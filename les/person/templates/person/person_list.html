@@ -1,0 +1,23 @@
+{% extends 'sobnushdi/base.html' %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<table>
+{% for p in object_list %}
+    <tr>
+
+    <td><b>ФИО:</b></td> <td>{{ p.second_name }} {{ p.first_name }} {{ p.patronymic }}</td> <td><b>Дата рождения:</b></td><td> {{ p.date_of_bird }}</td>
+</tr>
+    {% endfor %}
+
+</table>
+<table>
+<tr>
+    <td><a href="/person/">Добавить заявителя</a> |</td>
+</tr>
+
+</table>
+{% else %}
+<p>Авторизуйтесь</p>
+ {% endif %}
+{% endblock %}

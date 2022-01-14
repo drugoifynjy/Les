@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ title }}</title>
+        <link type="text/css" href="{% static 'les/css/styles.css' %}" rel="stylesheet" />
+    </head>
+    <body>
+     {% block mainmenu %}
+     <div class="header">
+         <ul id="mainmenu" class="mainmenu">
+             {% if request.user.is_authenticated %}
+             <li class="last">{{ user.username }} | <a href="{% url 'logout' %}">Выйти</a></li>
+             {% else %}
+            <li class="last"><a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
+             {% endif %}
+         </ul>
+     </div>
+     {% endblock %}
+        {% block content  %}
+
+        {% endblock %}
+    </body>
+    </html>

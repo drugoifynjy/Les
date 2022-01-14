@@ -1,0 +1,23 @@
+{% extends 'sobnushdi/base.html' %}
+
+{% block content %}
+ {% if request.user.is_authenticated %}
+    <hr>
+<table>
+<tr>Работа с гражданами
+    <td><a href="/person_list/">Заявители</a> |</td>
+    <td><a href="/">Заявления</a> |</td>
+    <td><a href="/">Договора</a> |</td>
+</tr>
+
+</table>
+<hr>
+<table>
+<tr> Системные таблици
+    <td><button>Разрады высот</button></td>
+</tr>
+</table>
+ {% else %}
+<p>Авторизуйтесь</p>
+ {% endif %}
+{% endblock %}
