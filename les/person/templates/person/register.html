@@ -1,0 +1,13 @@
+{% extends 'sobnushdi/base.html' %}
+
+
+{% block content %}
+
+<H1>{{title}}</H1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Регистрация</button>
+</form>
+
+{% endblock %}
