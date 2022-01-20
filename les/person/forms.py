@@ -5,7 +5,7 @@ from .models import *
 class AddPerson(forms.ModelForm):
     class Meta:
         model = Person
-        fields = '__all__'
+        fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number',]
 
 
 class AddPassport(forms.ModelForm):
