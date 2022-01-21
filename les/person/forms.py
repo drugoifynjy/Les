@@ -2,12 +2,6 @@ from django import forms
 from .models import *
 
 
-class AddPerson(forms.ModelForm):
-    class Meta:
-        model = Person
-        fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number',]
-
-
 class AddPassport(forms.ModelForm):
     class Meta:
         model = Passport
@@ -18,3 +12,9 @@ class AddResidenceAddress(forms.ModelForm):
     class Meta:
         model = ResidenceAddress
         fields = '__all__'
+
+
+class AddPerson(forms.ModelForm):
+    class Meta:
+        model = Person
+        fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number',]

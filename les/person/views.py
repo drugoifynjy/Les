@@ -10,35 +10,39 @@ from .forms import *
 
 def person_add(request):
     if request.method == 'POST':
-        form1 = AddPerson(request.POST)
-        form2 = AddPassport(request.POST)
-        if form1.is_valid() and form2.is_valid():
-            form1.save()
-            form2.save(commit=False)
-            form2.person = form1
-            form2.save()
+        form_add_person = AddPerson(request.POST)
+        form_add_passport = AddPassport(request.POST)
+        form_add_residence_address = AddResidenceAddress(request.POST)
+        if form_add_residence_address.is_valid() and form_add_passport.is_valid() and form_add_person.is_valid():
+            adr = form_add_residence_address.save()
+            passport = form_add_passport.save()
+            pers = form_add_person.save(commit=False)
+            pers.passport = passport
+            pers.residence_address = adr
+            pers.save()
             return redirect('person_list')
     else:
-        form1 = AddPerson()
-        form2 = AddPassport()
-        cont = {'form1': form1,
-                'form2': form2,
+        form_add_person = AddPerson()
+        form_add_passport = AddPassport()
+        form_add_residence_address = AddResidenceAddress()
+        cont = {'form_add_person': form_add_person,
+                'form_add_passport': form_add_passport,
+                'form_add_residence_address': form_add_residence_address,
                 'title': 'Добавить заявителя'}
         return render(request, 'person/person_add.html', context=cont)
-
 
 
 def person_mod(request, pk):
     print(pk)
     post = get_object_or_404(Person, pk=pk)
     if request.method == 'POST':
-        form = AddPerson(request.POST, instance=post)
-        if form.is_valid():
-            form.save()
+        form1 = AddPerson(request.POST, instance=post)
+        if form1.is_valid():
+            form1.save()
             return redirect('person_list')
     else:
-        form = AddPerson(instance=post)
-    return render(request, 'person/person_mod.html', {'form': form, 'pk': pk, 'title': 'редактироние заявителя'})
+        form1 = AddPerson(instance=post)
+    return render(request, 'person/person_mod.html', {'form': form1, 'pk': pk, 'title': 'редактироние заявителя'})
 
 
 def passport_mod(request, pk):

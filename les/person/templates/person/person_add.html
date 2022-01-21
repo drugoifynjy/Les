@@ -4,8 +4,9 @@
 
 <form action="{% url 'person_add' %}" method="post">
     {% csrf_token %}
-    {{ form1.as_p }}
-    {{ form2.as_p }}
+    <div><b>ФИО</b> <p> {{ form_add_person.as_p }}</p></div>
+    <div><b>Паспорт</b><p>{{ form_add_passport.as_p }}</p></div>
+    <div><b>Адресс</b><p>{{ form_add_residence_address.as_p }}</p></div>
     <button type="submit">Добавить</button>
 </form>
 
