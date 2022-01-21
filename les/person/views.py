@@ -33,42 +33,29 @@ def person_add(request):
 
 
 def person_mod(request, pk):
-    print(pk)
-    post = get_object_or_404(Person, pk=pk)
+    pers = get_object_or_404(Person, pk=pk)
+    addr = pers.residence_address
+    passp = pers.passport
     if request.method == 'POST':
-        form1 = AddPerson(request.POST, instance=post)
-        if form1.is_valid():
-            form1.save()
+        form_person_mod = AddPerson(request.POST, instance=pers)
+        form_passport_mod = AddPassport(request.POST, instance=passp)
+        form_residence_address_mod = AddResidenceAddress(request.POST, instance=addr)
+        if form_person_mod.is_valid() and form_passport_mod.is_valid() and form_residence_address_mod.is_valid():
+            form_person_mod.save()
+            form_passport_mod.save()
+            form_residence_address_mod.save()
             return redirect('person_list')
     else:
-        form1 = AddPerson(instance=post)
-    return render(request, 'person/person_mod.html', {'form': form1, 'pk': pk, 'title': 'редактироние заявителя'})
+        form_person_mod = AddPerson(instance=pers)
+        form_passport_mod = AddPassport(instance=passp)
+        form_residence_address_mod = AddResidenceAddress(instance=addr)
 
-
-def passport_mod(request, pk):
-    print(pk)
-    if hasattr(Person(pk), 'passport'):
-        print(Passport(pk=pk))
-        post = get_object_or_404(Passport, pk=pk)
-        if request.method == 'POST':
-            form = AddPassport(request.POST, instance=post)
-            if form.is_valid():
-                form.save()
-                return redirect('person_list')
-        else:
-            form = AddPassport(instance=post)
-        return render(request, 'person/passport_mod.html',
-                      {'form': form, 'pk': pk, 'title': 'редактироние паспортных данных'})
-    else:
-        if request.method == 'POST':
-            form = AddPassport(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('passport_list')
-        else:
-            form = AddPassport()
-        return render(request, 'person/passport_add.html',
-                      {'form': form, 'title': 'Добавить паспортные данные'})
+        cont = {'form_person_mod': form_person_mod,
+                'form_passport_mod': form_passport_mod,
+                'form_residence_address_mod': form_residence_address_mod,
+                'pk': pk,
+                'title': 'Добавить заявителя'}
+        return render(request, 'person/person_mod.html', context=cont)
 
 
 class PersonView(ListView):

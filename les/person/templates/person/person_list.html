@@ -9,14 +9,6 @@
         <td><mark>{{ p.pk }}</mark></td>
         <td>{{ p.second_name }} {{ p.first_name }} {{ p.patronymic }}</td>
         <td><b>Дата рождения:</b></td><td> {{ p.date_of_bird }}</td>
-        <td><form action="{% url 'passport_mod' pk=p.pk %}">
-                <button type="submit">Паспорт</button>
-            </form>
-        </td>
-        <td><form action="{% url 'person_mod' pk=p.pk %}">
-                <button type="submit">Адресс</button>
-            </form>
-        </td>
         <td>
             <form action="{% url 'person_mod' pk=p.pk %}">
                 <button type="submit">Изменить</button>
