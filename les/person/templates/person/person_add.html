@@ -4,30 +4,36 @@
 
 <form action="{% url 'person_add' %}" method="post">
     {% csrf_token %}
-    <table>
+    <table bgcolor="silver">
         <tr>
-            <th>
-                <b>ФИО</b>
-            </th>
-            <th>
-                <b>Паспорт</b>
-            </th>
-            <th>
-                <b>Адресс</b>
-            </th>
+            <th>ФИО</th>
+            <th>Паспортные данные</th>
+            <th>Прописка</th>
         </tr>
-        <tr>
-            <td>
-                 <div><p> {{ form_add_person.as_p }}</p></div>
-            </td>
-            <td>
-                <div><p>{{ form_add_passport.as_p }}</p></div>
-            </td>
-             <td>
-               <div><p>{{ form_add_residence_address.as_p }}</p></div>
-            </td>
-        </tr>
+    <tr bgcolor="#858">
+
+        <td>
+            <table >
+                {{ form_add_person.as_table }}
+            </table>
+        </td>
+
+        <td>
+            <table>
+                {{ form_add_passport.as_table }}
+            </table>
+        </td>
+
+        <td>
+            <table>
+                {{ form_add_residence_address.as_table }}
+            </table>
+        </td>
+    </tr>
+
+
     </table>
+
 
     <button type="submit">Добавить</button>
 </form>

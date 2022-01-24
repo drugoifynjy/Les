@@ -4,9 +4,33 @@
 
 <form action="{% url 'person_mod' pk=pk %}" method="post">
     {% csrf_token %}
-    <div><b>ФИО</b> <p> {{ form_person_mod.as_p }}</p></div>
-    <div><b>Паспорт</b><p>{{ form_passport_mod.as_p }}</p></div>
-    <div><b>Адресс</b><p>{{ form_residence_address_mod.as_p }}</p></div>
+      <table bgcolor="silver">
+        <tr>
+            <th>ФИО</th>
+            <th>Паспортные данные</th>
+            <th>Прописка</th>
+        </tr>
+    <tr bgcolor="#858">
+
+        <td>
+            <table >
+                {{ form_person_mod.as_p }}
+            </table>
+        </td>
+
+        <td>
+            <table>
+                {{ form_passport_mod.as_p }}
+            </table>
+        </td>
+
+        <td>
+            <table>
+                {{ form_residence_address_mod.as_p }}
+            </table>
+        </td>
+    </tr>
+    </table>
     <button type="submit">Изменить</button>
 </form>
 
