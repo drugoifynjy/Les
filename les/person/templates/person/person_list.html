@@ -3,7 +3,8 @@
 {% block content %}
 {% if request.user.is_authenticated %}
 <table>
-{% for p in object_list %}
+
+{% for p in pers %}
     <tr>
 
         <td><mark>{{ p.pk }}</mark></td>

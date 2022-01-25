@@ -54,13 +54,19 @@ def person_mod(request, pk):
                 'form_passport_mod': form_passport_mod,
                 'form_residence_address_mod': form_residence_address_mod,
                 'pk': pk,
-                'title': 'Добавить заявителя'}
+                'title': 'Изменить заявителя'}
         return render(request, 'person/person_mod.html', context=cont)
 
 
 class PersonView(ListView):
     model = Person
     template_name = 'person/person_list.html'
+    context_object_name = 'pers'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Заявители'
+        return context
 
 
 class RegisterUser(CreateView):

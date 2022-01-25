@@ -11,9 +11,16 @@
      <div class="header">
          <ul id="mainmenu" class="mainmenu">
              {% if request.user.is_authenticated %}
-             <li class="last">{{ user.username }} | <a href="{% url 'logout' %}">Выйти</a></li>
+                <li><a href="{% url 'statement' %}">Заявления</a></li>
+                <li>Договора</li>
+                <li>Служебные данные</li>
+                <li class="last">{{ user.username }} | <a href="{% url 'logout' %}">Выйти</a></li>
              {% else %}
-            <li class="last"><a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
+                <div>
+                    <li class="last">
+                        <a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a>
+                    </li>
+                </div>
              {% endif %}
          </ul>
      </div>

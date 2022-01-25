@@ -34,8 +34,7 @@ class Statement(models.Model):
     date = models.DateField(blank=True, null=True, verbose_name='Дата заявления')
     address = models.ForeignKey(HeatedPremise, on_delete=models.SET_NULL,
                                 null=True, verbose_name='Адрес отапливаемого помещения')
-    person = models.ForeignKey(Person, on_delete=models.CASCADE,
-                                  blank=True, null=True, verbose_name='Заявитель')
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Заявитель')
 
     def __str__(self):
         num = str(self.number_statement)
