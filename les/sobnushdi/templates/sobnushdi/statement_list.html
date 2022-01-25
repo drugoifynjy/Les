@@ -1,0 +1,31 @@
+{% extends 'sobnushdi/base.html' %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<table>
+
+{% for p in statements %}
+    <tr>
+
+        <td><b>№:</b><mark> {{ p.number_statement }}</mark></td>
+        <td><b>ФИО:</b> {{ p.person }}</td>
+        <td><b>Дата подачи:</b></td><td> {{ p.date }}</td>
+        <td>
+            <form action="{% url 'person_mod' pk=p.pk %}">
+                <button type="submit">Изменить</button>
+            </form>
+        </td>
+</tr>
+    {% endfor %}
+
+</table>
+<table>
+<tr>
+    <td><form action="{% url 'person_add' %}"><button type="submit">Добавить</button></form></td>
+</tr>
+
+</table>
+{% else %}
+<p>Авторизуйтесь</p>
+ {% endif %}
+{% endblock %}
