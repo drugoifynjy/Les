@@ -4,14 +4,14 @@
 {% if request.user.is_authenticated %}
 <table>
 
-{% for p in statements %}
+{% for stat in statements %}
     <tr>
 
-        <td><b>№:</b><mark> {{ p.number_statement }}</mark></td>
-        <td><b>ФИО:</b> {{ p.person }}</td>
-        <td><b>Дата подачи:</b></td><td> {{ p.date }}</td>
+        <td><b>№:</b><mark> {{ stat.number_statement }}</mark></td>
+        <td><b>ФИО:</b> {{ stat.person }}</td>
+        <td><b>Дата подачи:</b></td><td> {{ stat.date }}</td>
         <td>
-            <form action="{% url 'person_mod' pk=p.pk %}">
+            <form action="{% url 'statements_mod' pk=stat.pk %}">
                 <button type="submit">Изменить</button>
             </form>
         </td>
@@ -21,7 +21,8 @@
 </table>
 <table>
 <tr>
-    <td><form action="{% url 'person_add' %}"><button type="submit">Добавить</button></form></td>
+    <td><form action="{% url 'statements_add' %}">
+        <button type="submit">Добавить</button></form></td>
 </tr>
 
 </table>
