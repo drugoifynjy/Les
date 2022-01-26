@@ -55,8 +55,8 @@ class Contract(models.Model):
     date = models.DateField(blank=True, null=True, verbose_name='Дата договора')
 
     def __str__(self):
-        num = str(self.number)
-        a = '№ ' + num
+        b = str(self.statement.person)
+        a = ' Заявитель ' + b
         return a
 
     class Meta:
@@ -66,14 +66,13 @@ class Contract(models.Model):
 
 class Plot(models.Model):
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE, verbose_name='Договор')
-    number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='номер деляны')
+    number_plot = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Номер делянки')
     date = models.DateField(blank=True, null=True, verbose_name='Дата?')
     forestry = models.CharField(max_length=50, blank=True, null=True, verbose_name='Лесничество')
     district_forestry = models.CharField(max_length=50, blank=True, null=True, verbose_name='Участковое лесничество')
     tract = models.CharField(max_length=50, blank=True, null=True, verbose_name='Урочище')
     quarter = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартал')
     section = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Выдел')
-    number_plot = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Номер делянки')
     chop_type = models.CharField(max_length=2, verbose_name='Вид рубки')
 
     def __str__(self):

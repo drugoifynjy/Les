@@ -1,7 +1,7 @@
 from django.urls import path
 
 from person.views import LoginUser
-from .views import StatementsView, StatementAdd, StatementMod
+from .views import StatementsView, StatementAdd, StatementMod, ContractsView
 
 
 urlpatterns = [
@@ -9,5 +9,5 @@ urlpatterns = [
     path('statements/', StatementsView.as_view(), name='statements'),
     path('statements_mod/<int:pk>', StatementMod.as_view(), name='statements_mod'),
     path('statements_add/', StatementAdd.as_view(), name='statements_add'),
-
+    path('contracts/', ContractsView.as_view(), name='contracts'),
 ]

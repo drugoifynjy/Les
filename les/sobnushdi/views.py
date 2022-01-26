@@ -12,6 +12,7 @@ class StatementsView(ListView):
     model = Statement
     template_name = 'sobnushdi/statement_list.html'
     context_object_name = 'statements'
+    paginate_by = 100
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -35,3 +36,21 @@ class StatementAdd(CreateView):
     model = Statement
     template_name = 'sobnushdi/statement_add.html'
     fields = ['number_statement', 'date', 'address', 'person']
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Добавить заявление'
+        return context
+
+
+class ContractsView(ListView):
+    model = Contract
+    template_name = 'sobnushdi/contract_list.html'
+    context_object_name = 'contracts'
+    fields = ['statement', 'number_decree', 'date_decree', 'number', 'date']
+    paginate_by = 20
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Договора'
+        return context

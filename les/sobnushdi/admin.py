@@ -10,5 +10,12 @@ class AddressAdmin(admin.ModelAdmin):
 
 @admin.register(Statement)
 class StatementAdmin(admin.ModelAdmin):
-    list_display = ('number_statement', 'date',)
+    list_display = ('number_statement', 'date', 'person')
+    list_filter = ('date',)
+
+
+@admin.register(Contract)
+class ContractAdmin(admin.ModelAdmin):
+
+    list_display = ('number', 'date', 'statement')
     list_filter = ('date',)

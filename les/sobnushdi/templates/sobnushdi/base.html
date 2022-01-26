@@ -12,8 +12,8 @@
          <ul id="mainmenu" class="mainmenu">
              {% if request.user.is_authenticated %}
                 <li><a href="{% url 'statements' %}">Заявления</a></li>
-                <li>Договора</li>
-                <li>Служебные данные</li>
+                <li><a href="{% url 'contracts' %}">Договора</a></li>
+                <li><a href="#">Служебные данные</a></li>
                 <li class="last">{{ user.username }} | <a href="{% url 'logout' %}">Выйти</a></li>
              {% else %}
                 <div>
