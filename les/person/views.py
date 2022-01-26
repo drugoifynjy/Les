@@ -31,22 +31,32 @@ from .forms import *
 #                 'title': 'Добавить заявителя'}
 #         return render(request, 'person/person_add.html', context=cont)
 
-class PersonAdd(FormView):
-    form_class = AddPerson
-    initial = {'key': 'value'}
-    template_name = 'form_template.html'
+
+class PersonAdd(View):
+    template_name = 'person/person_add.html'
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class(instance=self.initial)
-        return render(request, self.template_name, {'form': form})
+        form1 = AddPerson()
+        form2 = AddPassport()
+        form3 = AddResidenceAddress()
+        form = {'form_add_person': form1,
+                'form_add_passport': form2,
+                'form_add_residence_address': form3,
+                'title': 'Добавить заявителя'}
+        return render(request, self.template_name, context=form)
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            # <process form cleaned data>
-            return HttpResponseRedirect('/success/')
+        form1 = AddPerson(request.POST)
+        form2 = AddPassport(request.POST)
+        form3 = AddResidenceAddress(request.POST)
+        form = {'form_add_person': form1,
+                'form_add_passport': form2,
+                'form_add_residence_address': form3,
+                'title': 'Добавить заявителя'}
+        if form1.is_valid() and form2.is_valid() and form3.is_valid():
+            return redirect('person_list')
 
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, context=form)
 
 
 def person_mod(request, pk):
@@ -79,7 +89,6 @@ class PersonView(ListView):
     model = Person
     template_name = 'person/person_list.html'
     context_object_name = 'pers'
-    paginate_by = 100
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
