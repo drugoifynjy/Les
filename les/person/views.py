@@ -32,57 +32,88 @@ from .forms import *
 #         return render(request, 'person/person_add.html', context=cont)
 
 
-class PersonAdd(View):
+class PersonAdd(CreateView):
     template_name = 'person/person_add.html'
 
     def get(self, request, *args, **kwargs):
-        form1 = AddPerson()
-        form2 = AddPassport()
-        form3 = AddResidenceAddress()
-        form = {'form_add_person': form1,
-                'form_add_passport': form2,
-                'form_add_residence_address': form3,
+        form_add_person = AddPerson()
+        form_add_passport = AddPassport()
+        form_add_residence_address = AddResidenceAddress()
+        form = {'form_add_person': form_add_person,
+                'form_add_passport': form_add_passport,
+                'form_add_residence_address': form_add_residence_address,
                 'title': 'Добавить заявителя'}
         return render(request, self.template_name, context=form)
 
     def post(self, request, *args, **kwargs):
-        form1 = AddPerson(request.POST)
-        form2 = AddPassport(request.POST)
-        form3 = AddResidenceAddress(request.POST)
-        form = {'form_add_person': form1,
-                'form_add_passport': form2,
-                'form_add_residence_address': form3,
+        form_add_person = AddPerson(request.POST)
+        form_add_passport = AddPassport(request.POST)
+        form_add_residence_address = AddResidenceAddress(request.POST)
+        form = {'form_add_person': form_add_person,
+                'form_add_passport': form_add_passport,
+                'form_add_residence_address': form_add_residence_address,
                 'title': 'Добавить заявителя'}
-        if form1.is_valid() and form2.is_valid() and form3.is_valid():
+        if form_add_person.is_valid() and form_add_passport.is_valid() and form_add_residence_address.is_valid():
+            adr = form_add_residence_address.save()
+            passport = form_add_passport.save()
+            pers = form_add_person.save(commit=False)
+            pers.passport = passport
+            pers.residence_address = adr
+            pers.save()
             return redirect('person_list')
 
         return render(request, self.template_name, context=form)
 
 
-def person_mod(request, pk):
-    pers = get_object_or_404(Person, pk=pk)
-    addr = pers.residence_address
-    passp = pers.passport
-    if request.method == 'POST':
-        form_person_mod = AddPerson(request.POST, instance=pers)
-        form_passport_mod = AddPassport(request.POST, instance=passp)
-        form_residence_address_mod = AddResidenceAddress(request.POST, instance=addr)
-        if form_person_mod.is_valid() and form_passport_mod.is_valid() and form_residence_address_mod.is_valid():
-            form_person_mod.save()
-            form_passport_mod.save()
-            form_residence_address_mod.save()
-            return redirect('person_list')
-    else:
-        form_person_mod = AddPerson(instance=pers)
-        form_passport_mod = AddPassport(instance=passp)
-        form_residence_address_mod = AddResidenceAddress(instance=addr)
+class PersonMod(UpdateView):
+    template_name = 'person/person_mod.html'
+    model = Person
 
-        cont = {'form_person_mod': form_person_mod,
-                'form_passport_mod': form_passport_mod,
-                'form_residence_address_mod': form_residence_address_mod,
-                'pk': pk,
-                'title': 'Изменить заявителя'}
-        return render(request, 'person/person_mod.html', context=cont)
+    def get(self, request, *args, **kwargs):
+        form_add_person = AddPerson(instance=request.Person)
+        form = {'form_add_person': form_add_person,
+                'title': 'Добавить заявителя'}
+        return render(request, self.template_name, context=form)
+
+    def post(self, request, *args, **kwargs):
+        form_add_person = AddPerson(request.POST, instance=request.Person)
+
+        form = {'form_add_person': form_add_person,
+
+                'title': 'Добавить заявителя'}
+        if form_add_person.is_valid():
+
+            pers = form_add_person.save(commit=False)
+
+            pers.save()
+            return redirect('person_list')
+
+        return render(request, self.template_name, context=form)
+
+# def person_mod(request, pk):
+#     pers = get_object_or_404(Person, pk=pk)
+#     addr = pers.residence_address
+#     passp = pers.passport
+#     if request.method == 'POST':
+#         form_person_mod = AddPerson(request.POST, instance=pers)
+#         form_passport_mod = AddPassport(request.POST, instance=passp)
+#         form_residence_address_mod = AddResidenceAddress(request.POST, instance=addr)
+#         if form_person_mod.is_valid() and form_passport_mod.is_valid() and form_residence_address_mod.is_valid():
+#             form_person_mod.save()
+#             form_passport_mod.save()
+#             form_residence_address_mod.save()
+#             return redirect('person_list')
+#     else:
+#         form_person_mod = AddPerson(instance=pers)
+#         form_passport_mod = AddPassport(instance=passp)
+#         form_residence_address_mod = AddResidenceAddress(instance=addr)
+#
+#         cont = {'form_person_mod': form_person_mod,
+#                 'form_passport_mod': form_passport_mod,
+#                 'form_residence_address_mod': form_residence_address_mod,
+#                 'pk': pk,
+#                 'title': 'Изменить заявителя'}
+#         return render(request, 'person/person_mod.html', context=cont)
 
 
 class PersonView(ListView):

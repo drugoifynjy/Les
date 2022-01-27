@@ -11,7 +11,7 @@
         <td>{{ p.second_name }} {{ p.first_name }} {{ p.patronymic }}</td>
         <td><b>Дата рождения:</b></td><td> {{ p.date_of_bird }}</td>
         <td>
-            <form action="{% url 'person_mod' pk=p.pk %}">
+            <form action="{% url 'person_mod' p.pk %}">
                 <button type="submit">Изменить</button>
             </form>
         </td>
