@@ -17,4 +17,4 @@ class AddResidenceAddress(forms.ModelForm):
 class AddPerson(forms.ModelForm):
     class Meta:
         model = Person
-        fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number',]
+        fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number']

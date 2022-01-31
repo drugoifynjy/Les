@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form action="{% url 'person_mod' %}" method="post">
+<form action="{% url 'person_mod' pk=pk %}" method="post">
     {% csrf_token %}
       <table bgcolor="silver">
         <tr>
@@ -32,6 +32,10 @@
     </tr>
     </table>
     <button type="submit">Изменить</button>
+    <form action="{% url 'person_list' %}" method="get">
+        <button type="reset"><a href="{% url 'person_list' %}">Отмена</a></button>
+    </form>
+
 </form>
 
 {% endblock %}

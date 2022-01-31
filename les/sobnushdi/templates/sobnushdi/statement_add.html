@@ -6,7 +6,9 @@
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Добавить" >
-    <input type="button" value="Отмена" >
+    <form action="{% url 'statements_list' %}" method="get">
+        <button type="reset"><a href="{% url 'statements_list' %}">Отменить</a></button>
+    </form>
 </form>
 
 {% endblock %}

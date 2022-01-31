@@ -11,7 +11,7 @@
         <td><b>ФИО:</b> {{ stat.person }}</td>
         <td><b>Дата подачи:</b></td><td> {{ stat.date }}</td>
         <td>
-            <form action="{% url 'statements_mod' pk=stat.pk %}">
+            <form action="{% url 'statement_mod' pk=stat.pk %}">
                 <button type="submit">Изменить</button>
             </form>
         </td>
@@ -21,7 +21,7 @@
 </table>
 <table>
 <tr>
-    <td><form action="{% url 'statements_add' %}">
+    <td><form action="{% url 'statement_add' %}">
         <button type="submit">Добавить</button></form></td>
 </tr>
 

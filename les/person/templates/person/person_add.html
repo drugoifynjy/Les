@@ -32,6 +32,9 @@
     </table>
 
     <button type="submit">Добавить</button>
+    <form action="{% url 'person_list' %}" method="get">
+        <button type="reset"><a href="{% url 'person_list' %}">Отмена</a></button>
+    </form>
 </form>
 
 {% endblock %}

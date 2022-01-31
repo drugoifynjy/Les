@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form action="{% url 'statements_mod' pk=pk %}" method="post">
+<form action="{% url 'statement_mod' pk=pk %}" method="post">
     {% csrf_token %}
       <table bgcolor="silver">
         <tr>

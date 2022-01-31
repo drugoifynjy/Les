@@ -6,8 +6,8 @@ from .views import StatementsView, StatementAdd, StatementMod, ContractsView
 
 urlpatterns = [
     path('', LoginUser.as_view(), name='login'),
-    path('statements/', StatementsView.as_view(), name='statements'),
-    path('statements_mod/<int:pk>', StatementMod.as_view(), name='statements_mod'),
-    path('statements_add/', StatementAdd.as_view(), name='statements_add'),
+    path('statements_list/', StatementsView.as_view(), name='statements_list'),
+    path('statement_mod/<int:pk>', StatementMod.as_view(), name='statement_mod'),
+    path('statement_add/', StatementAdd.as_view(), name='statement_add'),
     path('contracts/', ContractsView.as_view(), name='contracts'),
 ]

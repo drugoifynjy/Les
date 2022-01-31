@@ -23,7 +23,7 @@ class StatementsView(ListView):
 class StatementMod(UpdateView):
     model = Statement
     template_name = 'sobnushdi/statement_mod.html'
-    context_object_name = 'statements'
+    context_object_name = 'statement_mod'
     fields = ['number_statement', 'date', 'address']
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -34,6 +34,7 @@ class StatementMod(UpdateView):
 
 class StatementAdd(CreateView):
     model = Statement
+    context_object_name = 'statement_add'
     template_name = 'sobnushdi/statement_add.html'
     fields = ['number_statement', 'date', 'address', 'person']
 
