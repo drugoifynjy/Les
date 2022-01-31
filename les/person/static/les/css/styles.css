@@ -8,12 +8,20 @@ html, body {
 }
 
 a {
-	color: #0059b2;
+	color: #fdc073;
 	text-decoration: none;
 }
 a:hover {
-	color: #CC0000;
-	text-decoration: underline;
+	color: #FDA83D;
+}
+
+.Butf{
+    color: #fdc073;
+	text-decoration: none;
+}
+
+.Butf:hover{
+    color: #FDA83D;
 }
 
 img {max-width: 600px; height: auto;}
