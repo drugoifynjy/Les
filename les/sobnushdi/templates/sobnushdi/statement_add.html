@@ -1,15 +1,38 @@
-{% extends 'person/base.html' %}
+{% extends 'sobnushdi/base.html' %}
 
 {% block content %}
 
-<form method="post">
+<form action="{% url 'statement_add' %}" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Добавить" >
-    <form action="{% url 'statements_list' %}" method="get">
-        <button type="reset"><a href="{% url 'statements_list' %}">Отменить</a></button>
+    <table bgcolor="silver">
+        <tr>
+            <th>Заявление</th>
+            <th>Отапливаемое помещение</th>
+            <th>Заявитель</th>
+        </tr>
+        <tr bgcolor="#858">
+            <td>
+                <table >
+                    {{ form_add_statement.as_table }}
+                </table>
+            </td>
+
+            <td>
+                <table>
+                    {{ form_add_heated_promise.as_table }}
+                </table>
+            </td>
+
+            <td>
+                <a href="{% url 'person_add' %}"><button type="button">Добавить</button></a>
+            </td>
+        </tr>
+    </table>
+
+    <button type="submit">Добавить</button>
+    <form action="{% url 'person_list' %}" method="get">
+        <button type="reset"><a href="{% url 'statements_list' %}">Отмена</a></button>
     </form>
 </form>
 
 {% endblock %}
-

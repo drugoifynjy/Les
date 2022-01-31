@@ -3,9 +3,11 @@ from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, View
 
-from .models import *
+
+from .forms import *
+from person.views import PersonAdd
 
 
 class StatementsView(ListView):
@@ -20,7 +22,7 @@ class StatementsView(ListView):
         return context
 
 
-class StatementMod(UpdateView):
+class StatementMod(View):
     model = Statement
     template_name = 'sobnushdi/statement_mod.html'
     context_object_name = 'statement_mod'
@@ -33,15 +35,35 @@ class StatementMod(UpdateView):
 
 
 class StatementAdd(CreateView):
-    model = Statement
-    context_object_name = 'statement_add'
+    persadd = PersonAdd
     template_name = 'sobnushdi/statement_add.html'
-    fields = ['number_statement', 'date', 'address', 'person']
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Добавить заявление'
-        return context
+    def get(self, request, *args, **kwargs):
+        form_add_statement = AddStatement()
+        form_add_heated_promise = AddHeatedPromise()
+        form = {'form_add_statement': form_add_statement,
+                'form_add_heated_promise': form_add_heated_promise,
+                'title': 'Добавить заявление'}
+        return render(request, self.template_name, context=form)
+
+    def post(self, request, *args, **kwargs):
+        form_add_statement = AddStatement(request.POST)
+        form_add_heated_promise = AddHeatedPromise(request.POST)
+        form = {'form_add_statement': form_add_statement,
+                'form_add_heated_promise': form_add_heated_promise,
+                'title': 'Добавить заявление'}
+        if form_add_statement.is_valid() and form_add_heated_promise.is_valid():
+            heated_promise = form_add_heated_promise.save()
+            statement = form_add_statement.save(commit=False)
+            statement.heated_promise = heated_promise
+            statement.save()
+            return redirect('person_list')
+
+        return render(request, self.template_name, context=form)
+
+
+
+
 
 
 class ContractsView(ListView):
