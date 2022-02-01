@@ -5,7 +5,13 @@ from .models import *
 class AddStatement(forms.ModelForm):
     class Meta:
         model = Statement
-        fields = ['number_statement', ]
+        fields = ['number_statement', 'date']
+
+
+class SelectPersonInStatement(forms.ModelForm):
+    class Meta:
+        model = Statement
+        fields = ['person']
 
 
 class AddHeatedPromise(forms.ModelForm):

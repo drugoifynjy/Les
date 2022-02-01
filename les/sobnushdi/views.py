@@ -35,29 +35,33 @@ class StatementMod(View):
 
 
 class StatementAdd(CreateView):
-    persadd = PersonAdd
     template_name = 'sobnushdi/statement_add.html'
 
     def get(self, request, *args, **kwargs):
         form_add_statement = AddStatement()
         form_add_heated_promise = AddHeatedPromise()
+        form_select_person_in_statement = SelectPersonInStatement()
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
+                'form_select_person_in_statement': form_select_person_in_statement,
                 'title': 'Добавить заявление'}
         return render(request, self.template_name, context=form)
 
     def post(self, request, *args, **kwargs):
         form_add_statement = AddStatement(request.POST)
         form_add_heated_promise = AddHeatedPromise(request.POST)
+        form_select_person_in_statement = SelectPersonInStatement(request.POST)
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
+                'form_select_person_in_statement': form_select_person_in_statement,
                 'title': 'Добавить заявление'}
-        if form_add_statement.is_valid() and form_add_heated_promise.is_valid():
+        if form_add_statement.is_valid() and form_add_heated_promise.is_valid() and form_select_person_in_statement.is_valid():
             heated_promise = form_add_heated_promise.save()
             statement = form_add_statement.save(commit=False)
             statement.heated_promise = heated_promise
+            statement.person = form_select_person_in_statement.save()
             statement.save()
-            return redirect('person_list')
+            return request.META['HTTP_REFERER']
 
         return render(request, self.template_name, context=form)
 
@@ -68,7 +72,7 @@ class StatementAdd(CreateView):
 
 class ContractsView(ListView):
     model = Contract
-    template_name = 'sobnushdi/contract_list.html'
+    template_name = 'sobnushdi/contracts_list.html'
     context_object_name = 'contracts'
     fields = ['statement', 'number_decree', 'date_decree', 'number', 'date']
     paginate_by = 20

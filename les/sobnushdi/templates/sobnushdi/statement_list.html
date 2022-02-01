@@ -2,14 +2,19 @@
 
 {% block content %}
 {% if request.user.is_authenticated %}
+{{title}}
 <table>
-
+    <tr>
+        <th>№</th>
+        <th>ФИО</th>
+        <th>Дата заявления</th>
+    </tr>
 {% for stat in statements %}
     <tr>
 
-        <td><b>№:</b><mark> {{ stat.number_statement }}</mark></td>
-        <td><b>ФИО:</b> {{ stat.person }}</td>
-        <td><b>Дата подачи:</b></td><td> {{ stat.date }}</td>
+        <td><mark> {{ stat.number_statement }}</mark></td>
+        <td> {{ stat.person }}</td>
+        <td> {{ stat.date }}</td>
         <td>
             <form action="{% url 'statement_mod' pk=stat.pk %}">
                 <button type="submit">Изменить</button>

@@ -11,8 +11,9 @@
      <div class="header">
          <ul id="mainmenu" class="mainmenu">
              {% if request.user.is_authenticated %}
+                <li><a href="{% url 'persons_list' %}">Заявители</a></li>
                 <li><a href="{% url 'statements_list' %}">Заявления</a></li>
-                <li><a href="{% url 'contracts' %}">Договора</a></li>
+                <li><a href="{% url 'contracts_list' %}">Договора</a></li>
                 <li><a href="#">Служебные данные</a></li>
                 <li class="last">{{ user.username }} | <a href="{% url 'logout' %}">Выйти</a></li>
              {% else %}

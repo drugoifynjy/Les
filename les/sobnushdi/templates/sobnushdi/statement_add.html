@@ -10,28 +10,24 @@
             <th>Отапливаемое помещение</th>
             <th>Заявитель</th>
         </tr>
-        <tr bgcolor="#858">
+        <tr class="tab_statement_add" bgcolor="#858">
             <td>
-                <table >
-                    {{ form_add_statement.as_table }}
-                </table>
+                    {{ form_add_statement.as_p }}
             </td>
 
             <td>
-                <table>
-                    {{ form_add_heated_promise.as_table }}
-                </table>
+                    {{ form_add_heated_promise.as_p }}
             </td>
 
             <td>
-
-                <li><a class="Butf" id="Butf" href="{% url 'person_add' %}">Добавить</a></li>
+                {{form_select_person_in_statement.as_p}}
+                <a class="Butf" href="{% url 'person_add' %}">Новый</a>
             </td>
         </tr>
     </table>
 
     <button type="submit">Добавить</button>
-    <form action="{% url 'person_list' %}" method="get">
+    <form action="{% url 'statements_list' %}" method="get">
         <button type="reset"><a href="{% url 'statements_list' %}">Отмена</a></button>
     </form>
 </form>

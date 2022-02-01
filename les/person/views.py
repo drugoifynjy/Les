@@ -60,7 +60,7 @@ class PersonAdd(CreateView):
             pers.passport = passport
             pers.residence_address = adr
             pers.save()
-            return redirect('person_list')
+            return request.META['HTTP_REFERER']
 
         return render(request, self.template_name, context=form)
 
@@ -130,7 +130,7 @@ class PersonMod(UpdateView):
 
 class PersonView(ListView):
     model = Person
-    template_name = 'person/person_list.html'
+    template_name = 'person/persons_list.html'
     context_object_name = 'pers'
 
     def get_context_data(self, *, object_list=None, **kwargs):

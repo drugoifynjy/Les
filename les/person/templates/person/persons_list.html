@@ -2,29 +2,31 @@
 
 {% block content %}
 {% if request.user.is_authenticated %}
+<p class="title">{{title}}</p>
 <table>
-
+    <tr>
+        <th>№</th>
+        <th>ФИО</th>
+        <th>Дата рождения</th>
+    </tr>
 {% for p in pers %}
     <tr>
-
         <td><mark>{{ p.pk }}</mark></td>
         <td>{{ p.second_name }} {{ p.first_name }} {{ p.patronymic }}</td>
-        <td><b>Дата рождения:</b></td><td> {{ p.date_of_bird }}</td>
+        <td> {{ p.date_of_bird }}</td>
         <td>
             <form action="{% url 'person_mod' p.pk %}">
                 <button type="submit">Изменить</button>
             </form>
         </td>
-</tr>
-    {% endfor %}
+    </tr>
+{% endfor %}
 
 </table>
-<table>
-<tr>
-    <td><form action="{% url 'person_add' %}"><button type="submit">Добавить</button></form></td>
-</tr>
 
-</table>
+    <div class="button"><a href="{% url 'person_add' %}">Добавить</a></div>
+
+
 {% else %}
 <p>Авторизуйтесь</p>
  {% endif %}

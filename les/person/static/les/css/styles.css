@@ -15,13 +15,19 @@ a:hover {
 	color: #FDA83D;
 }
 
-.Butf{
+a.Butf{
     color: #fdc073;
 	text-decoration: none;
+	float: right;
+	background: #333671;
 }
 
-.Butf:hover{
+a.Butf:hover{
     color: #FDA83D;
+}
+
+.tab_statement_add{
+    text-align: right;
 }
 
 img {max-width: 600px; height: auto;}

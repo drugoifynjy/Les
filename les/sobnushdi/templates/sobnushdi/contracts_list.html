@@ -2,14 +2,19 @@
 
 {% block content %}
 {% if request.user.is_authenticated %}
+{{title}}
 <table>
-
+    <tr>
+        <th>№</th>
+        <th>Дата</th>
+        <th>Заявитель</th>
+    </tr>
 {% for contract in contracts %}
     <tr>
 
-        <td><b>№:</b><mark> {{ contract.number }}</mark></td>
-        <td><b>Дата:</b> {{ contract.date }}</td>
-        <td><b>Заявитель:</b> {{ contract.statement.person }}</td>
+        <td><mark> {{ contract.number }}</mark></td>
+        <td> {{ contract.date }}</td>
+        <td> {{ contract.statement.person }}</td>
 
     </tr>
     {% endfor %}
