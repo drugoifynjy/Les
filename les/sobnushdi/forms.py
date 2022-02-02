@@ -2,10 +2,17 @@ from django import forms
 from .models import *
 
 
+class MyDateInput(forms.DateInput):
+    input_type = 'date'
+
+
 class AddStatement(forms.ModelForm):
     class Meta:
         model = Statement
         fields = ['number_statement', 'date']
+        widgets = {
+            'date': MyDateInput,
+        }
 
 
 class SelectPersonInStatement(forms.ModelForm):

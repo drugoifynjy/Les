@@ -1,9 +1,8 @@
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, CreateView, UpdateView, View, FormView
+from django.views.generic import ListView, CreateView, UpdateView
 
 from .forms import *
 
@@ -71,8 +70,8 @@ class PersonMod(UpdateView):
 
     def get(self, request, pk, *args, **kwargs):
         pers = get_object_or_404(Person, pk=pk)
-        form_person_mod = AddPerson(instance=pers)
-        form_passport_mod = AddPassport(instance=pers.passport)
+        form_person_mod = UpdatePerson(instance=pers)
+        form_passport_mod = UpdatePassport(instance=pers.passport)
         form_residence_address_mod = AddResidenceAddress(instance=pers.residence_address)
         form = {'form_person_mod': form_person_mod,
                 'form_passport_mod': form_passport_mod,
@@ -98,7 +97,7 @@ class PersonMod(UpdateView):
             passport.save()
             address.save()
             person.save()
-            return redirect('person_list')
+            return redirect('persons_list')
 
         return render(request, self.template_name, context=form)
 

@@ -51,6 +51,7 @@ class StatementAdd(CreateView):
         form_add_statement = AddStatement(request.POST)
         form_add_heated_promise = AddHeatedPromise(request.POST)
         form_select_person_in_statement = SelectPersonInStatement(request.POST)
+        form = CreateManufacturerForm(initial={'createddate': datetime.now()})
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
                 'form_select_person_in_statement': form_select_person_in_statement,
