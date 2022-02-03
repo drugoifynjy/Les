@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.datetime_safe import datetime
 from django.views.generic import ListView, CreateView, UpdateView, View
 
 
@@ -38,7 +40,9 @@ class StatementAdd(CreateView):
     template_name = 'sobnushdi/statement_add.html'
 
     def get(self, request, *args, **kwargs):
-        form_add_statement = AddStatement()
+        today = str(datetime.now())[0:10]
+        # Текущая дата без времени для вставки в форму ввода даты заявления
+        form_add_statement = AddStatement(initial={'date': today})
         form_add_heated_promise = AddHeatedPromise()
         form_select_person_in_statement = SelectPersonInStatement()
         form = {'form_add_statement': form_add_statement,
@@ -51,24 +55,23 @@ class StatementAdd(CreateView):
         form_add_statement = AddStatement(request.POST)
         form_add_heated_promise = AddHeatedPromise(request.POST)
         form_select_person_in_statement = SelectPersonInStatement(request.POST)
-        form = CreateManufacturerForm(initial={'createddate': datetime.now()})
+#        form = CreateManufacturerForm(initial={'createddate': datetime.now()})
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
                 'form_select_person_in_statement': form_select_person_in_statement,
                 'title': 'Добавить заявление'}
-        if form_add_statement.is_valid() and form_add_heated_promise.is_valid() and form_select_person_in_statement.is_valid():
+        if form_add_statement.is_valid() \
+                and form_add_heated_promise.is_valid() \
+                and form_select_person_in_statement.is_valid():
             heated_promise = form_add_heated_promise.save()
             statement = form_add_statement.save(commit=False)
             statement.heated_promise = heated_promise
             statement.person = form_select_person_in_statement.save()
             statement.save()
-            return request.META['HTTP_REFERER']
-
-        return render(request, self.template_name, context=form)
-
-
-
-
+            return redirect('statements_list')
+        else:
+            form_p = form
+        return render(request, self.template_name, context=form_p)
 
 
 class ContractsView(ListView):

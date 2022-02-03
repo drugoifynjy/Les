@@ -6,12 +6,16 @@ class MyDateInput(forms.DateInput):
     input_type = 'date'
 
 
+class MyPhoneNumber(forms.NumberInput):
+    max_length = 11
+
+
 class AddPassport(forms.ModelForm):
     class Meta:
         model = Passport
         fields = '__all__'
         widgets = {
-            'date_of_issue': MyDateInput, 'address_birth': forms.TextInput,
+            'date_of_issue': MyDateInput,
         }
 
 
@@ -43,7 +47,3 @@ class UpdatePerson(forms.ModelForm):
     class Meta:
         model = Person
         fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number']
-
-
-class Dfrrrr(forms.BaseModelFormSet):
-    class Meta:

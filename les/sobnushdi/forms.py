@@ -1,9 +1,12 @@
 from django import forms
+from django.utils.datetime_safe import datetime
+
 from .models import *
 
 
 class MyDateInput(forms.DateInput):
     input_type = 'date'
+    value = datetime.now()
 
 
 class AddStatement(forms.ModelForm):

@@ -1,6 +1,7 @@
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, CreateView, UpdateView
 
@@ -59,7 +60,7 @@ class PersonAdd(CreateView):
             pers.passport = passport
             pers.residence_address = adr
             pers.save()
-            return request.META['HTTP_REFERER']
+            return redirect(request.META['HTTP_REFERER'])
 
         return render(request, self.template_name, context=form)
 
