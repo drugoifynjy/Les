@@ -16,7 +16,7 @@ class StatementsView(ListView):
     model = Statement
     template_name = 'sobnushdi/statement_list.html'
     context_object_name = 'statements'
-    paginate_by = 100
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -40,8 +40,7 @@ class StatementAdd(CreateView):
     template_name = 'sobnushdi/statement_add.html'
 
     def get(self, request, *args, **kwargs):
-        today = str(datetime.now())[0:10]
-        # Текущая дата без времени для вставки в форму ввода даты заявления
+        today = str(datetime.now())[0:10] # Текущая дата без времени для вставки в форму ввода даты заявления
         form_add_statement = AddStatement(initial={'date': today})
         form_add_heated_promise = AddHeatedPromise()
         form_select_person_in_statement = SelectPersonInStatement()
@@ -55,7 +54,6 @@ class StatementAdd(CreateView):
         form_add_statement = AddStatement(request.POST)
         form_add_heated_promise = AddHeatedPromise(request.POST)
         form_select_person_in_statement = SelectPersonInStatement(request.POST)
-#        form = CreateManufacturerForm(initial={'createddate': datetime.now()})
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
                 'form_select_person_in_statement': form_select_person_in_statement,
@@ -79,7 +77,6 @@ class ContractsView(ListView):
     template_name = 'sobnushdi/contracts_list.html'
     context_object_name = 'contracts'
     fields = ['statement', 'number_decree', 'date_decree', 'number', 'date']
-    paginate_by = 20
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

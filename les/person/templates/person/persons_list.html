@@ -25,6 +25,26 @@
 </table>
 
     <div class="button"><a href="{% url 'person_add' %}">Добавить</a></div>
+<div class="clear"></div>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="first_last">&laquo; Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="next_previous">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="next_previous">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="first_last">Последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+
 
 {% else %}
 <p>Авторизуйтесь</p>
