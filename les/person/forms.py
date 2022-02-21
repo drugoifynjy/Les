@@ -13,18 +13,10 @@ class MyPhoneNumber(forms.NumberInput):
 class AddPassport(forms.ModelForm):
     class Meta:
         model = Passport
-        fields = '__all__'
-        widgets = {
-            'date_of_issue': MyDateInput,
-        }
-
-
-class UpdatePassport(forms.ModelForm):
-    class Meta:
-        model = Passport
-        fields = '__all__'
+        fields = ['series', 'number', 'date_of_issue', 'issued', 'address_birth', 'inn']
         widgets = {
             'address_birth': forms.TextInput,
+            'date_of_issue': MyDateInput,
         }
 
 
@@ -41,9 +33,3 @@ class AddPerson(forms.ModelForm):
         widgets = {
             'date_of_bird': MyDateInput,
         }
-
-
-class UpdatePerson(forms.ModelForm):
-    class Meta:
-        model = Person
-        fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number']

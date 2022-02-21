@@ -7,4 +7,3 @@ class Fff(models.Model):
     class Meta:
         verbose_name = 'Диаметр'
         verbose_name_plural = 'Диаметры'
-

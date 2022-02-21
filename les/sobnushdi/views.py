@@ -41,6 +41,7 @@ class StatementAdd(CreateView):
 
     def get(self, request, *args, **kwargs):
         today = str(datetime.now())[0:10] # Текущая дата без времени для вставки в форму ввода даты заявления
+        print(today)
         form_add_statement = AddStatement(initial={'date': today})
         form_add_heated_promise = AddHeatedPromise()
         form_select_person_in_statement = SelectPersonInStatement()

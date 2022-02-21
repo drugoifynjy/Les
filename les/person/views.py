@@ -1,35 +1,10 @@
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, CreateView, UpdateView
-
+from django.views.generic import ListView, CreateView, View
+from formtools.wizard.views import SessionWizardView
 from .forms import *
-
-
-# def person_add(request):
-#     if request.method == 'POST':
-#         form_add_person = AddPerson(request.POST)
-#         form_add_passport = AddPassport(request.POST)
-#         form_add_residence_address = AddResidenceAddress(request.POST)
-#         if form_add_residence_address.is_valid() and form_add_passport.is_valid() and form_add_person.is_valid():
-#             adr = form_add_residence_address.save()
-#             passport = form_add_passport.save()
-#             pers = form_add_person.save(commit=False)
-#             pers.passport = passport
-#             pers.residence_address = adr
-#             pers.save()
-#             return redirect('person_list')
-#     else:
-#         form_add_person = AddPerson()
-#         form_add_passport = AddPassport()
-#         form_add_residence_address = AddResidenceAddress()
-#         cont = {'form_add_person': form_add_person,
-#                 'form_add_passport': form_add_passport,
-#                 'form_add_residence_address': form_add_residence_address,
-#                 'title': 'Добавить заявителя'}
-#         return render(request, 'person/person_add.html', context=cont)
 
 
 class PersonAdd(CreateView):
@@ -65,14 +40,16 @@ class PersonAdd(CreateView):
         return render(request, self.template_name, context=form)
 
 
-class PersonMod(UpdateView):
+class PersonMod(View):
     template_name = 'person/person_mod.html'
     model = Person
 
     def get(self, request, pk, *args, **kwargs):
         pers = get_object_or_404(Person, pk=pk)
-        form_person_mod = UpdatePerson(instance=pers)
-        form_passport_mod = UpdatePassport(instance=pers.passport)
+        date_of_bird = str(pers.date_of_bird)
+        date_of_issue = str(pers.passport.date_of_issue)
+        form_person_mod = AddPerson(initial={'date_of_bird': date_of_bird}, instance=pers)
+        form_passport_mod = AddPassport(initial={'date_of_issue': date_of_issue}, instance=pers.passport)
         form_residence_address_mod = AddResidenceAddress(instance=pers.residence_address)
         form = {'form_person_mod': form_person_mod,
                 'form_passport_mod': form_passport_mod,
@@ -153,3 +130,19 @@ class LoginUser(LoginView):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+
+FORMS = [
+         ("passport", AddPassport),
+         ("AddResidenceAddress", AddResidenceAddress),
+         ("person", AddPerson),
+        ]
+
+TEMPLATES = {"passport": "checkout/billingaddress.html",
+             "AddResidenceAddress": "checkout/paymentmethod.html",
+             "cc": "checkout/creditcard.html",
+             "person": "checkout/confirmation.html"}
+
+
+class PersonWizard(SessionWizardView):
+    pass
