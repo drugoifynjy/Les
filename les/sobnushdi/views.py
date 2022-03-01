@@ -6,10 +6,16 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.datetime_safe import datetime
 from django.views.generic import ListView, CreateView, UpdateView, View
-
-
+from formtools.wizard.views import SessionWizardView
 from .forms import *
-from person.views import PersonAdd
+from person.forms import AddPassport, AddResidenceAddress, AddPerson
+
+FORMS_STATEMENT = [("passport", AddPassport),
+                   ("AddResidenceAddress", AddResidenceAddress),
+                   ("person", AddPerson),
+                   ("AddHeatedPromise", AddHeatedPromise),
+                   ("AddStatement", AddStatement),
+                   ]
 
 
 class StatementsView(ListView):
@@ -71,6 +77,26 @@ class StatementAdd(CreateView):
         else:
             form_p = form
         return render(request, self.template_name, context=form_p)
+
+
+class PersonWizardAdd(SessionWizardView):
+    form_list = FORMS_STATEMENT
+    template_name = 'person/person_wizard_add.html'
+
+    def done(self, form_list, **kwargs):
+        if form_list[0].is_valid and form_list[1].is_valid and form_list[2].is_valid:
+            passport = form_list[0].save()
+            person_address = form_list[1].save()
+            person = form_list[2].save(commit=False)
+            heated_premise = form_list[3].save()
+            statement = form_list[4].save(commit=False)
+            person.passport = passport
+            person.residence_address = person_address
+            person.save()
+            statement.person = person
+            statement.address = heated_premise
+            statement.save()
+            return redirect('statements_list')
 
 
 class ContractsView(ListView):

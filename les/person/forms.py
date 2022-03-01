@@ -33,3 +33,4 @@ class AddPerson(forms.ModelForm):
         widgets = {
             'date_of_bird': MyDateInput,
         }
+

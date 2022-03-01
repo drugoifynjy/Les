@@ -7,6 +7,7 @@ urlpatterns = [
 
     path('person_add/', views.PersonAdd.as_view(), name='person_add'),
     path('person_mod/<int:pk>/edit', views.PersonMod.as_view(), name='person_mod'),
+    #path('person_wizard_add', views.PersonWizardAdd.as_view(), name='person_wizard_add'),
 
     path('register/', views.RegisterUser.as_view(), name='register'),
     path('', views.LoginUser.as_view(), name='login'),

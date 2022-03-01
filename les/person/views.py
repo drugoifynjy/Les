@@ -130,19 +130,3 @@ class LoginUser(LoginView):
 def logout_user(request):
     logout(request)
     return redirect('login')
-
-
-FORMS = [
-         ("passport", AddPassport),
-         ("AddResidenceAddress", AddResidenceAddress),
-         ("person", AddPerson),
-        ]
-
-TEMPLATES = {"passport": "checkout/billingaddress.html",
-             "AddResidenceAddress": "checkout/paymentmethod.html",
-             "cc": "checkout/creditcard.html",
-             "person": "checkout/confirmation.html"}
-
-
-class PersonWizard(SessionWizardView):
-    pass
