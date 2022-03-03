@@ -81,7 +81,21 @@ class StatementAdd(CreateView):
 
 class PersonWizardAdd(SessionWizardView):
     form_list = FORMS_STATEMENT
-    template_name = 'person/person_wizard_add.html'
+    template_name = 'sobnushdi/statement_wizard_add.html'
+
+    def get_context_data(self, form, **kwargs):
+        context = super().get_context_data(form=form, **kwargs)
+        if self.steps.current == 'passport':
+            context['title'] = 'данные пасспорта'
+        elif self.steps.current == 'AddResidenceAddress':
+            context['title'] = 'прописка'
+        elif self.steps.current == 'person':
+            context['title'] = 'заявитель'
+        elif self.steps.current == 'AddHeatedPromise':
+            context['title'] = 'адрес отапливаемого помещения'
+        elif self.steps.current == 'AddStatement':
+            context['title'] = 'заявление'
+        return context
 
     def done(self, form_list, **kwargs):
         if form_list[0].is_valid and form_list[1].is_valid and form_list[2].is_valid:

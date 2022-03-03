@@ -34,6 +34,8 @@ class Statement(models.Model):
     date = models.DateField(blank=True, null=True, verbose_name='Дата заявления')
     address = models.ForeignKey(HeatedPremise, on_delete=models.SET_NULL,
                                 null=True, verbose_name='Адрес отапливаемого помещения')
+    there_is_a_contract = models.BooleanField(verbose_name='Есть договор', default=False)
+    refusal_to_conclude_a_contract = models.BooleanField(verbose_name='Отказ от заключения договора', default=False)
     person = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Заявитель')
 
     def __str__(self):
@@ -48,7 +50,8 @@ class Statement(models.Model):
 
 
 class Contract(models.Model):
-    statement = models.ForeignKey(Statement, on_delete=models.CASCADE, verbose_name='Заявление')
+    statement = models.OneToOneField(Statement, on_delete=models.CASCADE, verbose_name='Заявление')
+    decision_on_statement = models.BooleanField(verbose_name='Отказ')
     number_decree = models.CharField(max_length=7, verbose_name='номер распоряжения')
     date_decree = models.DateField(blank=True, null=True, verbose_name='дата распоряжения')
     number = models.CharField(max_length=7, blank=True, null=True, verbose_name='номер договора')
@@ -65,7 +68,7 @@ class Contract(models.Model):
 
 
 class Plot(models.Model):
-    contract = models.ForeignKey(Contract, on_delete=models.CASCADE, verbose_name='Договор')
+    contract = models.OneToOneField(Contract, on_delete=models.CASCADE, verbose_name='Договор')
     number_plot = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Номер делянки')
     date = models.DateField(blank=True, null=True, verbose_name='Дата?')
     forestry = models.CharField(max_length=50, blank=True, null=True, verbose_name='Лесничество')

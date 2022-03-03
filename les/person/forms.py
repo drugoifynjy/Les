@@ -27,6 +27,7 @@ class AddResidenceAddress(forms.ModelForm):
 
 
 class AddPerson(forms.ModelForm):
+    name = 'Паспорт'
     class Meta:
         model = Person
         fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number']

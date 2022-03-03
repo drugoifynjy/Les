@@ -9,6 +9,6 @@ urlpatterns = [
     path('statement_mod/<int:pk>', StatementMod.as_view(), name='statement_mod'),
     path('statement_add/', StatementAdd.as_view(), name='statement_add'),
     path('contracts_list/', ContractsView.as_view(), name='contracts_list'),
-    path('person_wizard_add', PersonWizardAdd.as_view(), name='person_wizard_add'),
+    path('statement_wizard_add', PersonWizardAdd.as_view(), name='statement_wizard_add'),
 
 ]
