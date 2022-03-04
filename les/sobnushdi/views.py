@@ -98,11 +98,11 @@ class ContractAdd(CreateView):
         form = {'form_add_contract': form_add_contract,
                 'pk': pk,
                 'statement': statement,
-                'title': 'Добавить заявление'}
+                'title': 'Добавить договор'}
         return render(request, self.template_name, context=form)
 
     def post(self, request, pk, *args, **kwargs):
-        form_add_contract = AddStatement(request.POST)
+        form_add_contract = AddContract(request.POST)
         statement = get_object_or_404(Statement, pk=pk)
         print(statement)
         #print(request.POST)
@@ -124,7 +124,7 @@ class ContractsView(ListView):
     template_name = 'sobnushdi/contracts_list.html'
     context_object_name = 'contracts'
     fields = ['statement', 'number_decree', 'date_decree', 'number', 'date']
-
+    paginate_by = 10
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Договора'

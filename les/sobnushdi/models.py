@@ -42,7 +42,8 @@ class Statement(models.Model):
     def __str__(self):
         num = str(self.number_statement)
         data = str(self.date)
-        a = str('№  ' + num + ' от ' + data)
+        fio = str(self.person)
+        a = str('№  ' + num + ' от ' + data + ' ' + fio)
         return a
 
     class Meta:
