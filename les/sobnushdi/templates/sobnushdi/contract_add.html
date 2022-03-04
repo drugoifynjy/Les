@@ -1,0 +1,29 @@
+{% extends 'sobnushdi/base.html' %}
+
+{% block content %}
+
+<form action="{% url 'contract_add' pk %}" method="post">
+    {% csrf_token %}
+    <table bgcolor="silver">
+        <tr>
+            <th>Заявление</th>
+            <th>Договор</th>
+        </tr>
+        <tr class="tab_contract_add" bgcolor="#858">
+            <td>
+                    {{ statement }}
+            </td>
+            <td>
+                    {{ form_add_contract.as_p }}
+            </td>
+
+        </tr>
+    </table>
+
+    <button type="submit">Добавить</button>
+    <form action="{% url 'contracts_list' %}" method="get">
+        <button type="reset"><a href="{% url 'contracts_list' %}">Отмена</a></button>
+    </form>
+</form>
+
+{% endblock %}

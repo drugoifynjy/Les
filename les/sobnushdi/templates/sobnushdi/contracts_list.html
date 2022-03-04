@@ -5,17 +5,16 @@
 {{title}}
 <table>
     <tr>
+        <th>Заявление</th>
         <th>№</th>
         <th>Дата</th>
-        <th>Заявитель</th>
+
     </tr>
 {% for contract in contracts %}
     <tr>
-
         <td><mark> {{ contract.number }}</mark></td>
         <td> {{ contract.date }}</td>
         <td> {{ contract.statement.person }}</td>
-
     </tr>
     {% endfor %}
 

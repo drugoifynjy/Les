@@ -25,6 +25,7 @@ class HeatedPremise(models.Model):
         return a
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Адрес отапливаемого помещения'
         verbose_name_plural = 'Адреса отапливаемых помещений'
 
@@ -45,13 +46,14 @@ class Statement(models.Model):
         return a
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Заявление'
         verbose_name_plural = 'Заявления'
 
 
 class Contract(models.Model):
     statement = models.OneToOneField(Statement, on_delete=models.CASCADE, verbose_name='Заявление')
-    decision_on_statement = models.BooleanField(verbose_name='Отказ')
+    decision_on_statement = models.BooleanField(blank=True, null=True, verbose_name='Отказ')
     number_decree = models.CharField(max_length=7, verbose_name='номер распоряжения')
     date_decree = models.DateField(blank=True, null=True, verbose_name='дата распоряжения')
     number = models.CharField(max_length=7, blank=True, null=True, verbose_name='номер договора')
@@ -63,6 +65,7 @@ class Contract(models.Model):
         return a
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Договор'
         verbose_name_plural = 'Договоры'
 
@@ -83,5 +86,6 @@ class Plot(models.Model):
         return a
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Делянка'
         verbose_name_plural = 'Делянки'

@@ -18,10 +18,13 @@ class AddStatement(forms.ModelForm):
         }
 
 
-class SelectPersonInStatement(forms.ModelForm):
+class ModStatement(forms.ModelForm):
     class Meta:
         model = Statement
-        fields = ['person']
+        fields = ['person', 'number_statement', 'date', 'there_is_a_contract', 'refusal_to_conclude_a_contract']
+        widgets = {
+            'date': MyDateInput,
+        }
 
 
 class AddHeatedPromise(forms.ModelForm):
@@ -33,4 +36,16 @@ class AddHeatedPromise(forms.ModelForm):
 class AddContract(forms.ModelForm):
     class Meta:
         model = Contract
-        fields = '__all__'
+        fields = ['decision_on_statement', 'number_decree', 'date_decree', 'number', 'date']
+        widgets = {
+            'date': MyDateInput, 'date_decree': MyDateInput,
+        }
+
+
+class ModContract(forms.ModelForm):
+    class Meta:
+        model = Contract
+        fields = ['statement', 'decision_on_statement', 'number_decree', 'date_decree', 'number', 'date']
+        widgets = {
+            'date': MyDateInput, 'date_decree': MyDateInput,
+        }

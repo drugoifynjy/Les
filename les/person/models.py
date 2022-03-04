@@ -22,6 +22,7 @@ class ResidenceAddress(models.Model):
         return a
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Адрес проживания'
         verbose_name_plural = 'Адреса проживания'
 
@@ -39,6 +40,7 @@ class Passport(models.Model):
         return a
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Паспортные данные'
         verbose_name_plural = 'Паспортные данные'
 
@@ -59,5 +61,6 @@ class Person(models.Model):
         return a
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'ФИО'
         verbose_name_plural = 'ФИО'

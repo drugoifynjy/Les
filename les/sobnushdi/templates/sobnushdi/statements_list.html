@@ -20,6 +20,11 @@
                 <button type="submit">Изменить</button>
             </form>
         </td>
+        <td>
+            <form action="{% url 'contract_add' pk=stat.pk %}">
+                <button type="submit">Добавить договор</button>
+            </form>
+        </td>
 </tr>
     {% endfor %}
 

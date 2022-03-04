@@ -25,6 +25,11 @@
                             <button type="submit">Изменить</button>
                         </form>
                     </td>
+                    <td>
+                        <form action="{% url 'statement_add' p.pk %}">
+                            <button type="submit">Добавить заявление</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
