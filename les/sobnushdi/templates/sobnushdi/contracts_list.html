@@ -20,7 +20,12 @@
     {% endfor %}
 
 </table>
-
+<table>
+    <tr>
+        <td><form action="{% url 'contract_wizard_add' %}">
+        <button type="submit">Добавить</button></form></td>
+    </tr>
+</table>
 <div class="clear"></div>
     <div class="pagination">
         <span class="step-links">

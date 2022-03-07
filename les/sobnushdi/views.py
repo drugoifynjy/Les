@@ -16,7 +16,15 @@ FORMS_STATEMENT = [("person", AddPerson),
                    ("passport", AddPassport),
                    ("AddHeatedPromise", AddHeatedPromise),
                    ("AddStatement", AddStatement),
-                   ]
+                  ]
+
+FORMS_CONTRACT = [("person", AddPerson),
+                 ("AddResidenceAddress", AddResidenceAddress),
+                 ("passport", AddPassport),
+                 ("AddHeatedPromise", AddHeatedPromise),
+                 ("AddStatement", AddStatement),
+                 ("AddContract", AddContract),
+                ]
 
 
 class StatementsView(ListView):
@@ -168,7 +176,7 @@ class StatementWizardAdd(SessionWizardView):
 
 
 class ContractWizardAdd(SessionWizardView):
-    form_list = FORMS_STATEMENT
+    form_list = FORMS_CONTRACT
     template_name = 'sobnushdi/contract_wizard_add.html'
 
     def get_context_data(self, form, **kwargs):
@@ -186,6 +194,8 @@ class ContractWizardAdd(SessionWizardView):
             print(today)
             form_add_statement = AddStatement(initial={'date': today})
             context['title'] = 'заявление'
+        elif self.steps.current == 'AddContract':
+            context['title'] = 'Договор'
         return context
 
     def done(self, form_list, **kwargs):
@@ -200,4 +210,7 @@ class ContractWizardAdd(SessionWizardView):
             statement.person = person
             statement.address = heated_premise
             statement.save()
-            return redirect('statements_list')
+            contract = form_list[5].save(commit=False)
+            contract.statement = statement
+            contract.save()
+            return redirect('contracts_list')

@@ -81,6 +81,15 @@ class Plot(models.Model):
     quarter = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартал')
     section = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Выдел')
     chop_type = models.CharField(max_length=2, verbose_name='Вид рубки')
+    # number_of_trees количество деревьев
+    # large крупная
+    # average средняя
+    # small мелкая
+    # firewood дрова
+    # unmarketable неликвид
+    # total всего
+    # price цена
+    # cost стоимость
 
     def __str__(self):
         a = 'Для договра ' + self.contract.__str__()
