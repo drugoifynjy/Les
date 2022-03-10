@@ -3,6 +3,18 @@ from django.db import models
 from person.models import Person
 
 
+class Breeds(models.Model):
+    name = models.CharField(max_length=20, blank=True, null=True, verbose_name='Название породы')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Порода'
+        verbose_name_plural = 'Породы'
+
+
 class HeatedPremise(models.Model):
     cadastral_number = models.CharField(max_length=30, blank=True, null=True, verbose_name='Кадастровый номер')
     postcode = models.CharField(max_length=6, blank=True, null=True, verbose_name='Индекс')
@@ -61,9 +73,9 @@ class Contract(models.Model):
     date = models.DateField(blank=True, null=True, verbose_name='Дата договора')
 
     def __str__(self):
-        b = str(self.statement.person)
-        a = ' Заявитель ' + b
-        return a
+        b ='Договор № ' + str(self.number) + ' c ' + str(self.statement.person)
+
+        return b
 
     class Meta:
         ordering = ['id']
@@ -80,22 +92,58 @@ class Plot(models.Model):
     tract = models.CharField(max_length=50, blank=True, null=True, verbose_name='Урочище')
     quarter = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартал')
     section = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Выдел')
-    chop_type = models.CharField(max_length=2, verbose_name='Вид рубки')
-    # number_of_trees количество деревьев
-    # large крупная
-    # average средняя
-    # small мелкая
-    # firewood дрова
-    # unmarketable неликвид
-    # total всего
-    # price цена
-    # cost стоимость
+    chop_type = models.CharField(max_length=20, verbose_name='Вид рубки')
+    cost = models.FloatField(blank=True, null=True, verbose_name='Стоимость')
 
     def __str__(self):
-        a = 'Для договра ' + self.contract.__str__()
+        a = 'Делянка ' + str(self.number_plot) + 'для договра ' + self.contract.__str__() +'с ' + \
+        str(self.contract.statement.person)
         return a
 
     class Meta:
         ordering = ['id']
         verbose_name = 'Делянка'
-        verbose_name_plural = 'Делянки'
+        verbose_name_plural = '1Делянки'
+
+
+class WoodSpecies(models.Model):
+    plot = models.ForeignKey(Plot, on_delete=models.CASCADE, verbose_name='Делянка')
+    name_wood_species = models.ForeignKey(Breeds, null=True, on_delete=models.SET_NULL, verbose_name='Подора')
+
+
+    def __str__(self):
+        return str(self.plot.contract.statement.person) + ' ' + str(self.name_wood_species)
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Порода дерева'
+        verbose_name_plural = '2Породы деревьев'
+
+
+class PlotWoodSpecies(models.Model):
+    wood_species = models.ForeignKey(WoodSpecies, on_delete=models.CASCADE, verbose_name='Порода в делянке')
+    number_of_trees = models.IntegerField(blank=True, null=True, verbose_name='Количество деревьев')
+    large = models.IntegerField(blank=True, null=True, verbose_name='Крупная')
+    average = models.IntegerField(blank=True, null=True, verbose_name='Средняя')
+    small = models.IntegerField(blank=True, null=True, verbose_name='Мелкая')
+    firewood = models.IntegerField(blank=True, null=True, verbose_name='Дровяная')
+    price = models.FloatField(blank=True, null=True, verbose_name='Цена')
+
+    def __str__(self):
+        a = str(self.wood_species.plot.contract.statement.person) + str(self.wood_species.name_wood_species)
+        return a
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Данные по породе'
+        verbose_name_plural = '3Данные по породам'
+    # number_of_trees количество деревьев
+    # large крупная (кубов)
+    # average средняя (кубов)
+    # small мелкая (кубов)
+    # firewood дрова (кубов)
+    # unmarketable неликвид (кубов)
+    # total всего (кубов)
+    # price цена
+    # cost стоимость
+    # wood species древесная порода

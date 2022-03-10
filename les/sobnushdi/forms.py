@@ -49,3 +49,29 @@ class ModContract(forms.ModelForm):
         widgets = {
             'date': MyDateInput, 'date_decree': MyDateInput,
         }
+
+
+class AddPlot(forms.ModelForm):
+    class Meta:
+        model = Plot
+        fields = ['number_plot', 'date', 'forestry', 'district_forestry', 'tract',
+                  'quarter', 'section', 'chop_type', 'cost']
+        widgets = {
+            'date': MyDateInput,
+    }
+
+
+class AddWoodSpecies(forms.ModelForm):
+    class Meta:
+        model = WoodSpecies
+        fields = ['name_wood_species', ]
+
+
+class AddPlotWoodSpecies(forms.ModelForm):
+    class Meta:
+        model = PlotWoodSpecies
+        fields = ['wood_species', 'number_of_trees', 'large', 'average', 'small',
+                  'firewood', 'price']
+        widgets = {
+            'date': MyDateInput,
+        }

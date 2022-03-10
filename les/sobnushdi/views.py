@@ -16,15 +16,18 @@ FORMS_STATEMENT = [("person", AddPerson),
                    ("passport", AddPassport),
                    ("AddHeatedPromise", AddHeatedPromise),
                    ("AddStatement", AddStatement),
-                  ]
+                   ]
 
 FORMS_CONTRACT = [("person", AddPerson),
-                 ("AddResidenceAddress", AddResidenceAddress),
-                 ("passport", AddPassport),
-                 ("AddHeatedPromise", AddHeatedPromise),
-                 ("AddStatement", AddStatement),
-                 ("AddContract", AddContract),
-                ]
+                  ("AddResidenceAddress", AddResidenceAddress),
+                  ("passport", AddPassport),
+                  ("AddHeatedPromise", AddHeatedPromise),
+                  ("AddStatement", AddStatement),
+                  ("AddContract", AddContract),
+                  ("AddPlot", AddPlot),
+                  ("AddWoodSpecies", AddWoodSpecies),
+                  ("AddPlotWoodSpecies", AddPlotWoodSpecies),
+                  ]
 
 
 class StatementsView(ListView):
@@ -55,9 +58,9 @@ class StatementAdd(CreateView):
     template_name = 'sobnushdi/statement_add.html'
 
     def get(self, request, pk, *args, **kwargs):
-        #print(request.GET)
-        today = str(datetime.now())[0:10] # Текущая дата без времени для вставки в форму ввода даты заявления
-        #print(today)
+        # print(request.GET)
+        today = str(datetime.now())[0:10]  # Текущая дата без времени для вставки в форму ввода даты заявления
+        # print(today)
         form_add_statement = AddStatement(initial={'date': today})
         form_add_heated_promise = AddHeatedPromise()
         person = get_object_or_404(Person, pk=pk)
@@ -74,7 +77,7 @@ class StatementAdd(CreateView):
         form_add_heated_promise = AddHeatedPromise(request.POST)
         person = get_object_or_404(Person, pk=pk)
         print(person.first_name)
-        #print(request.POST)
+        # print(request.POST)
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
                 'person': person,
@@ -96,9 +99,9 @@ class ContractAdd(CreateView):
     template_name = 'sobnushdi/contract_add.html'
 
     def get(self, request, pk, *args, **kwargs):
-        #print(request.GET)
-        today = str(datetime.now())[0:10] # Текущая дата без времени для вставки в форму ввода даты заявления
-        #print(today)
+        # print(request.GET)
+        today = str(datetime.now())[0:10]  # Текущая дата без времени для вставки в форму ввода даты заявления
+        # print(today)
         form_add_contract = AddContract(initial={'date': today, 'date_decree': today})
 
         statement = get_object_or_404(Statement, pk=pk)
@@ -113,7 +116,7 @@ class ContractAdd(CreateView):
         form_add_contract = AddContract(request.POST)
         statement = get_object_or_404(Statement, pk=pk)
         print(statement)
-        #print(request.POST)
+        # print(request.POST)
         form = {'form_add_contract': form_add_contract,
                 'statement': statement,
                 'title': 'Добавить договор'}
@@ -133,6 +136,7 @@ class ContractsView(ListView):
     context_object_name = 'contracts'
     fields = ['statement', 'number_decree', 'date_decree', 'number', 'date']
     paginate_by = 10
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Договора'
@@ -161,18 +165,18 @@ class StatementWizardAdd(SessionWizardView):
         return context
 
     def done(self, form_list, **kwargs):
-            passport = form_list[2].save()
-            person_address = form_list[1].save()
-            person = form_list[0].save(commit=False)
-            heated_premise = form_list[3].save()
-            statement = form_list[4].save(commit=False)
-            person.passport = passport
-            person.residence_address = person_address
-            person.save()
-            statement.person = person
-            statement.address = heated_premise
-            statement.save()
-            return redirect('statements_list')
+        passport = form_list[2].save()
+        person_address = form_list[1].save()
+        person = form_list[0].save(commit=False)
+        heated_premise = form_list[3].save()
+        statement = form_list[4].save(commit=False)
+        person.passport = passport
+        person.residence_address = person_address
+        person.save()
+        statement.person = person
+        statement.address = heated_premise
+        statement.save()
+        return redirect('statements_list')
 
 
 class ContractWizardAdd(SessionWizardView):
@@ -191,26 +195,32 @@ class ContractWizardAdd(SessionWizardView):
             context['title'] = 'адрес отапливаемого помещения'
         elif self.steps.current == 'AddStatement':
             today = str(datetime.now())[0:10]  # Текущая дата без времени для вставки в форму ввода даты заявления
-            print(today)
+            #print(today)
             form_add_statement = AddStatement(initial={'date': today})
             context['title'] = 'заявление'
         elif self.steps.current == 'AddContract':
             context['title'] = 'Договор'
+        elif self.steps.current == 'AddPlot':
+            context['title'] = 'Делянка'
+        elif self.steps.current == 'AddWoodSpecies':
+            context['title'] = 'Порода'
+        elif self.steps.current == 'AddPlotWoodSpecies':
+            context['title'] = 'Данной породы'
         return context
 
     def done(self, form_list, **kwargs):
-            passport = form_list[2].save()
-            person_address = form_list[1].save()
-            person = form_list[0].save(commit=False)
-            heated_premise = form_list[3].save()
-            statement = form_list[4].save(commit=False)
-            person.passport = passport
-            person.residence_address = person_address
-            person.save()
-            statement.person = person
-            statement.address = heated_premise
-            statement.save()
-            contract = form_list[5].save(commit=False)
-            contract.statement = statement
-            contract.save()
-            return redirect('contracts_list')
+        passport = form_list[2].save()
+        person_address = form_list[1].save()
+        person = form_list[0].save(commit=False)
+        heated_premise = form_list[3].save()
+        statement = form_list[4].save(commit=False)
+        person.passport = passport
+        person.residence_address = person_address
+        person.save()
+        statement.person = person
+        statement.address = heated_premise
+        statement.save()
+        contract = form_list[5].save(commit=False)
+        contract.statement = statement
+        contract.save()
+        return redirect('contracts_list')
