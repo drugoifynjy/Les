@@ -1,4 +1,5 @@
 from django.db import models
+from sobnushdi.models import *
 
 
 class ResidenceAddress(models.Model):
@@ -55,6 +56,8 @@ class Person(models.Model):
                                              blank=True, null=True, verbose_name='Адрес проживания')
     passport = models.OneToOneField(Passport, on_delete=models.CASCADE,
                                     blank=True, null=True, verbose_name='паспортные данные')
+    statement = models.ForeignKey(Statement, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Заявление')
+    contract = models.ForeignKey(Contract, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Договор')
 
     def __str__(self):
         a = str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic)

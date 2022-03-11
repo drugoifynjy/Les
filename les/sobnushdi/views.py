@@ -25,7 +25,6 @@ FORMS_CONTRACT = [("person", AddPerson),
                   ("AddStatement", AddStatement),
                   ("AddContract", AddContract),
                   ("AddPlot", AddPlot),
-                  ("AddWoodSpecies", AddWoodSpecies),
                   ("AddPlotWoodSpecies", AddPlotWoodSpecies),
                   ]
 
@@ -64,7 +63,9 @@ class StatementAdd(CreateView):
         form_add_statement = AddStatement(initial={'date': today})
         form_add_heated_promise = AddHeatedPromise()
         person = get_object_or_404(Person, pk=pk)
+        statment = get_object_or_404(Statement, pk=pk)
         print(person)
+        print(statment)
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
                 'pk': pk,
@@ -140,6 +141,10 @@ class ContractsView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Договора'
+        p = Person.objects.get(pk=1)
+        c = Contract.objects.get(pk=1)
+        d = c.person_set.all()
+        print(d)
         return context
 
 
@@ -209,18 +214,22 @@ class ContractWizardAdd(SessionWizardView):
         return context
 
     def done(self, form_list, **kwargs):
-        passport = form_list[2].save()
-        person_address = form_list[1].save()
-        person = form_list[0].save(commit=False)
-        heated_premise = form_list[3].save()
-        statement = form_list[4].save(commit=False)
-        person.passport = passport
-        person.residence_address = person_address
-        person.save()
-        statement.person = person
-        statement.address = heated_premise
-        statement.save()
-        contract = form_list[5].save(commit=False)
-        contract.statement = statement
-        contract.save()
+        passport = form_list[2].save() # Сохраняем паспортные данные
+        person_address = form_list[1].save() # Сохраняем адресс проживания
+        person = form_list[0].save(commit=False) # сохраняем данные человека
+        heated_premise = form_list[3].save() # сохраняем адрес отпаливаемого помещения
+        statement = form_list[4].save(commit=False) # сохраняем заявление
+        person.passport = passport # привязываем паспорт к данным человека
+        person.residence_address = person_address # привязываем адрес проживания к данным человека
+        person.save() # сохраняем связи в классе данных человека
+        statement.person = person # добавляем данные человека к заявлению
+        statement.address = heated_premise # добавляем адрес отапливаемого поиещения к заявлению
+        statement.save() # сохраняем связи заявления данных человека и отапливаемого помещения
+        contract = form_list[5].save(commit=False) # сохраняем договор
+        contract.statement = statement # привязываем заявление к договору
+        contract.save() # сохраняем связь заявления и договора
+        plot = form_list[6].save(commit=False)
+        wood_species = form_list[7].save(commit=False)
+        plot_wood_species = form_list[8].save()
+        plot_wood_species.wood_species = wood_species
         return redirect('contracts_list')

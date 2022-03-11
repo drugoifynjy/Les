@@ -15,9 +15,19 @@
     <tr>
         <td><mark> {{ contract.number }}</mark></td>
         <td> {{ contract.date }}</td>
-        <td> {{ contract.statement }}</td>
+        <td> {{ contract.statement }} </td>
+    {% for i in stat %}
+        <tr>
+        {% for i in PWS %}
+            <td>{{i}}</td>
+        {% endfor %}
+            <td></td>
+            <td>{{ i }}</td>
+        </tr>
+    {% endfor %}
     </tr>
     {% endfor %}
+
 
 </table>
 <table>

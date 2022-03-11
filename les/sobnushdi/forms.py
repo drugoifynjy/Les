@@ -12,7 +12,7 @@ class MyDateInput(forms.DateInput):
 class AddStatement(forms.ModelForm):
     class Meta:
         model = Statement
-        fields = ['number_statement', 'date']
+        fields = ['number_statement', 'quantity', 'date']
         widgets = {
             'date': MyDateInput,
         }
@@ -21,7 +21,7 @@ class AddStatement(forms.ModelForm):
 class ModStatement(forms.ModelForm):
     class Meta:
         model = Statement
-        fields = ['person', 'number_statement', 'date', 'there_is_a_contract', 'refusal_to_conclude_a_contract']
+        fields = ['number_statement', 'date', 'there_is_a_contract', 'refusal_to_conclude_a_contract', ]
         widgets = {
             'date': MyDateInput,
         }
@@ -45,7 +45,7 @@ class AddContract(forms.ModelForm):
 class ModContract(forms.ModelForm):
     class Meta:
         model = Contract
-        fields = ['statement', 'decision_on_statement', 'number_decree', 'date_decree', 'number', 'date']
+        fields = ['decision_on_statement', 'number_decree', 'date_decree', 'number', 'date']
         widgets = {
             'date': MyDateInput, 'date_decree': MyDateInput,
         }
@@ -61,17 +61,13 @@ class AddPlot(forms.ModelForm):
     }
 
 
-class AddWoodSpecies(forms.ModelForm):
-    class Meta:
-        model = WoodSpecies
-        fields = ['name_wood_species', ]
-
-
 class AddPlotWoodSpecies(forms.ModelForm):
     class Meta:
         model = PlotWoodSpecies
-        fields = ['wood_species', 'number_of_trees', 'large', 'average', 'small',
+        fields = ['number_of_trees', 'large', 'average', 'small',
                   'firewood', 'price']
         widgets = {
             'date': MyDateInput,
         }
+
+#class ViewAll(forms.Form):

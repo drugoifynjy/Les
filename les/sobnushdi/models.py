@@ -1,9 +1,7 @@
 from django.db import models
 
-from person.models import Person
 
-
-class Breeds(models.Model):
+class Breeds(models.Model): #Порода
     name = models.CharField(max_length=20, blank=True, null=True, verbose_name='Название породы')
 
     def __str__(self):
@@ -13,6 +11,60 @@ class Breeds(models.Model):
         ordering = ['id']
         verbose_name = 'Порода'
         verbose_name_plural = 'Породы'
+
+
+class PlotWoodSpecies(models.Model): #Количество-качество по породе
+    name = models.ForeignKey(Breeds, on_delete=models.DO_NOTHING, verbose_name='Порода')
+    number_of_trees = models.IntegerField(blank=True, null=True, verbose_name='Количество деревьев')
+    large = models.IntegerField(blank=True, null=True, verbose_name='Крупная')
+    average = models.IntegerField(blank=True, null=True, verbose_name='Средняя')
+    small = models.IntegerField(blank=True, null=True, verbose_name='Мелкая')
+    firewood = models.IntegerField(blank=True, null=True, verbose_name='Дровяная')
+    price = models.FloatField(blank=True, null=True, verbose_name='Цена')
+
+    def __str__(self):
+        a = str(self.price)
+        return a
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Данные по породе'
+        verbose_name_plural = 'Данные по породам'
+
+
+# class WoodSpecies(models.Model):
+#     #plot = models.ForeignKey(Plot, on_delete=models.CASCADE, verbose_name='Делянка')
+#     name_wood_species = models.ForeignKey(Breeds, null=True, blank=True, default='',  on_delete=models.SET_DEFAULT, verbose_name='Подора')
+#
+#     def __str__(self):
+#         return str(self.name_wood_species)
+#
+#     class Meta:
+#         ordering = ['id']
+#         verbose_name = 'Порода дерева'
+#         verbose_name_plural = 'Породы деревьев'
+
+
+class Plot(models.Model): #ДЕЛЯНКА
+    number_plot = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Номер делянки')
+    date = models.DateField(blank=True, null=True, verbose_name='Дата?')
+    forestry = models.CharField(max_length=50, blank=True, null=True, verbose_name='Лесничество')
+    district_forestry = models.CharField(max_length=50, blank=True, null=True, verbose_name='Участковое лесничество')
+    tract = models.CharField(max_length=50, blank=True, null=True, verbose_name='Урочище')
+    quarter = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартал')
+    section = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Выдел')
+    chop_type = models.CharField(max_length=20, verbose_name='Вид рубки')
+    cost = models.FloatField(blank=True, null=True, verbose_name='Стоимость')
+    plot_wood_species = models.ManyToManyField(PlotWoodSpecies, verbose_name='Данные по породе')
+
+    def __str__(self):
+        a = 'Делянка ' + str(self.number_plot)
+        return a
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Делянка'
+        verbose_name_plural = 'Делянки'
 
 
 class HeatedPremise(models.Model):
@@ -48,14 +100,14 @@ class Statement(models.Model):
     address = models.ForeignKey(HeatedPremise, on_delete=models.SET_NULL,
                                 null=True, verbose_name='Адрес отапливаемого помещения')
     there_is_a_contract = models.BooleanField(verbose_name='Есть договор', default=False)
-    refusal_to_conclude_a_contract = models.BooleanField(verbose_name='Отказ от заключения договора', default=False)
-    person = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Заявитель')
+    quantity = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Количество по заявлению')
+    refusal_to_conclude_a_contract = models.BooleanField(verbose_name='Отказ', default=False)
 
     def __str__(self):
         num = str(self.number_statement)
         data = str(self.date)
-        fio = str(self.person)
-        a = str('№  ' + num + ' от ' + data + ' ' + fio)
+        #fio = str(self.person)
+        a = str('№  ' + num + ' от ' + data)
         return a
 
     class Meta:
@@ -65,15 +117,15 @@ class Statement(models.Model):
 
 
 class Contract(models.Model):
-    statement = models.OneToOneField(Statement, on_delete=models.CASCADE, verbose_name='Заявление')
+    #statement = models.OneToOneField(Statement, on_delete=models.CASCADE, verbose_name='Заявление')
     decision_on_statement = models.BooleanField(blank=True, null=True, verbose_name='Отказ')
     number_decree = models.CharField(max_length=7, verbose_name='номер распоряжения')
     date_decree = models.DateField(blank=True, null=True, verbose_name='дата распоряжения')
     number = models.CharField(max_length=7, blank=True, null=True, verbose_name='номер договора')
     date = models.DateField(blank=True, null=True, verbose_name='Дата договора')
-
+    plot = models.ForeignKey(Plot, on_delete=models.CASCADE, verbose_name='Делянка')
     def __str__(self):
-        b ='Договор № ' + str(self.number) + ' c ' + str(self.statement.person)
+        b ='Договор № ' + str(self.number)
 
         return b
 
@@ -83,60 +135,14 @@ class Contract(models.Model):
         verbose_name_plural = 'Договоры'
 
 
-class Plot(models.Model):
-    contract = models.OneToOneField(Contract, on_delete=models.CASCADE, verbose_name='Договор')
-    number_plot = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Номер делянки')
-    date = models.DateField(blank=True, null=True, verbose_name='Дата?')
-    forestry = models.CharField(max_length=50, blank=True, null=True, verbose_name='Лесничество')
-    district_forestry = models.CharField(max_length=50, blank=True, null=True, verbose_name='Участковое лесничество')
-    tract = models.CharField(max_length=50, blank=True, null=True, verbose_name='Урочище')
-    quarter = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартал')
-    section = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Выдел')
-    chop_type = models.CharField(max_length=20, verbose_name='Вид рубки')
-    cost = models.FloatField(blank=True, null=True, verbose_name='Стоимость')
-
-    def __str__(self):
-        a = 'Делянка ' + str(self.number_plot) + 'для договра ' + self.contract.__str__() +'с ' + \
-        str(self.contract.statement.person)
-        return a
-
-    class Meta:
-        ordering = ['id']
-        verbose_name = 'Делянка'
-        verbose_name_plural = '1Делянки'
 
 
-class WoodSpecies(models.Model):
-    plot = models.ForeignKey(Plot, on_delete=models.CASCADE, verbose_name='Делянка')
-    name_wood_species = models.ForeignKey(Breeds, null=True, on_delete=models.SET_NULL, verbose_name='Подора')
 
 
-    def __str__(self):
-        return str(self.plot.contract.statement.person) + ' ' + str(self.name_wood_species)
-
-    class Meta:
-        ordering = ['id']
-        verbose_name = 'Порода дерева'
-        verbose_name_plural = '2Породы деревьев'
 
 
-class PlotWoodSpecies(models.Model):
-    wood_species = models.ForeignKey(WoodSpecies, on_delete=models.CASCADE, verbose_name='Порода в делянке')
-    number_of_trees = models.IntegerField(blank=True, null=True, verbose_name='Количество деревьев')
-    large = models.IntegerField(blank=True, null=True, verbose_name='Крупная')
-    average = models.IntegerField(blank=True, null=True, verbose_name='Средняя')
-    small = models.IntegerField(blank=True, null=True, verbose_name='Мелкая')
-    firewood = models.IntegerField(blank=True, null=True, verbose_name='Дровяная')
-    price = models.FloatField(blank=True, null=True, verbose_name='Цена')
 
-    def __str__(self):
-        a = str(self.wood_species.plot.contract.statement.person) + str(self.wood_species.name_wood_species)
-        return a
 
-    class Meta:
-        ordering = ['id']
-        verbose_name = 'Данные по породе'
-        verbose_name_plural = '3Данные по породам'
     # number_of_trees количество деревьев
     # large крупная (кубов)
     # average средняя (кубов)
