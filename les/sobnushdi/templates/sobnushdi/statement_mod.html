@@ -2,36 +2,31 @@
 
 {% block content %}
 
-<form action="{% url 'statement_mod' pk=pk %}" method="post">
+<form action="{% url 'statement_mod' pk %}" method="post">
     {% csrf_token %}
-      <table bgcolor="silver">
+    <table bgcolor="silver">
         <tr>
-            <th>ФИО</th>
-            <th>Паспортные данные</th>
-            <th>Прописка</th>
+            <th>Заявитель</th>
+            <th>Заявление</th>
+            <th>Отапливаемое помещение</th>
         </tr>
-    <tr bgcolor="#858">
-
-        <td>
-            <table >
-                {{ form_statement_mod.as_p }}
-            </table>
-        </td>
-
-        <td>
-            <table>
-                {{ form_passport_mod.as_p }}
-            </table>
-        </td>
-
-        <td>
-            <table>
-                {{ form_residence_address_mod.as_p }}
-            </table>
-        </td>
-    </tr>
+        <tr class="tab_statement_mod" bgcolor="#858">
+            <td>
+                    {{ person }}
+            </td>
+            <td>
+                    {{ form_add_statement.as_p }}
+            </td>
+            <td>
+                    {{ form_add_heated_promise.as_p }}
+            </td>
+        </tr>
     </table>
+
     <button type="submit">Изменить</button>
+    <form action="{% url 'statements_list' %}" method="get">
+        <button type="reset"><a href="{% url 'statements_list' %}">Отмена</a></button>
+    </form>
 </form>
 
 {% endblock %}

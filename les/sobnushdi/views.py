@@ -34,38 +34,25 @@ class StatementsView(ListView):
     template_name = 'sobnushdi/statements_list.html'
     context_object_name = 'statements'
     paginate_by = 10
-
+    persons = Person.objects.all()
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        #person = self.persons.get(context.get('id'))
         context['title'] = 'Заявления'
+        #context['person'] = person
         return context
 
 
 class StatementMod(View):
-    model = Statement
     template_name = 'sobnushdi/statement_mod.html'
-    context_object_name = 'statement_mod'
-    fields = ['number_statement', 'date', 'address']
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Заявления'
-        return context
-
-
-class StatementAdd(CreateView):
-    template_name = 'sobnushdi/statement_add.html'
 
     def get(self, request, pk, *args, **kwargs):
-        # print(request.GET)
-        today = str(datetime.now())[0:10]  # Текущая дата без времени для вставки в форму ввода даты заявления
-        # print(today)
-        form_add_statement = AddStatement(initial={'date': today})
-        form_add_heated_promise = AddHeatedPromise()
-        person = get_object_or_404(Person, pk=pk)
-        statment = get_object_or_404(Statement, pk=pk)
-        print(person)
-        print(statment)
+        stat = get_object_or_404(Statement, pk=pk)
+        date = str(stat.date)
+        form_add_statement = AddStatement(initial={'date': date}, instance=stat)
+        form_add_heated_promise = AddHeatedPromise(instance=stat.heated_promise)
+        person = stat.person
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
                 'pk': pk,
@@ -74,21 +61,58 @@ class StatementAdd(CreateView):
         return render(request, self.template_name, context=form)
 
     def post(self, request, pk, *args, **kwargs):
+        stat = get_object_or_404(Statement, pk=pk)
+        person = stat.person
+        heated_promise = stat.heated_promise
+        form_add_statement = ModStatement(request.POST, instance=stat)
+        form_add_heated_promise = AddHeatedPromise(request.POST, instance=stat.heated_promise)
+        form = {'form_add_statement': form_add_statement,
+                'form_add_heated_promise': form_add_heated_promise,
+                'person': person,
+                'title': 'Добавить заявление'}
+        if form_add_statement.is_valid() and form_add_heated_promise.is_valid():
+            heated_promise.save()
+            person.save()
+            stat.save()
+            return redirect('statements_list')
+        else:
+            form_p = form
+        return render(request, self.template_name, context=form_p)
+
+
+class StatementAdd(CreateView):
+    template_name = 'sobnushdi/statement_add.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        today = str(datetime.now())[0:10]  # Текущая дата без времени для вставки в форму ввода даты заявления
+        form_add_statement = AddStatement(initial={'date': today})
+        person = get_object_or_404(Person, pk=pk)
+        form_add_heated_promise = AddHeatedPromise(instance=person.residence_address)
+        form = {'form_add_statement': form_add_statement,
+                'form_add_heated_promise': form_add_heated_promise,
+                'pk': pk,
+                'person': person,
+                'title': 'Добавить заявление'}
+
+        return render(request, self.template_name, context=form)
+
+    def post(self, request, pk, *args, **kwargs):
         form_add_statement = AddStatement(request.POST)
         form_add_heated_promise = AddHeatedPromise(request.POST)
         person = get_object_or_404(Person, pk=pk)
-        print(person.first_name)
-        # print(request.POST)
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
                 'person': person,
                 'title': 'Добавить заявление'}
         if form_add_statement.is_valid() \
                 and form_add_heated_promise.is_valid():
+            if form_add_statement.cleaned_data['address_address']:
+                addres_propisky = person.residence_address
             heated_promise = form_add_heated_promise.save()
             statement = form_add_statement.save(commit=False)
+            person.save()
             statement.heated_promise = heated_promise
-            statement.person = Person.objects.get(pk=pk)
+            statement.person = person
             statement.save()
             return redirect('statements_list')
         else:
@@ -102,23 +126,25 @@ class ContractAdd(CreateView):
     def get(self, request, pk, *args, **kwargs):
         # print(request.GET)
         today = str(datetime.now())[0:10]  # Текущая дата без времени для вставки в форму ввода даты заявления
-        # print(today)
+        statement = Statement.objects.get(pk=pk)
         form_add_contract = AddContract(initial={'date': today, 'date_decree': today})
-
-        statement = get_object_or_404(Statement, pk=pk)
-        print(statement)
+        form_add_plot = AddPlot()
+        form_add_plot_wood_species = AddPlotWoodSpecies()
         form = {'form_add_contract': form_add_contract,
+                'form_add_plot': form_add_plot,
                 'pk': pk,
                 'statement': statement,
                 'title': 'Добавить договор'}
         return render(request, self.template_name, context=form)
 
     def post(self, request, pk, *args, **kwargs):
-        form_add_contract = AddContract(request.POST)
         statement = get_object_or_404(Statement, pk=pk)
+        form_add_contract = AddContract(request.POST, statement=statement)
+        form_add_plot = AddPlot()
         print(statement)
         # print(request.POST)
         form = {'form_add_contract': form_add_contract,
+                'form_add_plot': form_add_plot,
                 'statement': statement,
                 'title': 'Добавить договор'}
         if form_add_contract.is_valid():
@@ -141,10 +167,6 @@ class ContractsView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Договора'
-        p = Person.objects.get(pk=1)
-        c = Contract.objects.get(pk=1)
-        d = c.person_set.all()
-        print(d)
         return context
 
 

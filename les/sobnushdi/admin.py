@@ -22,7 +22,7 @@ class ContractAdmin(admin.ModelAdmin):
 
 @admin.register(Plot)
 class PlotAdmin(admin.ModelAdmin):
-    list_display = ('number_plot', 'date', 'forestry', 'district_forestry', 'tract',
+    list_display = ('number_plot', 'forestry', 'district_forestry', 'tract',
                     'quarter', 'section', 'chop_type', 'cost')
     #list_filter = ('date',)
 

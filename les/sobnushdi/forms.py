@@ -12,7 +12,7 @@ class MyDateInput(forms.DateInput):
 class AddStatement(forms.ModelForm):
     class Meta:
         model = Statement
-        fields = ['number_statement', 'quantity', 'date']
+        fields = ['number_statement', 'quantity', 'date', 'address_address', ]
         widgets = {
             'date': MyDateInput,
         }
@@ -21,7 +21,7 @@ class AddStatement(forms.ModelForm):
 class ModStatement(forms.ModelForm):
     class Meta:
         model = Statement
-        fields = ['number_statement', 'date', 'there_is_a_contract', 'refusal_to_conclude_a_contract', ]
+        fields = ['number_statement', 'date', 'quantity', 'refusal_to_conclude_a_contract', ]
         widgets = {
             'date': MyDateInput,
         }
@@ -36,7 +36,7 @@ class AddHeatedPromise(forms.ModelForm):
 class AddContract(forms.ModelForm):
     class Meta:
         model = Contract
-        fields = ['decision_on_statement', 'number_decree', 'date_decree', 'number', 'date']
+        fields = ['number_decree', 'date_decree', 'number', 'date']
         widgets = {
             'date': MyDateInput, 'date_decree': MyDateInput,
         }
@@ -45,7 +45,7 @@ class AddContract(forms.ModelForm):
 class ModContract(forms.ModelForm):
     class Meta:
         model = Contract
-        fields = ['decision_on_statement', 'number_decree', 'date_decree', 'number', 'date']
+        fields = ['number_decree', 'date_decree', 'number', 'date', 'plot']
         widgets = {
             'date': MyDateInput, 'date_decree': MyDateInput,
         }
@@ -54,7 +54,7 @@ class ModContract(forms.ModelForm):
 class AddPlot(forms.ModelForm):
     class Meta:
         model = Plot
-        fields = ['number_plot', 'date', 'forestry', 'district_forestry', 'tract',
+        fields = ['number_plot', 'forestry', 'district_forestry', 'tract',
                   'quarter', 'section', 'chop_type', 'cost']
         widgets = {
             'date': MyDateInput,
@@ -70,4 +70,14 @@ class AddPlotWoodSpecies(forms.ModelForm):
             'date': MyDateInput,
         }
 
-#class ViewAll(forms.Form):
+
+class AddBreeds(forms.ModelForm):
+    class Meta:
+        model = Breeds
+        fields = ['name', ]
+
+
+class AddTract(forms.ModelForm):
+    class Meta:
+        model = Tract
+        fields = ['name', ]

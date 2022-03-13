@@ -20,6 +20,10 @@
                     <td>
                         {{ p.date_of_bird }}
                     </td>
+
+                    <td>
+                        {{p.statement.number_statement}}
+                    </td>
                     <td>
                         <form action="{% url 'person_mod' p.pk %}">
                             <button type="submit">Изменить</button>

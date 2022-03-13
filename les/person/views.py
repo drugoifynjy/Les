@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, CreateView, View
 from formtools.wizard.views import SessionWizardView
 from .forms import *
-
+from sobnushdi.models import Statement
 
 class PersonAdd(CreateView):
     template_name = 'person/person_add.html'
@@ -110,7 +110,6 @@ class PersonView(ListView):
     template_name = 'person/persons_list.html'
     context_object_name = 'pers'
     paginate_by = 10
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Заявители'
