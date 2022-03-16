@@ -1,0 +1,39 @@
+{% extends 'sobnushdi/base.html' %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<form action="{% url 'plot_wood_species_mod' pk %}" method="post">
+    {% csrf_token %}
+    <table bgcolor="silver">
+        <tr>
+            <th>ФИО</th>
+            <th>Договор</th>
+            <th>Делянка</th>
+            <th>Количество по делянке</th>
+
+        </tr>
+        <tr  bgcolor="#858">
+            <td>
+                    {{ person }}
+            </td>
+            <td>
+                    {{ contract }}
+            </td>
+            <td>
+                    {{ plot }}
+            </td>
+            <td>
+                    {{ form_mod_plot_wood_species.as_p }}
+            </td>
+        </tr>
+    </table>
+
+    <button type="submit">ОК</button>
+    <form action="{% url 'contracts_list' %}" method="get">
+        <button type="reset"><a href="{% url 'contracts_list' %}">Отмена</a></button>
+    </form>
+</form>
+{% else %}
+<p>Авторизуйтесь</p>
+ {% endif %}
+{% endblock %}

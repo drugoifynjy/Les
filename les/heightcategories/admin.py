@@ -3,6 +3,6 @@ from django.contrib import admin
 from .models import *
 
 
-@admin.register(Fff)
-class StatementAdmin(admin.ModelAdmin):
-    list_display = ('diametrs',)
+@admin.register(Diameter)
+class DiameterAdmin(admin.ModelAdmin):
+    list_display = ('name',)

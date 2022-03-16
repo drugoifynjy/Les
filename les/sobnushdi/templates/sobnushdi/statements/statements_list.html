@@ -1,0 +1,59 @@
+{% extends 'sobnushdi/base.html' %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+{{title}}
+<table>
+    <tr>
+        <th>№</th>
+        <th>ФИО</th>
+        <th>Дата заявления</th>
+    </tr>
+{% for stat in statements %}
+    <tr>
+
+        <td><mark> {{ stat.number_statement }}</mark></td>
+        <td> {{ stat.person }}</td>
+
+
+        <td> {{ stat.date }}</td>
+        <td>
+            <form action="{% url 'statement_mod' pk=stat.pk %}">
+                <button type="submit">Изменить</button>
+            </form>
+        </td>
+        <td>
+            {% if not stat.contract %}
+            <form action="{% url 'contract_add' pk=stat.pk %}">
+                <button type="submit">Добавить договор</button>
+            </form>
+            {% else %}
+                Есть договор
+            {%endif%}
+        </td>
+</tr>
+    {% endfor %}
+
+</table>
+<div class="clear"></div>
+    <div class="pagination">
+        <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="first_last">&laquo; Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="next_previous">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="next_previous">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="first_last">Последняя &raquo;</a>
+        {% endif %}
+        </span>
+    </div>
+{% else %}
+<p>Авторизуйтесь</p>
+ {% endif %}
+{% endblock %}

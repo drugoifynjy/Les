@@ -12,7 +12,7 @@ class MyDateInput(forms.DateInput):
 class AddStatement(forms.ModelForm):
     class Meta:
         model = Statement
-        fields = ['number_statement', 'quantity', 'date', 'address_address', ]
+        fields = ['number_statement', 'quantity', 'date', ]
         widgets = {
             'date': MyDateInput,
         }
@@ -55,29 +55,35 @@ class AddPlot(forms.ModelForm):
     class Meta:
         model = Plot
         fields = ['number_plot', 'forestry', 'district_forestry', 'tract',
-                  'quarter', 'section', 'chop_type', 'cost']
+                  'quarter', 'section', 'chop_type', 'cost', ]
         widgets = {
-            'date': MyDateInput,
-    }
+            'cost': forms.TextInput(attrs={'readonly': True}),
+        }
 
 
 class AddPlotWoodSpecies(forms.ModelForm):
     class Meta:
         model = PlotWoodSpecies
-        fields = ['number_of_trees', 'large', 'average', 'small',
+        fields = ['name', 'number_of_trees', 'large', 'average', 'small',
                   'firewood', 'price']
         widgets = {
             'date': MyDateInput,
         }
 
 
-class AddBreeds(forms.ModelForm):
+class AddBreed(forms.ModelForm):
     class Meta:
-        model = Breeds
+        model = Breed
         fields = ['name', ]
 
 
 class AddTract(forms.ModelForm):
     class Meta:
         model = Tract
+        fields = ['name', ]
+
+
+class AddForestry(forms.ModelForm):
+    class Meta:
+        model = Forestry
         fields = ['name', ]

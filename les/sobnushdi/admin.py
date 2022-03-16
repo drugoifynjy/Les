@@ -24,16 +24,23 @@ class ContractAdmin(admin.ModelAdmin):
 class PlotAdmin(admin.ModelAdmin):
     list_display = ('number_plot', 'forestry', 'district_forestry', 'tract',
                     'quarter', 'section', 'chop_type', 'cost')
-    #list_filter = ('date',)
 
 
 @admin.register(PlotWoodSpecies)
 class PlotWoodSpeciesAdmin(admin.ModelAdmin):
     list_display = ('number_of_trees', 'large', 'average', 'small', 'firewood', 'price')
-    #list_filter = ('date',)
 
 
-@admin.register(Breeds)
+@admin.register(Breed)
 class BreedsAdmin(admin.ModelAdmin):
     list_display = ('name',)
-    #list_filter = ('date',)
+
+
+@admin.register(Tract)
+class TractAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+
+@admin.register(Forestry)
+class ForestryAdmin(admin.ModelAdmin):
+    list_display = ('name',)

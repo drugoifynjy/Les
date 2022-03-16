@@ -126,6 +126,7 @@ class LoginUser(LoginView):
     template_name = 'person/login.html'
 
 
+
 def logout_user(request):
     logout(request)
     return redirect('login')

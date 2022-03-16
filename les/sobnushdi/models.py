@@ -27,7 +27,7 @@ class Forestry(models.Model):#Лесничесвто
         verbose_name_plural = 'Лесничества'
 
 
-class Breeds(models.Model): #Порода
+class Breed(models.Model): #Порода
     name = models.CharField(max_length=20, blank=True, null=True, verbose_name='Название породы')
 
     def __str__(self):
@@ -71,8 +71,7 @@ class Statement(models.Model):
     number_statement = models.PositiveSmallIntegerField(verbose_name='Номер заявления')
     date = models.DateField(blank=True, null=True, verbose_name='Дата заявления')
     heated_promise = models.OneToOneField(HeatedPremise, on_delete=models.SET_NULL, blank=True,
-                                null=True, verbose_name='Адрес отапливаемого помещения')
-    address_address = models.BooleanField(default=False, verbose_name='адрес отапливаемого помещения совпадает с проспиской')
+                                          null=True, verbose_name='Адрес отапливаемого помещения')
     there_is_a_contract = models.BooleanField(editable=False, verbose_name='Есть договор', default=False)
     quantity = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Количество по заявлению')
     refusal_to_conclude_a_contract = models.BooleanField(verbose_name='Отказ', default=False)
@@ -90,11 +89,8 @@ class Statement(models.Model):
         verbose_name_plural = 'Заявления'
 
 
-
-
-
 class PlotWoodSpecies(models.Model): #Количество-качество по породе
-    name = models.ForeignKey(Breeds, on_delete=models.DO_NOTHING, verbose_name='Порода')
+    name = models.ForeignKey(Breed, on_delete=models.DO_NOTHING, verbose_name='Порода')
     number_of_trees = models.IntegerField(blank=True, null=True, verbose_name='Количество деревьев')
     large = models.IntegerField(blank=True, null=True, verbose_name='Крупная')
     average = models.IntegerField(blank=True, null=True, verbose_name='Средняя')
@@ -103,26 +99,13 @@ class PlotWoodSpecies(models.Model): #Количество-качество по
     price = models.FloatField(blank=True, null=True, verbose_name='Цена')
 
     def __str__(self):
-        a = str(self.price)
+        a = str(self.name.name)
         return a
 
     class Meta:
         ordering = ['id']
         verbose_name = 'Данные по породе'
         verbose_name_plural = 'Данные по породам'
-
-
-# class WoodSpecies(models.Model):
-#     #plot = models.ForeignKey(Plot, on_delete=models.CASCADE, verbose_name='Делянка')
-#     name_wood_species = models.ForeignKey(Breeds, null=True, blank=True, default='',  on_delete=models.SET_DEFAULT, verbose_name='Подора')
-#
-#     def __str__(self):
-#         return str(self.name_wood_species)
-#
-#     class Meta:
-#         ordering = ['id']
-#         verbose_name = 'Порода дерева'
-#         verbose_name_plural = 'Породы деревьев'
 
 
 class Plot(models.Model): #ДЕЛЯНКА
@@ -162,16 +145,3 @@ class Contract(models.Model):
         ordering = ['id']
         verbose_name = 'Договор'
         verbose_name_plural = 'Договоры'
-
-
-
-    # number_of_trees количество деревьев
-    # large крупная (кубов)
-    # average средняя (кубов)
-    # small мелкая (кубов)
-    # firewood дрова (кубов)
-    # unmarketable неликвид (кубов)
-    # total всего (кубов)
-    # price цена
-    # cost стоимость
-    # wood species древесная порода

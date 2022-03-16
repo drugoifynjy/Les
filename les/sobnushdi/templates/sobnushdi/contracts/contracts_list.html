@@ -5,37 +5,33 @@
 {{title}}
 <table>
     <tr>
-        <th>Договор</th>
-        <th>Дата</th>
+        <th>№</th>
+        <th>ФИО</th>
+        <th>Дата договора</th>
+        <th>Дата заявления</th>
 
-        <th>Заявление</th>
 
     </tr>
 {% for contract in contracts %}
     <tr>
         <td><mark> {{ contract.number }}</mark></td>
+        <td> {{ contract.statement.person }}</td>
         <td> {{ contract.date }}</td>
-        <td> {{ contract.statement }} </td>
-    {% for i in stat %}
-        <tr>
-        {% for i in PWS %}
-            <td>{{i}}</td>
-        {% endfor %}
-            <td></td>
-            <td>{{ i }}</td>
-        </tr>
-    {% endfor %}
-    </tr>
-    {% endfor %}
+        <td> {{ contract.statement.date }} </td>
 
+        <td>
+            <form action="{% url 'contract_mod' pk=contract.pk %}">
+                <button type="submit">Изменить</button>
+            </form>
+        </td>
+        <td>
+            <form action="{% url 'contract_view' pk=contract.pk %}">
+                <button type="submit">Подробно</button>
+            </form>
+        </td>
+{% endfor %}
+</table>
 
-</table>
-<table>
-    <tr>
-        <td><form action="{% url 'contract_wizard_add' %}">
-        <button type="submit">Добавить</button></form></td>
-    </tr>
-</table>
 <div class="clear"></div>
     <div class="pagination">
         <span class="step-links">

@@ -10,9 +10,11 @@ html, body {
 a {
 	color: #fdc073;
 	text-decoration: none;
+	border: 1px
 }
 a:hover {
 	color: #FDA83D;
+	border: 1px
 }
 
 a.Butf{
@@ -20,10 +22,12 @@ a.Butf{
 	text-decoration: none;
 	float: right;
 	background: #333671;
+	border: 1px
 }
 
 a.Butf:hover{
     color: #FDA83D;
+    border: 1px
 }
 
 .first_last{

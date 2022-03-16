@@ -1,0 +1,14 @@
+{% extends 'sobnushdi/base.html' %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<H1>{{title}}</H1>
+
+<div class="button"><a href="{% url 'breeds' %}" >Породы</a></div>
+<div class="button"><a href="{% url 'tracts' %}" >Урочища</a></div>
+<div class="button"><a href="{% url 'forestrys' %}" >Лесничества</a></div>
+
+{% else %}
+<p>Авторизуйтесь</p>
+ {% endif %}
+{% endblock %}
