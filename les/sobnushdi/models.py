@@ -27,6 +27,18 @@ class Forestry(models.Model):#Лесничесвто
         verbose_name_plural = 'Лесничества'
 
 
+class DistrictForestry(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Участковое лесничество')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Участковое лесничество'
+        verbose_name_plural = 'Участковые лесничества'
+
+
 class Breed(models.Model): #Порода
     name = models.CharField(max_length=20, blank=True, null=True, verbose_name='Название породы')
 
@@ -42,11 +54,12 @@ class Breed(models.Model): #Порода
 class HeatedPremise(models.Model):# Отапливаемое помещение
     cadastral_number = models.CharField(max_length=30, blank=True, null=True, verbose_name='Кадастровый номер')
     postcode = models.CharField(max_length=6, blank=True, null=True,default='646350', verbose_name='Индекс')
+    region = models.CharField(max_length=100, blank=True, null=True, default='Омская', verbose_name='Область')
     district = models.CharField(max_length=50, blank=True, null=True, default='Колосовский', verbose_name='Район')
     locality = models.CharField(max_length=50, blank=True, null=True,default='Колосовка', verbose_name='Населенный пункт')
     street = models.CharField(max_length=50, blank=True, null=True, verbose_name='Улица')
-    house_number = models.PositiveSmallIntegerField(max_length=6, blank=True, null=True, verbose_name='Дом')
-    apartment_number = models.PositiveSmallIntegerField(max_length=6, blank=True, null=True, verbose_name='Квартира')
+    house_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Дом')
+    apartment_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартира')
 
     def __str__(self):
         if self.apartment_number:
@@ -96,6 +109,7 @@ class PlotWoodSpecies(models.Model): #Количество-качество по
     average = models.IntegerField(blank=True, null=True, verbose_name='Средняя')
     small = models.IntegerField(blank=True, null=True, verbose_name='Мелкая')
     firewood = models.IntegerField(blank=True, null=True, verbose_name='Дровяная')
+    brushwood = models.IntegerField(blank=True, null=True, verbose_name='Хворост(неликвид)')
     price = models.FloatField(blank=True, null=True, verbose_name='Цена')
 
     def __str__(self):
@@ -110,14 +124,17 @@ class PlotWoodSpecies(models.Model): #Количество-качество по
 
 class Plot(models.Model): #ДЕЛЯНКА
     number_plot = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Номер делянки')
+    area = models.FloatField(blank=True, null=True, verbose_name='Площадь')
     forestry = models.ForeignKey(Forestry, blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name='Лесничество')
-    district_forestry = models.CharField(max_length=50, blank=True, default='Колосовское', null=True, verbose_name='Участковое лесничество')
+    district_forestry = models.ForeignKey(DistrictForestry, blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name='Участковое лесничество')
     tract = models.ForeignKey(Tract, blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name='Урочище')
     quarter = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартал')
     section = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Выдел')
-    chop_type = models.CharField(max_length=100, default='рубка спелых и перестойных лесных насаждений', verbose_name='Вид рубки')
+    chop_type = models.CharField(blank=True, null=True, max_length=100, default='рубка спелых и перестойных лесных насаждений', verbose_name='Вид рубки')
+    type_of_forestry = models.CharField(blank=True, null=True, max_length=100, default='мягколиственное', verbose_name='Хозяйство')
     cost = models.FloatField(blank=True, null=True, verbose_name='Стоимость')
-    plot_wood_species = models.ManyToManyField(PlotWoodSpecies, verbose_name='Данные по породе')
+    cost_in_words = models.FloatField(blank=True, null=True, verbose_name='Стоимость прописью')
+    plot_wood_species = models.ManyToManyField(PlotWoodSpecies, blank=True, verbose_name='Данные по породе')
 
     def __str__(self):
         a = 'Делянка ' + str(self.number_plot)

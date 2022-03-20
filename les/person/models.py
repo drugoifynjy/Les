@@ -1,23 +1,29 @@
 from django.db import models
-#from sobnushdi.models import *
 
 
 class ResidenceAddress(models.Model):
     postcode = models.CharField(max_length=6, blank=True, null=True, verbose_name='Индекс', default='646350')
+    region = models.CharField(max_length=100, blank=True, null=True, default='Омская', verbose_name='Область')
     district = models.CharField(max_length=50, blank=True, null=True, verbose_name='Район', default='Колосовский')
     locality = models.CharField(max_length=50, blank=True, null=True, verbose_name='Населенный пункт', default='Колосовка')
     street = models.CharField(max_length=50, blank=True, null=True, verbose_name='Улица', default='Кирова')
-    house_number = models.PositiveSmallIntegerField(max_length=6, blank=True, null=True, verbose_name='Дом')
-    apartment_number = models.PositiveSmallIntegerField(max_length=6, blank=True, null=True, verbose_name='Квартира')
+    house_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Дом')
+    apartment_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартира')
 
     def __str__(self):
         if self.apartment_number:
-            a = str(self.locality.__str__()) + ' ул. ' + \
+            a = str(self.postcode.__str__()) + ' ' + \
+                str(self.region.__str__()) + ' область ' + \
+                str(self.district.__str__()) + ' район ' + \
+                str(self.locality.__str__()) + ' ул. ' + \
                 str(self.street.__str__()) + ' д. ' + \
                 str(self.house_number.__str__()) + ' кв. ' + \
                 str(self.apartment_number.__str__())
         else:
-            a = str(self.locality.__str__()) + ' ул. ' + \
+            a = str(self.postcode.__str__()) + ' ' + \
+                str(self.region.__str__()) + ' область ' + \
+                str(self.district.__str__()) + ' район ' + \
+                str(self.locality.__str__()) + ' ул. ' + \
                 str(self.street.__str__()) + ' д. ' + \
                 str(self.house_number.__str__())
         return a
@@ -37,7 +43,11 @@ class Passport(models.Model):
     inn = models.PositiveIntegerField(blank=True, null=True, verbose_name='ИНН')
 
     def __str__(self):
-        a = str(self.series.__str__()) + ' ' + str(self.number.__str__())
+        a = str(self.series.__str__()) + ' ' \
+            + str(self.number.__str__()) + ' '\
+            + str(self.date_of_issue.__str__()) + ' '\
+            + str(self.issued.__str__()) + ' '\
+            + str(self.address_birth.__str__()) + ' '
         return a
 
     class Meta:
@@ -51,13 +61,11 @@ class Person(models.Model):
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
     date_of_bird = models.DateField(blank=True, null=True, verbose_name='Дата рождения')
-    phone_number = models.IntegerField(max_length=11, blank=True, null=True, verbose_name='Телефон')
+    phone_number = models.IntegerField(blank=True, null=True, verbose_name='Телефон')
     residence_address = models.OneToOneField(ResidenceAddress, on_delete=models.CASCADE,
                                              blank=True, null=True, verbose_name='Адрес проживания')
     passport = models.OneToOneField(Passport, on_delete=models.CASCADE,
                                     blank=True, null=True, verbose_name='паспортные данные')
-    #statement = models.ManyToManyField(Statement, blank=True, null=True, verbose_name='Заявление')
-    #contract = models.ManyToManyField(Contract, blank=True, null=True, verbose_name='Договор')
 
     def __str__(self):
         a = str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic)

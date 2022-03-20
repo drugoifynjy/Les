@@ -54,7 +54,7 @@ class ModContract(forms.ModelForm):
 class AddPlot(forms.ModelForm):
     class Meta:
         model = Plot
-        fields = ['number_plot', 'forestry', 'district_forestry', 'tract',
+        fields = ['number_plot', 'forestry', 'district_forestry', 'tract', 'area',
                   'quarter', 'section', 'chop_type', 'cost', ]
         widgets = {
             'cost': forms.TextInput(attrs={'readonly': True}),
@@ -87,3 +87,10 @@ class AddForestry(forms.ModelForm):
     class Meta:
         model = Forestry
         fields = ['name', ]
+
+
+class AddDistrictForestry(forms.ModelForm):
+    class Meta:
+        model = DistrictForestry
+        fields = ['name', ]
+

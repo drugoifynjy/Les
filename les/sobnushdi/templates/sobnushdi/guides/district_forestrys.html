@@ -6,43 +6,35 @@
 <table>
     <tr>
         <th>№</th>
-        <th>ФИО</th>
-        <th>Дата договора</th>
-        <th>Дата заявления</th>
-
+        <th>Участковые лесничества</th>
 
     </tr>
-{% for contract in contracts %}
+{% for district_forestry in district_forestrys %}
     <tr>
-        <td><mark> {{ contract.number }}</mark></td>
-        <td> {{ contract.statement.person }}</td>
-        <td> {{ contract.date }}</td>
-        <td> {{ contract.statement.date }} </td>
 
+        <td><mark> {{ district_forestry.pk }}</mark></td>
+        <td> {{ district_forestry.name }}</td>
         <td>
-            <form action="{% url 'contract_mod' pk=contract.pk %}">
+            <form action="{% url 'district_forestry_mod' pk=district_forestry.pk %}">
                 <button type="submit">Изменить</button>
             </form>
         </td>
         <td>
-            <form action="{% url 'contract_view' pk=contract.pk %}">
-                <button type="submit">Подробно</button>
+            <form action="{% url 'form_district_forestry_del' pk=district_forestry.pk %}">
+                <button type="submit">Удалить</button>
             </form>
         </td>
-        <td>
-            <form action="{% url 'contract_print' pk=contract.pk %}">
-                <button type="submit">Распечатать договор</button>
-            </form>
-        </td>
-{% endfor %}
-</table>
+</tr>
+    {% endfor %}
 
+</table>
+<div class="button"><a href="{% url 'district_forestry_mod' pk=0 %}">Добавить</a></div>
 <div class="clear"></div>
     <div class="pagination">
         <span class="step-links">
         {% if page_obj.has_previous %}
             <a href="?page=1" class="first_last">&laquo; Первая</a>
-            <a href="?page={{ page_obj.previous_page_number }}" class="next_previous">Предыдущая</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="next_previous">&laquo; Предыдущая</a>
         {% endif %}
 
         <span class="current">
@@ -55,7 +47,6 @@
         {% endif %}
         </span>
     </div>
-
 {% else %}
 <p>Авторизуйтесь</p>
  {% endif %}

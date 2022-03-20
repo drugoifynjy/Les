@@ -20,5 +20,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('person/', include('person.urls')),
     path('', include('sobnushdi.urls')),
-    path('heightcategories/', include('heightcategories.urls')),
 ]

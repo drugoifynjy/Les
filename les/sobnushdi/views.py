@@ -1,27 +1,12 @@
+from openpyxl import load_workbook
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, View, DeleteView, DetailView
 from formtools.wizard.views import SessionWizardView
+from datetime import timedelta, date
 from .forms import *
 from person.forms import AddPassport, AddResidenceAddress, AddPerson
 from person.models import Person
-
-FORMS_STATEMENT = [("person", AddPerson),
-                   ("AddResidenceAddress", AddResidenceAddress),
-                   ("passport", AddPassport),
-                   ("AddHeatedPromise", AddHeatedPromise),
-                   ("AddStatement", AddStatement),
-                   ]
-
-FORMS_CONTRACT = [("person", AddPerson),
-                  ("AddResidenceAddress", AddResidenceAddress),
-                  ("passport", AddPassport),
-                  ("AddHeatedPromise", AddHeatedPromise),
-                  ("AddStatement", AddStatement),
-                  ("AddContract", AddContract),
-                  ("AddPlot", AddPlot),
-                  ("AddPlotWoodSpecies", AddPlotWoodSpecies),
-                  ]
 
 
 class GuidesView(View):
@@ -87,6 +72,61 @@ class ForestryDel(DeleteView):
     template_name = 'sobnushdi/guides/form_del.html'
     model = Forestry
     success_url = reverse_lazy('forestrys')
+
+
+class DistrictForestryView(ListView):
+    model = DistrictForestry
+    template_name = 'sobnushdi/guides/district_forestrys.html'
+    context_object_name = 'district_forestrys'
+    paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        gg = self.model.objects.all()
+        print(gg)
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Участковые лесничества'
+        return context
+
+
+class DistrictForestryMod(CreateView):
+    template_name = 'sobnushdi/guides/district_forestry_mod.html'
+    paginate_by = 10
+
+    def get(self, request, pk=None, *args, **kwargs):
+        if pk:
+            district_forestry = DistrictForestry.objects.get(pk=pk)
+            form_mod_district_forestry = AddDistrictForestry(instance=district_forestry)
+        else:
+            form_mod_district_forestry = AddDistrictForestry()
+        form = {'form_mod_district_forestry': form_mod_district_forestry,
+                'pk': pk,
+                'title': 'Добавить участковое лесничество'}
+
+        return render(request, self.template_name, context=form)
+
+    def post(self, request, pk=None, *args, **kwargs):
+        if pk:
+            district_forestry = DistrictForestry.objects.get(pk=pk)
+            form_mod_district_forestry = AddDistrictForestry(request.POST, instance=district_forestry)
+        else:
+            form_mod_district_forestry = AddDistrictForestry(request.POST)
+        form = {'form_mod_district_forestry': form_mod_district_forestry,
+                'title': 'Добавить участковое лесничество'}
+        if form_mod_district_forestry.is_valid():
+            if pk:
+                district_forestry.save()
+            else:
+                form_mod_district_forestry.save()
+            return redirect('district_forestrys')
+        else:
+            form_p = form
+        return render(request, self.template_name, context=form_p)
+
+
+class DistrictForestryDel(DeleteView):
+    template_name = 'sobnushdi/guides/form_del.html'
+    model = DistrictForestry
+    success_url = reverse_lazy('district_forestrys')
 
 
 class TractsView(ListView):
@@ -213,7 +253,7 @@ class StatementAdd(CreateView):
     def get(self, request, pk, *args, **kwargs):
         today = str(datetime.now())[0:10]  # Текущая дата без времени для вставки в форму ввода даты заявления
         form_add_statement = AddStatement(initial={'date': today})
-        person = get_object_or_404(Person, pk=pk)
+        person = Person.objects.get(pk=pk)
         form_add_heated_promise = AddHeatedPromise(instance=person.residence_address)
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
@@ -226,7 +266,7 @@ class StatementAdd(CreateView):
     def post(self, request, pk, *args, **kwargs):
         form_add_statement = AddStatement(request.POST)
         form_add_heated_promise = AddHeatedPromise(request.POST)
-        person = get_object_or_404(Person, pk=pk)
+        person = Person.objects.get(pk=pk)
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
                 'person': person,
@@ -249,7 +289,7 @@ class StatementMod(View):
     template_name = 'sobnushdi/statements/statement_mod.html'
 
     def get(self, request, pk, *args, **kwargs):
-        stat = get_object_or_404(Statement, pk=pk)
+        stat = Statement.objects.get(pk=pk)
         date = str(stat.date)
         form_add_statement = AddStatement(initial={'date': date}, instance=stat)
         form_add_heated_promise = AddHeatedPromise(instance=stat.heated_promise)
@@ -257,11 +297,12 @@ class StatementMod(View):
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
                 'person': person,
+                'pk': pk,
                 'title': 'Добавить заявление'}
         return render(request, self.template_name, context=form)
 
     def post(self, request, pk, *args, **kwargs):
-        stat = get_object_or_404(Statement, pk=pk)
+        stat = Statement.objects.get(pk=pk)
         person = stat.person
         heated_promise = stat.heated_promise
         form_add_statement = ModStatement(request.POST, instance=stat)
@@ -269,6 +310,7 @@ class StatementMod(View):
         form = {'form_add_statement': form_add_statement,
                 'form_add_heated_promise': form_add_heated_promise,
                 'person': person,
+                'pk': pk,
                 'title': 'Добавить заявление'}
         if form_add_statement.is_valid() and form_add_heated_promise.is_valid():
             heated_promise.save()
@@ -312,10 +354,12 @@ class ContractAdd(CreateView):
     template_name = 'sobnushdi/contracts/contract_add.html'
 
     def get(self, request, pk, *args, **kwargs):
-        # print(request.GET)
-        today = str(datetime.now())[0:10]  # Текущая дата без времени для вставки в форму ввода даты заявления
         statement = Statement.objects.get(pk=pk)
-        form_add_contract = AddContract(initial={'date': today, 'date_decree': today, 'statement': statement})
+        date1 = statement.date + timedelta(14)
+        date2 = statement.date + timedelta(45)
+        #my_birthday = my_birthday.replace(year=today.year + 1)
+        print(statement.date, ' ', date1, ' ', date2)
+        form_add_contract = AddContract(initial={'date': str(date2), 'date_decree': str(date1), 'statement': statement})
         form_add_plot = AddPlot()
         form = {'person': statement.person,
                 'form_add_contract': form_add_contract,
@@ -426,6 +470,46 @@ class ContractView(View):
         return render(request, self.template_name, context=form)
 
 
+class ContractPrint(View):
+    template_name = 'sobnushdi/contracts/contract_print.html'
+    file_name = "sobnushdi/templates/for_print/contract.xlsx"
+    work_book = load_workbook(file_name)
+    page = work_book['Договор']
+
+    def get(self, request, pk, *args, **kwargs):
+        contract = Contract.objects.get(pk=pk)
+        self.page['BP2'] = contract.number
+        self.page['BP3'] = contract.date
+        self.page['BP4'] = contract.date.replace(year=contract.date.year + 1, day=contract.date.day - 1)
+        self.page['BP5'] = contract.date.replace(year=contract.date.year + 1, day=contract.date.day - 1)
+        self.page['BP7'] = contract.date_decree
+        self.page['BP8'] = contract.number_decree
+
+        self.page['BP10'] = str(contract.statement.person)
+        self.page['BP11'] = contract.statement.person.passport.series
+        self.page['BP12'] = contract.statement.person.passport.number
+        self.page['BP13'] = contract.statement.person.passport.date_of_issue
+        self.page['BP14'] = contract.statement.person.passport.issued
+
+        self.page['BP20'] = contract.statement.person.passport.address_birth
+        self.page['BP21'] = contract.statement.person.date_of_bird
+        self.page['BP22'] = contract.statement.person.passport.address_birth
+        self.page['BP23'] = contract.statement.person.passport.inn
+        self.page['BP24'] = str(contract.statement.person.residence_address)
+
+        self.page['BP44'] = contract.plot.district_forestry.name
+        self.page['BP45'] = contract.plot.tract.name
+        self.page['BP46'] = contract.plot.quarter
+        self.page['BP47'] = contract.plot.section
+        self.page['BP48'] = contract.plot.number_plot
+
+        self.page['BP57'] = contract.plot.chop_type
+        self.page['BP62'] = contract.plot.cost
+        self.work_book.save('Договор.xlsx')
+        self.work_book.close()
+        return redirect('contracts_list')
+
+
 class PlotWoodSpeciesAdd(CreateView):
     template_name = 'sobnushdi/plot_wood_species/plot_wood_species_add.html'
 
@@ -503,90 +587,3 @@ class PlotWoodSpeciesMod(CreateView):
         else:
             form_p = form
         return render(request, self.template_name, context=form_p)
-
-
-class StatementWizardAdd(SessionWizardView):
-    form_list = FORMS_STATEMENT
-    template_name = 'sobnushdi/statement_wizard_add.html'
-
-    def get_context_data(self, form, **kwargs):
-        context = super().get_context_data(form=form, **kwargs)
-        if self.steps.current == 'passport':
-            context['title'] = 'данные пасспорта'
-        elif self.steps.current == 'AddResidenceAddress':
-            context['title'] = 'прописка'
-        elif self.steps.current == 'person':
-            context['title'] = 'заявитель'
-        elif self.steps.current == 'AddHeatedPromise':
-            context['title'] = 'адрес отапливаемого помещения'
-        elif self.steps.current == 'AddStatement':
-            today = str(datetime.now())[0:10]  # Текущая дата без времени для вставки в форму ввода даты заявления
-            print(today)
-            form_add_statement = AddStatement(initial={'date': today})
-            context['title'] = 'заявление'
-        return context
-
-    def done(self, form_list, **kwargs):
-        passport = form_list[2].save()
-        person_address = form_list[1].save()
-        person = form_list[0].save(commit=False)
-        heated_premise = form_list[3].save()
-        statement = form_list[4].save(commit=False)
-        person.passport = passport
-        person.residence_address = person_address
-        person.save()
-        statement.person = person
-        statement.address = heated_premise
-        statement.save()
-        return redirect('statements_list')
-
-
-class ContractWizardAdd(SessionWizardView):
-    form_list = FORMS_CONTRACT
-    template_name = 'sobnushdi/contract_wizard_add.html'
-
-    def get_context_data(self, form, **kwargs):
-        context = super().get_context_data(form=form, **kwargs)
-        if self.steps.current == 'passport':
-            context['title'] = 'данные пасспорта'
-        elif self.steps.current == 'AddResidenceAddress':
-            context['title'] = 'прописка'
-        elif self.steps.current == 'person':
-            context['title'] = 'заявитель'
-        elif self.steps.current == 'AddHeatedPromise':
-            context['title'] = 'адрес отапливаемого помещения'
-        elif self.steps.current == 'AddStatement':
-            today = str(datetime.now())[0:10]  # Текущая дата без времени для вставки в форму ввода даты заявления
-            #print(today)
-            form_add_statement = AddStatement(initial={'date': today})
-            context['title'] = 'заявление'
-        elif self.steps.current == 'AddContract':
-            context['title'] = 'Договор'
-        elif self.steps.current == 'AddPlot':
-            context['title'] = 'Делянка'
-        elif self.steps.current == 'AddWoodSpecies':
-            context['title'] = 'Порода'
-        elif self.steps.current == 'AddPlotWoodSpecies':
-            context['title'] = 'Данной породы'
-        return context
-
-    def done(self, form_list, **kwargs):
-        passport = form_list[2].save() # Сохраняем паспортные данные
-        person_address = form_list[1].save() # Сохраняем адресс проживания
-        person = form_list[0].save(commit=False) # сохраняем данные человека
-        heated_premise = form_list[3].save() # сохраняем адрес отпаливаемого помещения
-        statement = form_list[4].save(commit=False) # сохраняем заявление
-        person.passport = passport # привязываем паспорт к данным человека
-        person.residence_address = person_address # привязываем адрес проживания к данным человека
-        person.save() # сохраняем связи в классе данных человека
-        statement.person = person # добавляем данные человека к заявлению
-        statement.address = heated_premise # добавляем адрес отапливаемого поиещения к заявлению
-        statement.save() # сохраняем связи заявления данных человека и отапливаемого помещения
-        contract = form_list[5].save(commit=False) # сохраняем договор
-        contract.statement = statement # привязываем заявление к договору
-        contract.save() # сохраняем связь заявления и договора
-        plot = form_list[6].save(commit=False)
-        wood_species = form_list[7].save(commit=False)
-        plot_wood_species = form_list[8].save()
-        plot_wood_species.wood_species = wood_species
-        return redirect('contracts_list')

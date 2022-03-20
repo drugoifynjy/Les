@@ -1,10 +1,10 @@
 {% extends 'sobnushdi/base.html' %}
 
 {% block content %}
-
+{% if request.user.is_authenticated %}
 <form action="{% url 'statement_mod' pk %}" method="post">
     {% csrf_token %}
-    <table bgcolor="silver">
+    <table>
         <tr>
             <th>Заявитель</th>
             <th>Заявление</th>
@@ -28,5 +28,7 @@
         <button type="reset"><a href="{% url 'statements_list' %}">Отмена</a></button>
     </form>
 </form>
-
+{% else %}
+<p>Авторизуйтесь</p>
+ {% endif %}
 {% endblock %}

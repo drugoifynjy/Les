@@ -1,0 +1,16 @@
+{% extends 'sobnushdi/base.html' %}
+
+{% block content %}
+
+<form action="{% url 'contract_print' pk %}" method="post">
+    {% csrf_token %}
+
+
+
+    <button type="submit">Печать</button>
+    <form action="{% url 'contract_list' %}" method="get">
+        <button type="reset"><a href="{% url 'statements_list' %}">Отмена</a></button>
+    </form>
+</form>
+
+{% endblock %}
