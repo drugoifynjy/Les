@@ -44,6 +44,22 @@
 
 </table>
 <table border="1 px">
+    <th>ИТОГО Деловой</th>
+    <th>ИТОГО Дровяной</th>
+    <th>ИТОГО Ликвидной</th>
+    <th>Итого неликвидной</th>
+    <th>ВСЕГО</th>
+
+    <tr>
+        <td>{{ plot.business }}</td>
+        <td>{{ plot.firewood }}</td>
+        <td>{{ plot.liquid_wood }}</td>
+        <td>{{ plot.brushwood }}</td>
+        <td>{{ plot.total }}</td>
+    </tr>
+
+</table>
+<table border="1 px">
     <tr>
         <th>Порода</th>
         <th>Количество деревьев</th>
@@ -69,9 +85,9 @@
                     </form>
                 </td>
             </tr>
+
             {% endfor %}
     </tr>
-
             <td>
                 <form action="{% url 'plot_wood_species_add' pk=contract.pk %}">
                     <button type="submit">Добавить данные по породам</button>

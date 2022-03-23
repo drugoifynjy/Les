@@ -240,7 +240,8 @@ class StatementsView(ListView):
     template_name = 'sobnushdi/statements/statements_list.html'
     context_object_name = 'statements'
     paginate_by = 10
-    #persons = Person.objects.all()
+
+    # persons = Person.objects.all()
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Заявления'
@@ -339,11 +340,21 @@ class ContractsView(ListView):
         for contract in Contract.objects.all():
             plot = contract.plot
             plot_wood_specie = plot.plot_wood_species.all()
+            plot.brushwood = 0
             plot.cost = 0
+            plot.liquid_wood = 0
+            plot.business = 0
+            plot.firewood = 0
+
+            plot.total = 0
             for i in plot_wood_specie:
-                print(i.price)
                 plot.cost += float(i.price)
-            print(plot.cost)
+                plot.liquid_wood += int(i.large) + int(i.average) + int(i.small) + int(i.firewood)
+                plot.business += int(i.large) + int(i.average) + int(i.small)
+                plot.firewood += int(i.firewood)
+                plot.brushwood += int(i.brushwood)
+                plot.total += int(i.large) + int(i.average) + int(i.small) + \
+                              int(i.firewood) + int(i.brushwood)
             plot.save()
         context = super().get_context_data(**kwargs)
         context['title'] = 'Договора'
@@ -357,7 +368,7 @@ class ContractAdd(CreateView):
         statement = Statement.objects.get(pk=pk)
         date1 = statement.date + timedelta(14)
         date2 = statement.date + timedelta(45)
-        #my_birthday = my_birthday.replace(year=today.year + 1)
+        # my_birthday = my_birthday.replace(year=today.year + 1)
         print(statement.date, ' ', date1, ' ', date2)
         form_add_contract = AddContract(initial={'date': str(date2), 'date_decree': str(date1), 'statement': statement})
         form_add_plot = AddPlot()
@@ -497,6 +508,7 @@ class ContractPrint(View):
         self.page['BP23'] = contract.statement.person.passport.inn
         self.page['BP24'] = str(contract.statement.person.residence_address)
 
+        self.page['BP43'] = contract.plot.area
         self.page['BP44'] = contract.plot.district_forestry.name
         self.page['BP45'] = contract.plot.tract.name
         self.page['BP46'] = contract.plot.quarter
@@ -505,7 +517,23 @@ class ContractPrint(View):
 
         self.page['BP57'] = contract.plot.chop_type
         self.page['BP62'] = contract.plot.cost
-        self.work_book.save('Договор.xlsx')
+        birch = contract.plot.plot_wood_species.filter(name__name='Береза')
+        aspen = contract.plot.plot_wood_species.filter(name__name='Осина')
+        self.page['BP84'] = birch[0].number_of_trees
+        self.page['BP85'] = birch[0].large
+        self.page['BP86'] = birch[0].average
+        self.page['BP87'] = birch[0].small
+        self.page['BP88'] = birch[0].firewood
+        self.page['BP89'] = birch[0].brushwood
+
+        self.page['BP94'] = aspen[0].number_of_trees
+        self.page['BP95'] = aspen[0].large
+        self.page['BP96'] = aspen[0].average
+        self.page['BP97'] = aspen[0].small
+        self.page['BP98'] = aspen[0].firewood
+        self.page['BP99'] = aspen[0].brushwood
+
+        self.work_book.save('Договор ' + str(contract.statement.person) + '.xlsx')
         self.work_book.close()
         return redirect('contracts_list')
 
@@ -555,7 +583,7 @@ class PlotWoodSpeciesMod(CreateView):
         plot = Plot.objects.get(plot_wood_species=plot_wood_species)
         contract = Contract.objects.get(plot=plot)
         person = contract.statement.person
-        #print(plot)
+        # print(plot)
         form_mod_plot_wood_species = AddPlotWoodSpecies(instance=plot_wood_species)
         form = {
             'person': person,

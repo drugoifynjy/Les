@@ -65,7 +65,7 @@ class AddPlotWoodSpecies(forms.ModelForm):
     class Meta:
         model = PlotWoodSpecies
         fields = ['name', 'number_of_trees', 'large', 'average', 'small',
-                  'firewood', 'price']
+                  'firewood', 'brushwood', 'price']
         widgets = {
             'date': MyDateInput,
         }

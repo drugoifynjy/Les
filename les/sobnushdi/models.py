@@ -105,11 +105,11 @@ class Statement(models.Model):
 class PlotWoodSpecies(models.Model): #Количество-качество по породе
     name = models.ForeignKey(Breed, on_delete=models.DO_NOTHING, verbose_name='Порода')
     number_of_trees = models.IntegerField(blank=True, null=True, verbose_name='Количество деревьев')
-    large = models.IntegerField(blank=True, null=True, verbose_name='Крупная')
-    average = models.IntegerField(blank=True, null=True, verbose_name='Средняя')
-    small = models.IntegerField(blank=True, null=True, verbose_name='Мелкая')
-    firewood = models.IntegerField(blank=True, null=True, verbose_name='Дровяная')
-    brushwood = models.IntegerField(blank=True, null=True, verbose_name='Хворост(неликвид)')
+    large = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Крупная')
+    average = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Средняя')
+    small = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Мелкая')
+    firewood = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Дровяная')
+    brushwood = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Хворост(неликвид)')
     price = models.FloatField(blank=True, null=True, verbose_name='Цена')
 
     def __str__(self):
@@ -132,9 +132,15 @@ class Plot(models.Model): #ДЕЛЯНКА
     section = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Выдел')
     chop_type = models.CharField(blank=True, null=True, max_length=100, default='рубка спелых и перестойных лесных насаждений', verbose_name='Вид рубки')
     type_of_forestry = models.CharField(blank=True, null=True, max_length=100, default='мягколиственное', verbose_name='Хозяйство')
+    business = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Деловая')
+    firewood = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Дровяная')
+    liquid_wood = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Ликвидная всего')
+    brushwood = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Хворост(неликвид)')
+    total = models.PositiveIntegerField(blank=True, null=True, verbose_name='Всего')
     cost = models.FloatField(blank=True, null=True, verbose_name='Стоимость')
-    cost_in_words = models.FloatField(blank=True, null=True, verbose_name='Стоимость прописью')
     plot_wood_species = models.ManyToManyField(PlotWoodSpecies, blank=True, verbose_name='Данные по породе')
+
+
 
     def __str__(self):
         a = 'Делянка ' + str(self.number_plot)
