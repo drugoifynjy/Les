@@ -37,7 +37,9 @@
                 </tr>
             {% endfor %}
         </table>
-        <div class="button"><a href="{% url 'person_add' %}">Добавить</a></div>
+        <form action="{% url 'person_add' %}" method="GET">
+	        <button type="submit" >Добавить</button>
+        </form>
     <div class="clear"></div>
     <div class="pagination">
         <span class="step-links">

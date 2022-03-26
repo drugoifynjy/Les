@@ -28,7 +28,7 @@
     <th>Урочище</th>
     <th>Квартал</th>
     <th>Выдел</th>
-    <th>Вид рубки</th>
+
     <th>Стоимость по договору (руб.)</th>
 
     <tr>
@@ -38,11 +38,50 @@
         <td>{{ plot.tract }}</td>
         <td>{{ plot.quarter }}</td>
         <td>{{ plot.section }}</td>
-        <td>{{ plot.chop_type }}</td>
         <td>{{ plot.cost }}</td>
     </tr>
 
 </table>
+
+<table border="1 px">
+    <tr>
+        <th>Порода</th>
+        <th>Количество деревьев</th>
+        <th>Крупная</th>
+        <th>Средняя</th>
+        <th>Мелкая</th>
+        <th>Дровяная</th>
+        <th>Хворост</th>
+        <th>Цена</th>
+    </tr>
+    <tr>
+        {% for wood in plot_wood_species %}
+            <tr>
+                <td>{{ wood.name }}</td>
+                <td>{{ wood.number_of_trees }}</td>
+                <td>{{ wood.large }}</td>
+                <td>{{ wood.average }}</td>
+                <td>{{ wood.small }}</td>
+                <td>{{ wood.firewood }}</td>
+                <td>{{ wood.brushwood }}</td>
+                <td>{{ wood.price }}</td>
+                <td>
+                    <form action="{% url 'plot_wood_species_mod' pk=wood.pk %}">
+                        <button type="submit">Изменить</button>
+                    </form>
+                </td>
+            </tr>
+
+            {% endfor %}
+    </tr>
+            <td>
+                <form action="{% url 'plot_wood_species_add' pk=contract.pk %}">
+                    <button type="submit">Добавить породу</button>
+                </form>
+            </td>
+
+</table>
+
 <table border="1 px">
     <th>ИТОГО Деловой</th>
     <th>ИТОГО Дровяной</th>
@@ -59,43 +98,6 @@
     </tr>
 
 </table>
-<table border="1 px">
-    <tr>
-        <th>Порода</th>
-        <th>Количество деревьев</th>
-        <th>Крупная</th>
-        <th>Средняя</th>
-        <th>Мелкая</th>
-        <th>Дровяная</th>
-        <th>Цена</th>
-    </tr>
-    <tr>
-        {% for wood in plot_wood_species %}
-            <tr>
-                <td>{{ wood.name }}</td>
-                <td>{{ wood.number_of_trees }}</td>
-                <td>{{ wood.large }}</td>
-                <td>{{ wood.average }}</td>
-                <td>{{ wood.small }}</td>
-                <td>{{ wood.firewood }}</td>
-                <td>{{ wood.price }}</td>
-                <td>
-                    <form action="{% url 'plot_wood_species_mod' pk=wood.pk %}">
-                        <button type="submit">Изменить</button>
-                    </form>
-                </td>
-            </tr>
-
-            {% endfor %}
-    </tr>
-            <td>
-                <form action="{% url 'plot_wood_species_add' pk=contract.pk %}">
-                    <button type="submit">Добавить данные по породам</button>
-                </form>
-            </td>
-
-</table>
-
 <div class="clear"></div>
 
 {% else %}

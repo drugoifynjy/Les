@@ -21,7 +21,7 @@ class AddStatement(forms.ModelForm):
 class ModStatement(forms.ModelForm):
     class Meta:
         model = Statement
-        fields = ['number_statement', 'date', 'quantity', 'refusal_to_conclude_a_contract', ]
+        fields = ['number_statement', 'date', 'quantity', ]
         widgets = {
             'date': MyDateInput,
         }

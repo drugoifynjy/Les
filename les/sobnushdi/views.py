@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from openpyxl import load_workbook
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -23,6 +24,7 @@ class ForestryView(ListView):
     model = Forestry
     template_name = 'sobnushdi/guides/forestrys.html'
     context_object_name = 'forestrys'
+    ordering = '-pk'
     paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -79,6 +81,7 @@ class DistrictForestryView(ListView):
     template_name = 'sobnushdi/guides/district_forestrys.html'
     context_object_name = 'district_forestrys'
     paginate_by = 10
+    ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         gg = self.model.objects.all()
@@ -134,6 +137,7 @@ class TractsView(ListView):
     template_name = 'sobnushdi/guides/tracts.html'
     context_object_name = 'tracts'
     paginate_by = 10
+    ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -187,6 +191,7 @@ class BreedsView(ListView):
     template_name = 'sobnushdi/guides/breeds.html'
     context_object_name = 'breeds'
     paginate_by = 10
+    ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -240,6 +245,7 @@ class StatementsView(ListView):
     template_name = 'sobnushdi/statements/statements_list.html'
     context_object_name = 'statements'
     paginate_by = 10
+    ordering = '-pk'
 
     # persons = Person.objects.all()
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -335,27 +341,9 @@ class ContractsView(ListView):
     context_object_name = 'contracts'
     fields = ['statement', 'number_decree', 'date_decree', 'number', 'date']
     paginate_by = 10
+    ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        for contract in Contract.objects.all():
-            plot = contract.plot
-            plot_wood_specie = plot.plot_wood_species.all()
-            plot.brushwood = 0
-            plot.cost = 0
-            plot.liquid_wood = 0
-            plot.business = 0
-            plot.firewood = 0
-
-            plot.total = 0
-            for i in plot_wood_specie:
-                plot.cost += float(i.price)
-                plot.liquid_wood += int(i.large) + int(i.average) + int(i.small) + int(i.firewood)
-                plot.business += int(i.large) + int(i.average) + int(i.small)
-                plot.firewood += int(i.firewood)
-                plot.brushwood += int(i.brushwood)
-                plot.total += int(i.large) + int(i.average) + int(i.small) + \
-                              int(i.firewood) + int(i.brushwood)
-            plot.save()
         context = super().get_context_data(**kwargs)
         context['title'] = 'Договора'
         return context
@@ -451,6 +439,19 @@ class ContractView(View):
         person = contract.statement.person
         plot = contract.plot
         plot_wood_species = contract.plot.plot_wood_species.all()
+        plot.cost = 0
+        plot.business = 0
+        plot.firewood = 0
+        plot.brushwood = 0
+        plot.liquid_wood = 0
+        plot.total = 0
+        for plot_wood_specie in plot_wood_species:
+            plot.cost += plot_wood_specie.price
+            plot.business += plot_wood_specie.large + plot_wood_specie.average + plot_wood_specie.small
+            plot.firewood += plot_wood_specie.firewood
+            plot.brushwood += plot_wood_specie.brushwood
+        plot.liquid_wood += plot.business + plot.firewood
+        plot.total = plot.liquid_wood + plot.brushwood
         form = {'contract': contract,
                 'date': date,
                 'person': person,
@@ -460,24 +461,22 @@ class ContractView(View):
         return render(request, self.template_name, context=form)
 
     def post(self, request, pk, *args, **kwargs):
-        contract = get_object_or_404(Contract, pk=pk)
-        date = str(contract.date)
+        contract = Contract.objects.get(pk=pk)
+        date_contract = str(contract.date)
         person = contract.statement.person
         plot = contract.plot
         plot_wood_species = contract.plot.plot_wood_species.all()
-        for i in plot_wood_species:
-            print(i.name, i.number_of_trees)
         form = {'contract': contract,
-                'date': date,
+                'date': date_contract,
                 'person': person,
                 'plot_wood_species': plot_wood_species,
                 'title': 'Данные договора'}
         for plot_wood_specie in plot_wood_species:
             if plot_wood_specie.is_valid():
                 plot_wood_specie.save()
+            plot.plot_wood_species.add(plot_wood_specie)
         plot.save()
         contract.save()
-        return redirect('contracts_list')
         return render(request, self.template_name, context=form)
 
 
@@ -517,21 +516,29 @@ class ContractPrint(View):
 
         self.page['BP57'] = contract.plot.chop_type
         self.page['BP62'] = contract.plot.cost
-        birch = contract.plot.plot_wood_species.filter(name__name='Береза')
-        aspen = contract.plot.plot_wood_species.filter(name__name='Осина')
-        self.page['BP84'] = birch[0].number_of_trees
-        self.page['BP85'] = birch[0].large
-        self.page['BP86'] = birch[0].average
-        self.page['BP87'] = birch[0].small
-        self.page['BP88'] = birch[0].firewood
-        self.page['BP89'] = birch[0].brushwood
+        if contract.plot.plot_wood_species.filter(name__name='Береза'):
+            birch = contract.plot.plot_wood_species.filter(name__name='Береза')
+        else:
+            birch = False
+        if contract.plot.plot_wood_species.filter(name__name='Осина'):
+            aspen = contract.plot.plot_wood_species.filter(name__name='Осина')
+        else:
+            aspen = False
+        if birch:
+            self.page['BP84'] = birch[0].number_of_trees
+            self.page['BP85'] = birch[0].large
+            self.page['BP86'] = birch[0].average
+            self.page['BP87'] = birch[0].small
+            self.page['BP88'] = birch[0].firewood
+            self.page['BP89'] = birch[0].brushwood
 
-        self.page['BP94'] = aspen[0].number_of_trees
-        self.page['BP95'] = aspen[0].large
-        self.page['BP96'] = aspen[0].average
-        self.page['BP97'] = aspen[0].small
-        self.page['BP98'] = aspen[0].firewood
-        self.page['BP99'] = aspen[0].brushwood
+        if aspen:
+            self.page['BP94'] = aspen[0].number_of_trees
+            self.page['BP95'] = aspen[0].large
+            self.page['BP96'] = aspen[0].average
+            self.page['BP97'] = aspen[0].small
+            self.page['BP98'] = aspen[0].firewood
+            self.page['BP99'] = aspen[0].brushwood
 
         self.work_book.save('Договор ' + str(contract.statement.person) + '.xlsx')
         self.work_book.close()
@@ -565,10 +572,34 @@ class PlotWoodSpeciesAdd(CreateView):
                 'title': 'Добавить данные по породе в деляне к договору' + str(contract.number)}
         if form_add_plot_wood_species.is_valid():
             plot_wood_species = form_add_plot_wood_species.save()
-            plot.cost += float(plot_wood_species.price)
+            if plot_wood_species.price is None:
+                plot_wood_species.price = 0
+            if plot_wood_species.large is None:
+                plot_wood_species.large = 0
+            if plot_wood_species.average is None:
+                plot_wood_species.average = 0
+            if plot_wood_species.small is None:
+                plot_wood_species.small = 0
+            if plot_wood_species.firewood is None:
+                plot_wood_species.firewood = 0
+            if plot_wood_species.brushwood is None:
+                plot_wood_species.brushwood = 0
+            plot_wood_species.save()
+            if plot.cost is None:
+                plot.cost = 0
+            if plot.business is None:
+                plot.business = 0
+            if plot.firewood is None:
+                plot.firewood = 0
+            if plot.brushwood is None:
+                plot.brushwood = 0
+            if plot.liquid_wood is None:
+                plot.liquid_wood = 0
+            if plot.total is None:
+                plot.total = 0
             plot.plot_wood_species.add(plot_wood_species)
             plot.save()
-            return redirect('contracts_list')
+            return redirect('contract_view', pk=contract.pk)
         else:
             form_p = form
         return render(request, self.template_name, context=form_p)
@@ -576,14 +607,12 @@ class PlotWoodSpeciesAdd(CreateView):
 
 class PlotWoodSpeciesMod(CreateView):
     template_name = 'sobnushdi/plot_wood_species/plot_wood_species_mod.html'
-    beck = ''
 
     def get(self, request, pk=None, *args, **kwargs):
         plot_wood_species = PlotWoodSpecies.objects.get(pk=pk)
         plot = Plot.objects.get(plot_wood_species=plot_wood_species)
         contract = Contract.objects.get(plot=plot)
         person = contract.statement.person
-        # print(plot)
         form_mod_plot_wood_species = AddPlotWoodSpecies(instance=plot_wood_species)
         form = {
             'person': person,
@@ -592,8 +621,6 @@ class PlotWoodSpeciesMod(CreateView):
             'pk': pk,
             'form_mod_plot_wood_species': form_mod_plot_wood_species,
             'title': 'contract.number'}
-        self.beck = request.META['HTTP_REFERER']
-        print(self.beck)
         return render(request, self.template_name, context=form)
 
     def post(self, request, pk=None, *args, **kwargs):
@@ -611,7 +638,9 @@ class PlotWoodSpeciesMod(CreateView):
             'title': 'contract.number'}
         if form_mod_plot_wood_species.is_valid():
             plot_wood_species.save()
-            return redirect('contracts_list')
+            plot.plot_wood_species.add(plot_wood_species)
+            plot.save()
+            return redirect('contract_view', pk=contract.pk)
         else:
             form_p = form
         return render(request, self.template_name, context=form_p)

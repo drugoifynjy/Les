@@ -28,7 +28,9 @@
     {% endfor %}
 
 </table>
-<div class="button"><a href="{% url 'district_forestry_mod' pk=0 %}">Добавить</a></div>
+<div><form action="{% url 'district_forestry_mod' pk=0 %}" method="GET">
+	        <button type="submit" >Добавить</button>
+</form>
 <div class="clear"></div>
     <div class="pagination">
         <span class="step-links">

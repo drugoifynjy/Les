@@ -2,6 +2,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, View
 
 from .forms import *
@@ -85,6 +86,7 @@ class PersonView(ListView):
     template_name = 'person/persons_list.html'
     context_object_name = 'pers'
     paginate_by = 10
+    ordering = '-pk'
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Заявители'
@@ -94,11 +96,13 @@ class PersonView(ListView):
 class RegisterUser(CreateView):
     form_class = UserCreationForm
     template_name = 'person/register.html'
+    success_url = reverse_lazy('login')
 
 
 class LoginUser(LoginView):
     form_class = AuthenticationForm
     template_name = 'person/login.html'
+    success_url = reverse_lazy('persons_list')
 
 
 def logout_user(request):

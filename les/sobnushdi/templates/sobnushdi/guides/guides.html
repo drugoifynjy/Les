@@ -4,10 +4,22 @@
 {% if request.user.is_authenticated %}
 <H1>{{title}}</H1>
 
-<div class="button"><a href="{% url 'breeds' %}" >Породы</a></div>
-<div class="button"><a href="{% url 'tracts' %}" >Урочища</a></div>
-<div class="button"><a href="{% url 'forestrys' %}" >Лесничества</a></div>
-<div class="button"><a href="{% url 'district_forestrys' %}" >Участковые лесничества</a></div>
+<div><form action="{% url 'breeds' %}" method="GET">
+	        <button type="submit" >Породы</button>
+</form></div>
+<div><form action="{% url 'tracts' %}" method="GET">
+	        <button type="submit" >Урочища</button>
+</form>
+</div>
+<div><form action="{% url 'forestrys' %}" method="GET">
+	        <button type="submit" >Лесничества</button>
+</form>
+</div>
+<div><form action="{% url 'district_forestrys' %}" method="GET">
+	        <button type="submit" >Участковые лесничества</button>
+</form>
+</div>
+
 
 {% else %}
 <p>Авторизуйтесь</p>
