@@ -87,9 +87,14 @@ class PersonView(ListView):
     context_object_name = 'pers'
     paginate_by = 10
     ordering = '-pk'
+
     def get_context_data(self, *, object_list=None, **kwargs):
+        for person in self.object_list:
+            person.date_of_bird = person.date_of_bird.strftime("%d.%m.%Y")
+
         context = super().get_context_data(**kwargs)
         context['title'] = 'Заявители'
+        #context['date_of_bird'] = date_of_bird
         return context
 
 

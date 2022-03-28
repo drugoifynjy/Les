@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, View, DeleteView, DetailView
-from formtools.wizard.views import SessionWizardView
+
 from datetime import timedelta, date
 from .forms import *
 from person.forms import AddPassport, AddResidenceAddress, AddPerson
@@ -249,6 +249,8 @@ class StatementsView(ListView):
 
     # persons = Person.objects.all()
     def get_context_data(self, *, object_list=None, **kwargs):
+        for statement in self.object_list:
+            statement.date = statement.date.strftime("%d.%m.%Y")
         context = super().get_context_data(**kwargs)
         context['title'] = 'Заявления'
         return context
@@ -344,6 +346,9 @@ class ContractsView(ListView):
     ordering = '-pk'
 
     def get_context_data(self, *, object_list=None, **kwargs):
+        for contract in self.object_list:
+            contract.date = contract.date.strftime("%d.%m.%Y")
+            contract.statement.date = contract.statement.date.strftime("%d.%m.%Y")
         context = super().get_context_data(**kwargs)
         context['title'] = 'Договора'
         return context
