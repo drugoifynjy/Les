@@ -91,7 +91,6 @@ class PersonView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         for person in self.object_list:
             person.date_of_bird = person.date_of_bird.strftime("%d.%m.%Y")
-
         context = super().get_context_data(**kwargs)
         context['title'] = 'Заявители'
         return context

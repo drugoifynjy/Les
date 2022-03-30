@@ -11,23 +11,9 @@
             <th>Прописка</th>
         </tr>
         <tr bgcolor="#858">
-            <td>
-                <table >
-                    {{ form_add_person.as_table }}
-                </table>
-            </td>
-
-            <td>
-                <table>
-                    {{ form_add_passport.as_table }}
-                </table>
-            </td>
-
-            <td>
-                <table>
-                    {{ form_add_residence_address.as_table }}
-                </table>
-            </td>
+            <td><table >{{ form_add_person.as_table }}</table></td>
+            <td><table>{{ form_add_passport.as_table }}</table></td>
+            <td><table>{{ form_add_residence_address.as_table }}</table></td>
         </tr>
     </table>
 
