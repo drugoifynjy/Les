@@ -6,10 +6,6 @@ class MyDateInput(forms.DateInput):
     input_type = 'date'
 
 
-class MyPhoneNumber(forms.NumberInput):
-    max_length = 11
-
-
 class AddPassport(forms.ModelForm):
     class Meta:
         model = Passport
@@ -27,7 +23,6 @@ class AddResidenceAddress(forms.ModelForm):
 
 
 class AddPerson(forms.ModelForm):
-    name = 'Паспорт'
     class Meta:
         model = Person
         fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number']

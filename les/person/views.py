@@ -94,7 +94,6 @@ class PersonView(ListView):
 
         context = super().get_context_data(**kwargs)
         context['title'] = 'Заявители'
-        #context['date_of_bird'] = date_of_bird
         return context
 
 

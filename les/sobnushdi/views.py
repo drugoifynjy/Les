@@ -1,12 +1,10 @@
-from django.http import HttpResponseRedirect
 from openpyxl import load_workbook
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, View, DeleteView, DetailView
-
-from datetime import timedelta, date
+from django.views.generic import ListView, CreateView, View, DeleteView
+from datetime import timedelta
 from .forms import *
-from person.forms import AddPassport, AddResidenceAddress, AddPerson
+
 from person.models import Person
 
 
