@@ -329,12 +329,6 @@ class StatementMod(View):
         return render(request, self.template_name, context=form_p)
 
 
-class StatementDel(DeleteView):
-    template_name = 'sobnushdi/form_del.html'
-    model = Statement
-    success_url = reverse_lazy('breeds')
-
-
 class ContractsView(ListView):
     model = Contract
     template_name = 'sobnushdi/contracts/contracts_list.html'
@@ -347,6 +341,12 @@ class ContractsView(ListView):
         for contract in self.object_list:
             contract.date = contract.date.strftime("%d.%m.%Y")
             contract.statement.date = contract.statement.date.strftime("%d.%m.%Y")
+            plot_wood_speciess = contract.plot.plot_wood_species.all()
+            contract.plot.cost = 0
+            for i in plot_wood_speciess:
+                contract.plot.cost += i.price
+                #print(i.price)
+            contract.plot.save()
         context = super().get_context_data(**kwargs)
         context['title'] = 'Договора'
         return context
@@ -588,8 +588,6 @@ class PlotWoodSpeciesAdd(CreateView):
             if plot_wood_species.brushwood is None:
                 plot_wood_species.brushwood = 0
             plot_wood_species.save()
-            if plot.cost is None:
-                plot.cost = 0
             if plot.business is None:
                 plot.business = 0
             if plot.firewood is None:
