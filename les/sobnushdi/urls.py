@@ -14,6 +14,7 @@ urlpatterns = [
     path('contracts/contract_mod/<int:pk>', ContractMod.as_view(), name='contract_mod'),
     path('contracts/contract_print/<int:pk>', ContractPrint.as_view(), name='contract_print'),
     path('contracts/contract_view/<int:pk>', ContractView.as_view(), name='contract_view'),
+    path('contracts/contract/<int:pk>', Contract.as_view(), name='contract'),
 
     path('plot_wood_species/plot_wood_species_add/<int:pk>', PlotWoodSpeciesAdd.as_view(), name='plot_wood_species_add'),
     path('plot_wood_species/plot_wood_species_mod/<int:pk>', PlotWoodSpeciesMod.as_view(), name='plot_wood_species_mod'),

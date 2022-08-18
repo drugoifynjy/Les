@@ -493,8 +493,8 @@ class ContractPrint(View):
         contract = Contract.objects.get(pk=pk)
         self.page['BP2'] = contract.number
         self.page['BP3'] = contract.date
-        self.page['BP4'] = contract.date.replace(year=contract.date.year + 1, day=contract.date.day - 1)
-        self.page['BP5'] = contract.date.replace(year=contract.date.year + 1, day=contract.date.day - 1)
+        self.page['BP4'] = contract.date+timedelta(days=364)
+        self.page['BP5'] = contract.date+timedelta(days=364)
         self.page['BP7'] = contract.date_decree
         self.page['BP8'] = contract.number_decree
 
