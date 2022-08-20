@@ -36,18 +36,22 @@ class AddHeatedPromise(forms.ModelForm):
 class AddContract(forms.ModelForm):
     class Meta:
         model = Contract
-        fields = ['number_decree', 'date_decree', 'number', 'date']
+        fields = ['number_decree', 'date_decree', 'number', 'date',
+                  'the_end_date_of_the_export_of_wood', 'end_date_of_wood_harvesting']
         widgets = {
-            'date': MyDateInput, 'date_decree': MyDateInput,
+            'date': MyDateInput, 'date_decree': MyDateInput, 'end_date_of_wood_harvesting':MyDateInput,
+            'the_end_date_of_the_export_of_wood': MyDateInput,
         }
 
 
 class ModContract(forms.ModelForm):
     class Meta:
         model = Contract
-        fields = ['number_decree', 'date_decree', 'number', 'date', 'plot']
+        fields = ['number_decree', 'date_decree', 'number', 'date',
+                  'the_end_date_of_the_export_of_wood', 'end_date_of_wood_harvesting', 'plot']
         widgets = {
-            'date': MyDateInput, 'date_decree': MyDateInput,
+            'date': MyDateInput, 'date_decree': MyDateInput, 'the_end_date_of_the_export_of_wood':MyDateInput,
+            'end_date_of_wood_harvesting':MyDateInput
         }
 
 

@@ -359,9 +359,14 @@ class ContractAdd(CreateView):
         statement = Statement.objects.get(pk=pk)
         date1 = statement.date + timedelta(14)
         date2 = statement.date + timedelta(45)
+        end_date = date2 + timedelta(364)
         # my_birthday = my_birthday.replace(year=today.year + 1)
-        print(statement.date, ' ', date1, ' ', date2)
-        form_add_contract = AddContract(initial={'date': str(date2), 'date_decree': str(date1), 'statement': statement})
+        #print(statement.date, ' ', date1, ' ', date2)
+        form_add_contract = AddContract(initial={'date': str(date2), 'date_decree': str(date1),
+                                                 'statement': statement,
+                                                 'the_end_date_of_the_export_of_wood': str(end_date),
+                                                 'end_date_of_wood_harvesting': str(end_date),
+                                                 })
         form_add_plot = AddPlot()
         form = {'person': statement.person,
                 'form_add_contract': form_add_contract,
@@ -399,9 +404,13 @@ class ContractMod(CreateView):
         contract = Contract.objects.get(pk=pk)
         date = str(contract.date)
         date_decree = str(contract.date_decree)
+        end_date = str(contract.end_date_of_wood_harvesting)
         statement = contract.statement
         plot = contract.plot
-        form_add_contract = AddContract(initial={'date': date, 'date_decree': date_decree}, instance=contract)
+        form_add_contract = AddContract(initial={'date': date, 'date_decree': date_decree,
+                                                 'the_end_date_of_the_export_of_wood': end_date,
+                                                 'end_date_of_wood_harvesting': end_date
+                                                 }, instance=contract)
         form_add_plot = AddPlot(instance=plot)
         form = {'person': statement.person,
                 'form_add_contract': form_add_contract,
@@ -547,7 +556,66 @@ class ContractPrint(View):
         self.work_book.close()
         return redirect('contracts_list')
 
+class ContractVee(View):
+    template_name = 'sobnushdi/contracts/contract.html'
+    def get(self, request, pk, *args, **kwargs):
+        contract = Contract.objects.get(pk=pk)
+        '''contract.number
+        self.page['BP3'] = contract.date
+        self.page['BP4'] = contract.date + timedelta(days=364)
+        self.page['BP5'] = contract.date + timedelta(days=364)
+        self.page['BP7'] = contract.date_decree
+        self.page['BP8'] = contract.number_decree
 
+        self.page['BP10'] = str(contract.statement.person)
+        self.page['BP11'] = contract.statement.person.passport.series
+        self.page['BP12'] = contract.statement.person.passport.number
+        self.page['BP13'] = contract.statement.person.passport.date_of_issue
+        self.page['BP14'] = contract.statement.person.passport.issued
+
+        self.page['BP20'] = contract.statement.person.passport.address_birth
+        self.page['BP21'] = contract.statement.person.date_of_bird
+        self.page['BP22'] = contract.statement.person.passport.address_birth
+        self.page['BP23'] = contract.statement.person.passport.inn
+        self.page['BP24'] = str(contract.statement.person.residence_address)
+
+        self.page['BP43'] = contract.plot.area
+        self.page['BP44'] = contract.plot.district_forestry.name
+        self.page['BP45'] = contract.plot.tract.name
+        self.page['BP46'] = contract.plot.quarter
+        self.page['BP47'] = contract.plot.section
+        self.page['BP48'] = contract.plot.number_plot
+
+        self.page['BP57'] = contract.plot.chop_type
+        self.page['BP62'] = contract.plot.cost
+        if contract.plot.plot_wood_species.filter(name__name='Береза'):
+            birch = contract.plot.plot_wood_species.filter(name__name='Береза')
+        else:
+            birch = False
+        if contract.plot.plot_wood_species.filter(name__name='Осина'):
+            aspen = contract.plot.plot_wood_species.filter(name__name='Осина')
+        else:
+            aspen = False
+        if birch:
+            self.page['BP84'] = birch[0].number_of_trees
+            self.page['BP85'] = birch[0].large
+            self.page['BP86'] = birch[0].average
+            self.page['BP87'] = birch[0].small
+            self.page['BP88'] = birch[0].firewood
+            self.page['BP89'] = birch[0].brushwood
+
+        if aspen:
+            self.page['BP94'] = aspen[0].number_of_trees
+            self.page['BP95'] = aspen[0].large
+            self.page['BP96'] = aspen[0].average
+            self.page['BP97'] = aspen[0].small
+            self.page['BP98'] = aspen[0].firewood
+            self.page['BP99'] = aspen[0].brushwood'''
+        form = {'person': contract.statement.person,
+                'contract': contract,
+                'pk': pk,
+                'title': 'Добавить данные по породе в деляне к договору' + str(contract.number)}
+        return render(request, self.template_name, context=form)
 class PlotWoodSpeciesAdd(CreateView):
     template_name = 'sobnushdi/plot_wood_species/plot_wood_species_add.html'
 

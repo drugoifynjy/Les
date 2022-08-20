@@ -1,3 +1,20 @@
-div {
-	text-aling: justify;
+#center {
+	text-align: center;
+}
+
+#justy {
+	text-align: justify;
+}
+
+#right {
+	float: right;
+}
+
+#left {
+	float: left;
+}
+
+#dogovor {
+    margin:0 auto ;
+    width: 800px;
 }

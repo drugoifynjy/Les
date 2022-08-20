@@ -127,6 +127,7 @@ class Plot(models.Model): #ДЕЛЯНКА
     tract = models.ForeignKey(Tract, blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name='Урочище')
     quarter = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартал')
     section = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Выдел')
+    felling_type = models.CharField(blank=True, null=True, max_length=100, default='Сплошная', verbose_name='Форма рубки')
     chop_type = models.CharField(blank=True, null=True, max_length=100, default='рубка спелых и перестойных лесных насаждений', verbose_name='Вид рубки')
     type_of_forestry = models.CharField(blank=True, null=True, max_length=100, default='мягколиственное', verbose_name='Хозяйство')
     business = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Деловая')
@@ -149,12 +150,14 @@ class Plot(models.Model): #ДЕЛЯНКА
         verbose_name_plural = 'Делянки'
 
 
-class Contract(models.Model):
+class Contract(models.Model): #Договор
     statement = models.OneToOneField(Statement, on_delete=models.CASCADE, verbose_name='Заявление')
     number_decree = models.CharField(max_length=7, verbose_name='номер распоряжения')
     date_decree = models.DateField(blank=True, null=True, verbose_name='дата распоряжения')
     number = models.CharField(max_length=7, blank=True, null=True, verbose_name='номер договора')
     date = models.DateField(blank=True, null=True, verbose_name='Дата договора')
+    the_end_date_of_the_export_of_wood = models.DateField(blank=True, null=True, verbose_name='Дата окончания вывоза древесины')
+    end_date_of_wood_harvesting = models.DateField(blank=True, null=True, verbose_name='Дата окончания заготовки')
     plot = models.OneToOneField(Plot, on_delete=models.CASCADE, verbose_name='Делянка')
 
     def __str__(self):
