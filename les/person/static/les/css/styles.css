@@ -17,6 +17,10 @@ a:hover {
 	border: 1px
 }
 
+button{
+width: 100%;
+}
+
 a.Butf{
     color: #fdc073;
 	text-decoration: none;
@@ -82,6 +86,16 @@ ul.mainmenu li a:hover {
 	color: #FDA83D;
 }
 
+
+th{
+    border: 2px solid;
+    color: #444;
+}
+
+td{
+    padding: 6px;
+    border: 1px solid;
+}
 .table-content {
 	width: 100%;
 	min-height: 100%;
@@ -89,7 +103,10 @@ ul.mainmenu li a:hover {
 }
 
 table {
-   border: 3px solid grey;
+   width: 100%;
+   border: 1px solid grey;
+   border-collapse: collapse;
+   padding: 3px;
 }
 
 .pagination{

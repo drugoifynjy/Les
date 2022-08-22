@@ -29,8 +29,9 @@
     </table>
 
     <button type="submit">ОК</button>
-    <form action="{% url 'contracts_list' %}" method="get">
-        <button type="reset"><a href="{% url 'contracts_list' %}">Отмена</a></button>
+    <form action="{% url 'contract_view' pk%}" method="get">
+        <button type="reset" onclick="document.location='{% url 'contract_view' pk%}'">Отмена</button>
+
     </form>
 </form>
 {% else %}

@@ -136,6 +136,7 @@ class Plot(models.Model): #ДЕЛЯНКА
     brushwood = models.PositiveSmallIntegerField(blank=True, null=True, default=0, verbose_name='Хворост(неликвид)')
     total = models.PositiveIntegerField(blank=True, null=True, default=0, verbose_name='Всего')
     cost = models.FloatField(blank=True, null=True, default=0, verbose_name='Стоимость')
+    cost_in_words = models.CharField(blank=True, null=True, max_length=500, default='ноль руб. 00 коп.', verbose_name='Стоимость прописью')
     plot_wood_species = models.ManyToManyField(PlotWoodSpecies, blank=True, verbose_name='Данные по породе')
 
 

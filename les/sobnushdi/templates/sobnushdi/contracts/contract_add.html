@@ -12,7 +12,7 @@
             <th>Делянка</th>
 
         </tr>
-        <tr class="tab_contract_add" bgcolor="#858">
+        <tr class="tab_contract_add" >
 
             <td>
                     {{ person }}
@@ -33,8 +33,8 @@
     </table>
 
     <button type="submit">Добавить</button>
-    <form action="{% url 'contracts_list' %}" method="get">
-        <button type="reset"><a href="{% url 'contracts_list' %}">Отмена</a></button>
+    <form action="{% url 'statements_list' %}" method="get">
+        <button type="reset" onclick="document.location='{% url 'statements_list' %}'">Отмена</button>
     </form>
 </form>
 {% else %}

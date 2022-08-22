@@ -10,7 +10,7 @@
             <th>Паспортные данные</th>
             <th>Прописка</th>
         </tr>
-        <tr bgcolor="#858">
+        <tr>
             <td><table >{{ form_add_person.as_table }}</table></td>
             <td><table>{{ form_add_passport.as_table }}</table></td>
             <td><table>{{ form_add_residence_address.as_table }}</table></td>
@@ -19,7 +19,7 @@
 
     <button type="submit">Добавить</button>
     <form action="{% url 'persons_list' %}" method="get">
-        <button type="reset"><a href="{% url 'persons_list' %}">Отмена</a></button>
+        <button type="reset" onclick="document.location='{% url 'persons_list' %}'">Отмена</button>
     </form>
 </form>
 

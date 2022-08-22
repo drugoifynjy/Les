@@ -10,7 +10,7 @@
             <th>Заявление</th>
             <th>Отапливаемое помещение</th>
         </tr>
-        <tr class="tab_statement_mod" bgcolor="#858">
+        <tr class="tab_statement_mod">
             <td>
                     {{ person }}
             </td>
@@ -25,7 +25,7 @@
 
     <button type="submit">Изменить</button>
     <form action="{% url 'statements_list' %}" method="get">
-        <button type="reset"><a href="{% url 'statements_list' %}">Отмена</a></button>
+              <button type="reset" onclick="document.location='{% url 'statements_list' %}'">Отмена</button>
     </form>
 </form>
 {% else %}

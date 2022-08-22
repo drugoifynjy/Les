@@ -59,7 +59,7 @@ class AddPlot(forms.ModelForm):
     class Meta:
         model = Plot
         fields = ['number_plot', 'forestry', 'district_forestry', 'tract', 'area',
-                  'quarter', 'section', 'chop_type', 'cost', ]
+                  'quarter', 'section', 'chop_type', 'cost', 'cost_in_words']
         widgets = {
             'cost': forms.TextInput(attrs={'readonly': True}),
         }

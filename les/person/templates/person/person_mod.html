@@ -10,7 +10,7 @@
             <th>Паспортные данные</th>
             <th>Прописка</th>
         </tr>
-    <tr bgcolor="#858">
+    <tr>
 
         <td>
             <table >
@@ -33,7 +33,7 @@
     </table>
     <button type="submit">Изменить</button>
     <form action="{% url 'persons_list' %}" method="get">
-        <button type="reset"><a href="{% url 'persons_list' %}">Отмена</a></button>
+        <button type="reset" onclick="document.location='{% url 'persons_list' %}'">Отмена</button>
     </form>
 
 </form>
