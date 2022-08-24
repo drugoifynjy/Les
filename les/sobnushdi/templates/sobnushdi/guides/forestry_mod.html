@@ -18,7 +18,7 @@
     </table>
 
     <button type="submit">Ок</button>
-    <a href="{% url 'forestrys' %}" type=button>Отмена</a>
+    <button type="reset" onclick="document.location='{% url 'forestrys' %}'">Отмена</button>
 </form>
 {% else %}
 <p>Авторизуйтесь</p>

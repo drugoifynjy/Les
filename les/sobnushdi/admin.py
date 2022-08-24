@@ -41,6 +41,11 @@ class TractAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 
+@admin.register(DistrictForestry)
+class DistrictForestryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+
 @admin.register(Forestry)
 class ForestryAdmin(admin.ModelAdmin):
     list_display = ('name',)

@@ -19,7 +19,7 @@
 
     <button type="submit">Ок</button>
     <form action="{% url 'tracts' %}" method="get">
-        <button type="reset"><a href="{% url 'tracts' %}">Отмена</a></button>
+         <button type="reset" onclick="document.location='{% url 'tracts' %}'">Отмена</button>
     </form>
 </form>
 {% else %}

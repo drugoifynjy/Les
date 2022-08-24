@@ -1,6 +1,7 @@
 from django.db import models
 
 from person.models import Person
+from organization.models import Organization
 
 
 class Tract(models.Model):#Урочище
@@ -80,6 +81,8 @@ class HeatedPremise(models.Model):# Отапливаемое помещение
 
 
 class Statement(models.Model):
+    organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, blank=True,
+                                     null=True, verbose_name='Организация')
     person = models.ForeignKey(Person, on_delete=models.CASCADE, verbose_name='ФИО')
     number_statement = models.PositiveSmallIntegerField(verbose_name='Номер заявления')
     date = models.DateField(blank=True, null=True, verbose_name='Дата заявления')
