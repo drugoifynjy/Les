@@ -127,7 +127,7 @@ class RepresentativeAddOrMod(CreateView):
                 print('Запрос POST отправка на сервер Нет PK')
                 representative = form_mod_representative_organization.save(commit=False)
                 representative.save()
-            return redirect('representative_list')
+            return redirect('representative_list', org_pk=representative.organization.pk)
 
         else:
             form_p = form

@@ -15,8 +15,8 @@
     </table>
 
     <button type="submit">Ок</button>
-    <form action="{% url 'representative_list' pk= %}" method="get">
-        <button type="reset" onclick="document.location='{% url 'representative_list' pk %}'">Отмена</button>
+    <form action="{% url 'representative_list' org_pk %}" method="get">
+        <button type="reset" onclick="document.location='{% url 'representative_list' org_pk %}'">Отмена</button>
     </form>
 </form>
 
