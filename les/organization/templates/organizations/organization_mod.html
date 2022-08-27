@@ -1,0 +1,28 @@
+{% extends 'sobnushdi/base.html' %}
+
+{% block content %}
+
+<form action="{% url 'organization_mod' pk %}" method="post">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <th>Название</th>
+            <th>Адресс</th>
+            <th>Реквизиты</th>
+            <th>Банковские реквизиты</th>
+        </tr>
+        <tr>
+            <td>{{ form_add_organization.as_p }}</td>
+            <td>{{ form_add_organization_address.as_p }}</td>
+            <td>{{ form_add_requisites_organization.as_p }}</td>
+            <td>{{ form_add_bank_details.as_p }}</td>
+        </tr>
+    </table>
+
+    <button type="submit">Ок</button>
+    <form action="{% url 'organizations_list' %}" method="get">
+        <button type="reset" onclick="document.location='{% url 'organizations_list' %}'">Отмена</button>
+    </form>
+</form>
+
+{% endblock %}

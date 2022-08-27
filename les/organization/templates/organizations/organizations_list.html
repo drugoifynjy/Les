@@ -1,0 +1,60 @@
+{% extends 'sobnushdi/base.html' %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <p class="title">{{title}}</p>
+        <table>
+            <tr>
+                <th>№</th>
+                <th>Организация</th>
+
+            </tr>
+            {% for org in organizations %}
+                <tr>
+                    <td>
+                        <mark>{{ org.pk }}</mark>
+                    </td>
+                    <td>
+                        {{ org.title }}
+                    </td>
+
+                    <td>
+                        <form action="{% url 'organization_mod' pk=org.pk %}">
+                            <button type="submit">Изменить</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{% url 'representative_list' org_pk=org.pk %}">
+                            <button type="submit">Представители</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <form action="{% url 'organization_mod' pk=0 %}" method="GET">
+	        <button type="submit" >Добавить</button>
+            <button type="reset" onclick="document.location='{% url 'guides' %}'">Назад</button>
+        </form>
+    <div class="clear"></div>
+    <div class="pagination">
+        <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="first_last">&laquo; Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="next_previous">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="next_previous">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="first_last">Последняя &raquo;</a>
+        {% endif %}
+        </span>
+    </div>
+
+    {% else %}
+        <p>Авторизуйтесь</p>
+    {% endif %}
+{% endblock %}
