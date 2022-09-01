@@ -1,8 +1,7 @@
 {% extends 'sobnushdi/base.html' %}
 
 {% block content %}
-
-<form action="{% url 'representative_mod' pk %}" method="post">
+<form action="{% url 'representative_mod' org pk  %}" method="post">
     {% csrf_token %}
     <table>
         <tr>
@@ -15,8 +14,8 @@
     </table>
 
     <button type="submit">Ок</button>
-    <form action="{% url 'representative_list' pk= %}" method="get">
-        <button type="reset" onclick="document.location='{% url 'representative_list' pk %}'">Отмена</button>
+    <form action="{% url 'representative_list' org %}" method="get">
+        <button type="reset" onclick="document.location='{% url 'representative_list' org %}'">Отмена</button>
     </form>
 </form>
 

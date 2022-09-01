@@ -12,7 +12,7 @@ class MyDateInput(forms.DateInput):
 class AddStatement(forms.ModelForm):
     class Meta:
         model = Statement
-        fields = ['number_statement', 'quantity', 'date', ]
+        fields = ['number_statement', 'quantity', 'date', 'organization']
         widgets = {
             'date': MyDateInput,
         }

@@ -56,6 +56,7 @@ class Organization(models.Model):#  Организация
                                              blank=True, null=True, verbose_name='Адрес организации')
     requisites_organization = models.OneToOneField(RequisitesOrganization, on_delete=models.CASCADE,
                                              blank=True, null=True, verbose_name='Реквизиты организации')
+    selected = models.BooleanField(verbose_name='Активировать', default=False)
 
     def __str__(self):
         a = str(self.title)
@@ -73,8 +74,9 @@ class BankDetails(models.Model): # Банковские реквизиты ор�
     bank_account = models.CharField(max_length=20, blank=True, null=True, verbose_name='Расчетный счет', default='')
     correspondent_account = models.CharField(max_length=20, blank=True, null=True, verbose_name='Корсчет', default='')
     BIK = models.CharField(max_length=9, blank=True, null=True, verbose_name='БИК', default='')
-    organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING,
+    organization = models.ForeignKey(Organization, on_delete=models.SET_NULL,
                                         blank=True, null=True, verbose_name='Организация')
+    selected = models.BooleanField(verbose_name='Активировать', default=False)
 
     def __str__(self):
         a = str(self.bank_title)+' '+str(self.bank_account)
@@ -90,12 +92,16 @@ class OrganizationRepresentative(models.Model):# Представитель ор
     second_name = models.CharField(max_length=50, verbose_name='Фамилия')
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
+    fio_v_roditelnom_padeje = models.CharField(max_length=150, verbose_name='ФИО в родительном падеже')
     position = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Должность')
+    position_v_roditelnom_padeje = models.CharField(max_length=1000, blank=True, null=True,
+                                                    verbose_name='Должность в родительном пажеде')
     organization = models.ForeignKey(Organization, blank=True,
-                                     null=True, on_delete=models.CASCADE, verbose_name='Организация')
+                                     null=True, on_delete=models.SET_NULL, verbose_name='Организация')
+    selected = models.BooleanField(verbose_name='Активировать', default=False)
 
     def __str__(self):
-        a = str(self.position)+' '+str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic)+' '+str(self.position)
+        a = str(self.position)+' '+str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic)
         return a
 
     class Meta:

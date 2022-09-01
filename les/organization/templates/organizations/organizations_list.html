@@ -7,6 +7,7 @@
             <tr>
                 <th>№</th>
                 <th>Организация</th>
+                <th>Текущая</th>
 
             </tr>
             {% for org in organizations %}
@@ -17,10 +18,22 @@
                     <td>
                         {{ org.title }}
                     </td>
+                    <td>
+                        {% if org.selected %}
+                        Активная
+                        {% else %}
+                        <p>Не активная</p>
+                        {% endif %}
+                    </td>
 
                     <td>
                         <form action="{% url 'organization_mod' pk=org.pk %}">
                             <button type="submit">Изменить</button>
+                        </form>
+                    </td>
+                     <td>
+                        <form action="{% url 'bank_details_list' org_pk=org.pk %}">
+                            <button type="submit">Банковские реквизиты</button>
                         </form>
                     </td>
                     <td>

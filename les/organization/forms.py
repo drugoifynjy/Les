@@ -7,7 +7,7 @@ from .models import *
 class AddOrganization(forms.ModelForm):
     class Meta:
         model = Organization
-        fields = ['title']
+        fields = ['title', 'selected']
 
 
 class AddOrganizationAddress(forms.ModelForm):
@@ -22,13 +22,13 @@ class AddRequisitesOrganization(forms.ModelForm):
         fields = ['INN', 'KPP', 'OGRN', 'OKPO', 'email']
 
 
-class AddBankDetals(forms.ModelForm):
+class AddOrModBankDetals(forms.ModelForm):
     class Meta:
         model = BankDetails
-        fields = '__all__'
+        fields = ['bank_title', 'bank_account', 'correspondent_account', 'BIK', 'selected']
 
 
 class AddOrModRepresentativeOrganization(forms.ModelForm):
     class Meta:
         model = OrganizationRepresentative
-        fields = ['second_name', 'first_name', 'patronymic', 'position', 'organization']
+        fields = ['second_name', 'first_name', 'patronymic','fio_v_roditelnom_padeje', 'position', 'position_v_roditelnom_padeje', 'selected']

@@ -81,7 +81,7 @@ class HeatedPremise(models.Model):# Отапливаемое помещение
 
 
 class Statement(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, blank=True,
+    organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, blank=True,
                                      null=True, verbose_name='Организация')
     person = models.ForeignKey(Person, on_delete=models.CASCADE, verbose_name='ФИО')
     number_statement = models.PositiveSmallIntegerField(verbose_name='Номер заявления')

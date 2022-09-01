@@ -6,7 +6,7 @@ from datetime import timedelta
 from .forms import *
 
 from person.models import Person
-
+from organization.models import *
 
 class GuidesView(View):
     template_names = 'sobnushdi/guides/guides.html'
@@ -282,6 +282,7 @@ class StatementAdd(CreateView):
                 and form_add_heated_promise.is_valid():
             heated_promise = form_add_heated_promise.save()
             statement = form_add_statement.save(commit=False)
+            statement.organization = Organization.objects.get(selected=True)
             person.save()
             statement.heated_promise = heated_promise
             statement.person = person
@@ -320,6 +321,7 @@ class StatementMod(View):
                 'pk': pk,
                 'title': 'Добавить заявление'}
         if form_add_statement.is_valid() and form_add_heated_promise.is_valid():
+            stat.organization = Organization.objects.get(selected=True)
             heated_promise.save()
             person.save()
             stat.save()
@@ -556,10 +558,16 @@ class ContractPrint(View):
         self.work_book.close()
         return redirect('contracts_list')
 
+
 class ContractVee(View):
     template_name = 'sobnushdi/contracts/contract.html'
+
     def get(self, request, pk, *args, **kwargs):
         contract = Contract.objects.get(pk=pk)
+        organ = Organization.objects.get(selected=True)
+        bank_detail = organ.bankdetails_set.get(selected=True)
+        organ_repr = organ.organizationrepresentative_set.get(selected=True)
+        print(organ_repr, bank_detail)
         '''contract.number
         self.page['BP3'] = contract.date
         self.page['BP4'] = contract.date + timedelta(days=364)
@@ -613,9 +621,13 @@ class ContractVee(View):
             self.page['BP99'] = aspen[0].brushwood'''
         form = {'person': contract.statement.person,
                 'contract': contract,
+                'bank_detail': bank_detail,
+                'organ_repr': organ_repr,
                 'pk': pk,
                 'title': 'Добавить данные по породе в деляне к договору' + str(contract.number)}
         return render(request, self.template_name, context=form)
+
+
 class PlotWoodSpeciesAdd(CreateView):
     template_name = 'sobnushdi/plot_wood_species/plot_wood_species_add.html'
 
