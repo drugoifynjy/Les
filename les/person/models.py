@@ -5,7 +5,8 @@ class ResidenceAddress(models.Model):
     postcode = models.CharField(max_length=6, blank=True, null=True, verbose_name='Индекс', default='646350')
     region = models.CharField(max_length=100, blank=True, null=True, default='Омская', verbose_name='Область')
     district = models.CharField(max_length=50, blank=True, null=True, verbose_name='Район', default='Колосовский')
-    locality = models.CharField(max_length=50, blank=True, null=True, verbose_name='Населенный пункт', default='Колосовка')
+    locality = models.CharField(max_length=50, blank=True, null=True, verbose_name='Населенный пункт',
+                                default='Колосовка')
     street = models.CharField(max_length=50, blank=True, null=True, verbose_name='Улица', default='Кирова')
     house_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Дом')
     apartment_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартира')
@@ -39,7 +40,8 @@ class Passport(models.Model):
     number = models.PositiveIntegerField(verbose_name='Номер')
     date_of_issue = models.DateField(verbose_name='Дата выдачи')
     issued = models.CharField(max_length=250, blank=True, null=True, verbose_name='Кем выдан')
-    address_birth = models.TextField(max_length=500, blank=True, null=True, verbose_name='Место рождения', default='Колосовка')
+    address_birth = models.TextField(max_length=500, blank=True, null=True, verbose_name='Место рождения',
+                                     default='Колосовка')
     inn = models.PositiveIntegerField(blank=True, null=True, verbose_name='ИНН')
 
     def __str__(self):
