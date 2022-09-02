@@ -9,6 +9,11 @@
             <button type="submit">Изменить</button>
         </form>
     </td>
+    <td>
+        <form action="{% url 'contract' pk=contract.pk %}" target="_blank">
+            <button type="submit">Распечатать</button>
+        </form>
+    </td>
 </table>
 <table border="1 px">
     <th>ФИО заявителя</th>

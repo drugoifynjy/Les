@@ -1,8 +1,15 @@
-{% extends 'sobnushdi/base.html' %}
+<!DOCTYPE html>
+{% load static %}
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ title }}</title>
+        <link type="text/css" href="{% static 'les/css/style_dogovor.css' %}" rel="stylesheet" />
+    </head>
+    <body>
 
-{% block content %}
 {% if request.user.is_authenticated %}
-<div id="dogovor"
+<bo id="dogovor">
 <p id="center">Договор</p>
 <p id="center">
 купли-продажи лесных насаждений № 11/{{contract.number}}
@@ -459,4 +466,5 @@
 {% else %}
 <p>Авторизуйтесь</p>
  {% endif %}
-{% endblock %}
+    </body>
+</html>

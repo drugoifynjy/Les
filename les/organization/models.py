@@ -1,7 +1,8 @@
 from django.db import models
 
 
-class OrganizationAddress(models.Model):# Адрес организации
+class OrganizationAddress(models.Model):
+    """Адрес организации"""
     postcode = models.CharField(max_length=6, blank=True, null=True, verbose_name='Индекс', default='644001')
     region = models.CharField(max_length=100, blank=True, null=True, verbose_name='Область', default='Омская')
     district = models.CharField(max_length=50, blank=True, null=True, verbose_name='Район', default='')
@@ -32,7 +33,8 @@ class OrganizationAddress(models.Model):# Адрес организации
         verbose_name_plural = 'Адреса организации'
 
 
-class RequisitesOrganization(models.Model):# Реквизиты организации
+class RequisitesOrganization(models.Model):
+    """Реквизиты организации"""
     INN = models.CharField(max_length=10, blank=True, null=True, verbose_name='ИНН', default='')
     KPP = models.CharField(max_length=9, blank=True, null=True, verbose_name='КПП', default='')
     OGRN = models.CharField(max_length=13, blank=True, null=True, verbose_name='ОГРН', default='')
@@ -49,9 +51,16 @@ class RequisitesOrganization(models.Model):# Реквизиты организа
         verbose_name_plural = 'Реквизиты организаций'
 
 
-class Organization(models.Model):#  Организация
+class Organization(models.Model):
+    """ Организация """
     title = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Название организации',
-                             default='Главное управление лесного хозяйства')
+                             default='Главное управление лесного хозяйства Омской области')
+    title_v_roditelnom_padeje = models.CharField(max_length=1000, blank=True, null=True,
+                                                 verbose_name='Название организации в родительном падеже',
+                                                 default='Главного управления лесного хозяйства Омской области')
+    title_v_predlojnom_padeje = models.CharField(max_length=1000, blank=True, null=True,
+                                                 verbose_name='Название организации в родительном падеже',
+                                                 default='Главном управлении лесного хозяйства Омской области')
     organization_address = models.OneToOneField(OrganizationAddress, on_delete=models.CASCADE,
                                              blank=True, null=True, verbose_name='Адрес организации')
     requisites_organization = models.OneToOneField(RequisitesOrganization, on_delete=models.CASCADE,
@@ -68,7 +77,8 @@ class Organization(models.Model):#  Организация
         verbose_name_plural = 'Организации'
 
 
-class BankDetails(models.Model): # Банковские реквизиты организации
+class BankDetails(models.Model):
+    """Банковские реквизиты организации"""
     bank_title = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Название банка',
                             default='ОТДЕЛЕНИЕ ОМСКБАНКА РОССИИ // УФК по Омской области г.Омск')
     bank_account = models.CharField(max_length=20, blank=True, null=True, verbose_name='Расчетный счет', default='')
@@ -88,11 +98,13 @@ class BankDetails(models.Model): # Банковские реквизиты ор�
         verbose_name_plural = 'Банковские реквизиты организаций'
 
 
-class OrganizationRepresentative(models.Model):# Представитель организации
+class OrganizationRepresentative(models.Model):
+    '''Представитель организации'''
     second_name = models.CharField(max_length=50, verbose_name='Фамилия')
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
     fio_v_roditelnom_padeje = models.CharField(max_length=150, verbose_name='ФИО в родительном падеже')
+
     position = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Должность')
     position_v_roditelnom_padeje = models.CharField(max_length=1000, blank=True, null=True,
                                                     verbose_name='Должность в родительном пажеде')
@@ -108,3 +120,10 @@ class OrganizationRepresentative(models.Model):# Представитель ор
         ordering = ['id']
         verbose_name = 'Представитель организации'
         verbose_name_plural = 'Представители организаций'
+
+ class PowerOfAttorneyRepresentative(models.Model):
+        number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Номер доверенности')
+        date = models.DateField(blank=True, null=True, verbose_name='Дата доверенности')
+        organization_representative = models.ForeignKey(OrganizationRepresentative, blank=True,
+                                                        null=True, on_delete=models.SET_NULL, verbose_name='Представитель организации')
+        selected = models.BooleanField(verbose_name='Активировать', default=False)
