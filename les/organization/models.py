@@ -57,10 +57,10 @@ class Organization(models.Model):
                              default='Главное управление лесного хозяйства Омской области')
     title_v_roditelnom_padeje = models.CharField(max_length=1000, blank=True, null=True,
                                                  verbose_name='Название организации в родительном падеже',
-                                                 default='Главного управления лесного хозяйства Омской области')
+                                                 default='')
     title_v_predlojnom_padeje = models.CharField(max_length=1000, blank=True, null=True,
-                                                 verbose_name='Название организации в родительном падеже',
-                                                 default='Главном управлении лесного хозяйства Омской области')
+                                                 verbose_name='Название организации в предложном падеже',
+                                                 default='')
     organization_address = models.OneToOneField(OrganizationAddress, on_delete=models.CASCADE,
                                              blank=True, null=True, verbose_name='Адрес организации')
     requisites_organization = models.OneToOneField(RequisitesOrganization, on_delete=models.CASCADE,
@@ -103,11 +103,13 @@ class OrganizationRepresentative(models.Model):
     second_name = models.CharField(max_length=50, verbose_name='Фамилия')
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
-    fio_v_roditelnom_padeje = models.CharField(max_length=150, verbose_name='ФИО в родительном падеже')
+    fio_v_roditelnom_padeje = models.CharField(max_length=150, blank=True, null=True,
+                                               verbose_name='ФИО в родительном падеже')
 
     position = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Должность')
     position_v_roditelnom_padeje = models.CharField(max_length=1000, blank=True, null=True,
                                                     verbose_name='Должность в родительном пажеде')
+
     organization = models.ForeignKey(Organization, blank=True,
                                      null=True, on_delete=models.SET_NULL, verbose_name='Организация')
     selected = models.BooleanField(verbose_name='Активировать', default=False)
@@ -121,9 +123,12 @@ class OrganizationRepresentative(models.Model):
         verbose_name = 'Представитель организации'
         verbose_name_plural = 'Представители организаций'
 
- class PowerOfAttorneyRepresentative(models.Model):
-        number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Номер доверенности')
-        date = models.DateField(blank=True, null=True, verbose_name='Дата доверенности')
-        organization_representative = models.ForeignKey(OrganizationRepresentative, blank=True,
-                                                        null=True, on_delete=models.SET_NULL, verbose_name='Представитель организации')
-        selected = models.BooleanField(verbose_name='Активировать', default=False)
+
+class PowerOfAttorneyRepresentative(models.Model):
+    """ Доверенность представителя от организации """
+    number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Номер доверенности')
+    date = models.DateField(blank=True, null=True, verbose_name='Дата доверенности')
+    organization_representative = models.ForeignKey(OrganizationRepresentative, blank=True,
+                                                        null=True, on_delete=models.SET_NULL,
+                                                        verbose_name='Представитель организации')
+    selected = models.BooleanField(verbose_name='Активировать', default=False)

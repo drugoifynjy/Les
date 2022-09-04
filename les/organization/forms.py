@@ -31,4 +31,4 @@ class AddOrModBankDetals(forms.ModelForm):
 class AddOrModRepresentativeOrganization(forms.ModelForm):
     class Meta:
         model = OrganizationRepresentative
-        fields = ['second_name', 'first_name', 'patronymic','fio_v_roditelnom_padeje', 'position', 'position_v_roditelnom_padeje', 'selected']
+        fields = ['second_name', 'first_name', 'patronymic', 'position', 'selected']

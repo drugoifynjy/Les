@@ -1,11 +1,8 @@
-from openpyxl import load_workbook
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, View, DeleteView
-from datetime import timedelta
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, CreateView
 from .forms import *
 
-from sobnushdi.models import Statement
+from .sklonenye import *
 
 
 class OrganizationsView(ListView):
@@ -14,6 +11,7 @@ class OrganizationsView(ListView):
     context_object_name = 'organizations'
     ordering = '-pk'
     paginate_by = 10
+    print('Сработал класс OrganizationsView')
 
 
 class OrganizationAddOrMod(CreateView):
@@ -61,7 +59,6 @@ class OrganizationAddOrMod(CreateView):
                 'title1': 'Добавить организацию'}
         if form_add_organization.is_valid() and form_add_organization_address.is_valid() and\
                 form_add_requisites_organization.is_valid():
-
             if pk:
                 if organization.selected:
                     org = Organization.objects.exclude(pk=pk)  #
@@ -69,15 +66,20 @@ class OrganizationAddOrMod(CreateView):
                         i.selected = False                     #
                         i.save()                               #
                 print('Запрос POST отправка на сервер Есть PK')
+                skl = sklonenye(organization.title)
+                organization.title_v_predlojnom_padeje = skl[1]
+                organization.title_v_roditelnom_padeje = skl[0]
                 organization_address.save()
                 requisites_organization.save()
                 organization.save()
             else:
-
                 print('Запрос POST отправка на сервер Нет PK создание нового')
                 adr = form_add_organization_address.save()
                 requisites = form_add_requisites_organization.save()
                 organization = form_add_organization.save(commit=False)
+                skl = sklonenye(organization.title)
+                organization.title_v_predlojnom_padeje = skl[1]
+                organization.title_v_roditelnom_padeje = skl[0]
                 if organization.selected:
                     org = Organization.objects.exclude(pk=pk)  #
                     for i in org:                              # Отключение активной организации
@@ -149,6 +151,11 @@ class RepresentativeAddOrMod(CreateView):
                     i.selected = False  #
                     i.save()  #
                 print('Запрос POST отправка на сервер Есть PK')
+                fio = representative.second_name + ' ' + representative.first_name + ' ' + representative.patronymic
+                print(fio)
+                skl = sklonenye(fio)
+                representative.fio_v_roditelnom_padeje = skl[0].title()
+                representative.position_v_roditelnom_padeje = sklonenye(representative.position)[0]
                 representative.save()
             else:
                 print('Запрос POST отправка на сервер Нет PK')
@@ -159,6 +166,11 @@ class RepresentativeAddOrMod(CreateView):
                         i.selected = False  #
                         i.save()  #
                 representative.organization = Organization.objects.get(pk=self.kwargs['org_pk'])
+                fio = representative.second_name + ' ' + representative.first_name + ' ' + representative.patronymic
+                print(fio)
+                skl = sklonenye(fio)
+                representative.fio_v_roditelnom_padeje = skl[0].title()
+                representative.position_v_roditelnom_padeje = sklonenye(representative.position)[0]
                 representative.save()
             return redirect('representative_list', organization.pk)
 
