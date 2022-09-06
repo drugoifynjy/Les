@@ -12,7 +12,7 @@
 <bo id="dogovor">
 <p id="center">Договор</p>
 <p id="center">
-купли-продажи лесных насаждений № 11/{{contract.number}}
+купли-продажи лесных насаждений № {{contract.statement.organization.number_otdelenya}}/{{contract.number}}
 </p>
 <span id="justy">с.Колосовка</span>   <span id="right">  {{contract.date}} </span>
 <p id="justy" style="text-indent: 50px;">{{contract.statement.organization.title}}, именуемое
@@ -40,7 +40,7 @@
     I. Предмет договора
 </p>
 <p id="justy">
-    1. По настоящему Договору на основании распоряжения {{contract.statement.organization.title}} Главного управления лесного хозяйства Омской области от
+    1. По настоящему Договору на основании распоряжения {{contract.statement.organization.title_v_roditelnom_padeje}} от
     {{contract.date_decree}} года № {{contract.number_decree}} "О заключении договора
     купли-продажи лесных насаждений для собственных нужд граждан", Продавец обязуется передать лесные насаждения,
     расположенные на землях, находящихся в федеральной собственности (далее - лесные насаждения), в собственность

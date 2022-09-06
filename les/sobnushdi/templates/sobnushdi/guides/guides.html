@@ -23,7 +23,9 @@
 	        <button type="submit" >Организации</button>
 </form>
 </div>
-
+<div><form action="{% url 'locality_types_list' %}" method="GET">
+	        <button type="submit" >Типы населенных пунктов</button>
+</form></div>
 
 {% else %}
 <p>Авторизуйтесь</p>

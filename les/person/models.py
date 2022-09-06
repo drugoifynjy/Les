@@ -1,10 +1,29 @@
 from django.db import models
 
 
+class LocalityType(models.Model):
+    """Тип населенного пункта: locality_type = ['деревня', 'село', 'город', 'посёлок']"""
+    locality_type = models.CharField(max_length=20, blank=True, null=True, verbose_name='Тип населенноо пункта', default='село')
+    locality_type_sokr = models.CharField(max_length=5, blank=True, null=True,
+                                          verbose_name='Тип населенноо пункта кратко', default='с.')
+
+    def __str__(self):
+        a = str(self.locality_type)
+
+        return a
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Тип населенного пункта'
+        verbose_name_plural = 'Типы населенных пунктов'
+
+
 class ResidenceAddress(models.Model):
     postcode = models.CharField(max_length=6, blank=True, null=True, verbose_name='Индекс', default='646350')
     region = models.CharField(max_length=100, blank=True, null=True, default='Омская', verbose_name='Область')
     district = models.CharField(max_length=50, blank=True, null=True, verbose_name='Район', default='Колосовский')
+    locality_type = models.ForeignKey(LocalityType, on_delete=models.SET_NULL,
+                                      blank=True, null=True, verbose_name='Тип населенного пункта')
     locality = models.CharField(max_length=50, blank=True, null=True, verbose_name='Населенный пункт',
                                 default='Колосовка')
     street = models.CharField(max_length=50, blank=True, null=True, verbose_name='Улица', default='Кирова')
@@ -16,6 +35,7 @@ class ResidenceAddress(models.Model):
             a = str(self.postcode.__str__()) + ' ' + \
                 str(self.region.__str__()) + ' область ' + \
                 str(self.district.__str__()) + ' район ' + \
+                str(self.locality_type) + \
                 str(self.locality.__str__()) + ' ул. ' + \
                 str(self.street.__str__()) + ' д. ' + \
                 str(self.house_number.__str__()) + ' кв. ' + \

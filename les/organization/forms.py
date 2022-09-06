@@ -1,5 +1,5 @@
 from django import forms
-from django.utils.datetime_safe import datetime
+
 
 from .models import *
 
@@ -7,12 +7,24 @@ from .models import *
 class AddOrganization(forms.ModelForm):
     class Meta:
         model = Organization
-        fields = ['title', 'selected']
+        fields = ['title', 'otdel', 'number_otdelenya', 'selected']
 
 
 class AddOrganizationAddress(forms.ModelForm):
     class Meta:
         model = OrganizationAddress
+        fields = '__all__'
+
+
+class AddAddressOtdelenya(forms.ModelForm):
+    class Meta:
+        model = AddressOtdelenya
+        fields = '__all__'
+
+
+class AddLocalityType(forms.ModelForm):
+    class Meta:
+        model = LocalityType
         fields = '__all__'
 
 

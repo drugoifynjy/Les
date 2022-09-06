@@ -160,7 +160,8 @@ class Contract(models.Model): #Договор
     date_decree = models.DateField(blank=True, null=True, verbose_name='дата распоряжения')
     number = models.CharField(max_length=7, blank=True, null=True, verbose_name='номер договора')
     date = models.DateField(blank=True, null=True, verbose_name='Дата договора')
-    the_end_date_of_the_export_of_wood = models.DateField(blank=True, null=True, verbose_name='Дата окончания вывоза древесины')
+    the_end_date_of_the_export_of_wood = models.DateField(blank=True, null=True,
+                                                          verbose_name='Дата окончания вывоза древесины')
     end_date_of_wood_harvesting = models.DateField(blank=True, null=True, verbose_name='Дата окончания заготовки')
     plot = models.OneToOneField(Plot, on_delete=models.CASCADE, verbose_name='Делянка')
 

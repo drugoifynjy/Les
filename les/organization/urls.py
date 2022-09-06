@@ -10,5 +10,7 @@ urlpatterns = [
     path('guides/organizations/<int:org_pk>/representative_mod/<int:pk>', RepresentativeAddOrMod.as_view(), name='representative_mod'),
     path('guides/organizations/<int:org_pk>/bank_details_list/', BankDetailsList.as_view(), name='bank_details_list'),
     path('guides/organizations/<int:org_pk>/bank_details_mod/<int:pk>', BankDetailsAddOrMod.as_view(), name='bank_details_mod'),
+    path('guides/locality_type/', LocalityTypesList.as_view(), name='locality_types_list'),
+    path('guides/locality_type/locality_type_mod/<int:pk>', LocalityTypeAddOrMod.as_view(), name='locality_type_mod'),
     #path('guides/organizations/representative_add/', RepresentativeAddOrMod.as_view(), name='representative_add'),
 ]

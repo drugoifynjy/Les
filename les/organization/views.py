@@ -23,15 +23,18 @@ class OrganizationAddOrMod(CreateView):
             organization = Organization.objects.get(pk=pk)
             form_add_organization = AddOrganization(instance=organization)
             form_add_organization_address = AddOrganizationAddress(instance=organization.organization_address)
+            form_add_address_otdelenya = AddAddressOtdelenya(instance=organization.address_otdelenya)
             form_add_requisites_organization = AddRequisitesOrganization(instance=organization.requisites_organization)
         else:
             print(' Запрос  GET - Нет PK')
             form_add_organization = AddOrganization()
             form_add_organization_address = AddOrganizationAddress()
+            form_add_address_otdelenya = AddAddressOtdelenya()
             form_add_requisites_organization = AddRequisitesOrganization()
 
         form = {'form_add_organization': form_add_organization,
                 'form_add_organization_address': form_add_organization_address,
+                'form_add_address_otdelenya': form_add_address_otdelenya,
                 'form_add_requisites_organization': form_add_requisites_organization,
                 'pk': pk,
                 'title': 'Добавить организацию'}
@@ -43,22 +46,26 @@ class OrganizationAddOrMod(CreateView):
             print(' Запрос  POST - Есть PK' )
             organization = Organization.objects.get(pk=pk)
             organization_address = organization.organization_address
+            address_otdelenya = organization.address_otdelenya
             requisites_organization = organization.requisites_organization
             form_add_organization = AddOrganization(request.POST, instance=organization)
             form_add_organization_address = AddOrganizationAddress(request.POST, instance=organization_address)
+            form_add_address_otdelenya = AddAddressOtdelenya(request.POST, instance=address_otdelenya)
             form_add_requisites_organization = AddRequisitesOrganization(request.POST, instance=requisites_organization)
         else:
             print(' Запрос  POST - Нет PK')
             form_add_organization = AddOrganization(request.POST)
             form_add_organization_address = AddOrganizationAddress(request.POST)
+            form_add_address_otdelenya = AddAddressOtdelenya(request.POST)
             form_add_requisites_organization = AddRequisitesOrganization(request.POST)
         form = {'form_add_organization': form_add_organization,
                 'form_add_organization_address': form_add_organization_address,
+                'form_add_address_otdelenya': form_add_address_otdelenya,
                 'form_add_requisites_organization': form_add_requisites_organization,
                 'pk': pk,
                 'title1': 'Добавить организацию'}
-        if form_add_organization.is_valid() and form_add_organization_address.is_valid() and\
-                form_add_requisites_organization.is_valid():
+        if form_add_organization.is_valid() and form_add_organization_address.is_valid() and \
+                form_add_address_otdelenya.is_valid() and form_add_requisites_organization.is_valid():
             if pk:
                 if organization.selected:
                     org = Organization.objects.exclude(pk=pk)  #
@@ -66,18 +73,20 @@ class OrganizationAddOrMod(CreateView):
                         i.selected = False                     #
                         i.save()                               #
                 print('Запрос POST отправка на сервер Есть PK')
-                skl = sklonenye(organization.title)
+                skl = sklonenye(organization.title, type='Orgn')
                 organization.title_v_predlojnom_padeje = skl[1]
                 organization.title_v_roditelnom_padeje = skl[0]
                 organization_address.save()
+                address_otdelenya.save()
                 requisites_organization.save()
                 organization.save()
             else:
                 print('Запрос POST отправка на сервер Нет PK создание нового')
                 adr = form_add_organization_address.save()
+                adr_otd = form_add_address_otdelenya.save()
                 requisites = form_add_requisites_organization.save()
                 organization = form_add_organization.save(commit=False)
-                skl = sklonenye(organization.title)
+                skl = sklonenye(organization.title, type='Orgn')
                 organization.title_v_predlojnom_padeje = skl[1]
                 organization.title_v_roditelnom_padeje = skl[0]
                 if organization.selected:
@@ -86,6 +95,7 @@ class OrganizationAddOrMod(CreateView):
                         i.selected = False                     #
                         i.save()                               #
                 organization.organization_address = adr
+                organization.address_otdelenya = adr_otd
                 organization.requisites_organization = requisites
                 organization.save()
             return redirect('organizations_list')
@@ -151,10 +161,11 @@ class RepresentativeAddOrMod(CreateView):
                     i.selected = False  #
                     i.save()  #
                 print('Запрос POST отправка на сервер Есть PK')
-                fio = representative.second_name + ' ' + representative.first_name + ' ' + representative.patronymic
-                print(fio)
-                skl = sklonenye(fio)
-                representative.fio_v_roditelnom_padeje = skl[0].title()
+                skl_second_name = sklonenye(representative.second_name, type='Surn')[0]
+                skl_firs_name = sklonenye(representative.first_name, type='Name')[0]
+                skl_patronymic_name = sklonenye(representative.patronymic,type='Patr')[0]
+                representative.fio_v_roditelnom_padeje = skl_second_name + ' ' + skl_firs_name + ' ' \
+                                                         + skl_patronymic_name
                 representative.position_v_roditelnom_padeje = sklonenye(representative.position)[0]
                 representative.save()
             else:
@@ -166,10 +177,10 @@ class RepresentativeAddOrMod(CreateView):
                         i.selected = False  #
                         i.save()  #
                 representative.organization = Organization.objects.get(pk=self.kwargs['org_pk'])
-                fio = representative.second_name + ' ' + representative.first_name + ' ' + representative.patronymic
-                print(fio)
-                skl = sklonenye(fio)
-                representative.fio_v_roditelnom_padeje = skl[0].title()
+                skl_second_name = sklonenye(representative.second_name)[0]
+                skl_firs_name = sklonenye(representative.first_name)[0]
+                skl_patronymic_name = sklonenye(representative.patronymic)[0]
+                representative.fio_v_roditelnom_padeje = skl_second_name + ' ' + skl_firs_name + ' ' + skl_patronymic_name
                 representative.position_v_roditelnom_padeje = sklonenye(representative.position)[0]
                 representative.save()
             return redirect('representative_list', organization.pk)
@@ -250,6 +261,56 @@ class BankDetailsAddOrMod(CreateView):
                 bank_details.save()
             return redirect('bank_details_list', organization.pk)
 
+        else:
+            form_p = form
+        return render(request, self.template_name, context=form_p)
+
+
+class LocalityTypesList(ListView):
+    model = LocalityType
+    template_name = 'locality_types/locality_types_list.html'
+    context_object_name = 'locality_types'
+    ordering = '-pk'
+    paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        gg = self.model.objects.all()
+        print(gg)
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Типы населенных пунктов'
+        return context
+
+
+class LocalityTypeAddOrMod(CreateView):
+    template_name = 'locality_types/locality_type_mod.html'
+    paginate_by = 10
+
+    def get(self, request, pk=None, *args, **kwargs):
+        if pk:
+            locality_type = LocalityType.objects.get(pk=pk)
+            form_mod_locality_type = AddLocalityType(instance=locality_type)
+        else:
+            form_mod_locality_type = AddLocalityType()
+        form = {'form_mod_locality_type': form_mod_locality_type,
+                'pk': pk,
+                'title': 'Добавить тип населенного пункта'}
+
+        return render(request, self.template_name, context=form)
+
+    def post(self, request, pk=None, *args, **kwargs):
+        if pk:
+            locality_type = LocalityType.objects.get(pk=pk)
+            form_mod_locality_type = AddLocalityType(request.POST, instance=locality_type)
+        else:
+            form_mod_locality_type = AddLocalityType(request.POST)
+        form = {'form_mod_locality_type': form_mod_locality_type,
+                'title': 'Добавить тип населенного пункта'}
+        if form_mod_locality_type.is_valid():
+            if pk:
+                locality_type.save()
+            else:
+                form_mod_locality_type.save()
+            return redirect('locality_types_list')
         else:
             form_p = form
         return render(request, self.template_name, context=form_p)

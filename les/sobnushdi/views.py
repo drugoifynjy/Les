@@ -8,6 +8,7 @@ from .forms import *
 from person.models import Person
 from organization.models import *
 
+
 class GuidesView(View):
     template_names = 'sobnushdi/guides/guides.html'
 

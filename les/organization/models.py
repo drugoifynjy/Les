@@ -1,12 +1,52 @@
 from django.db import models
 
+from person.models import *
+
+
+class AddressOtdelenya(models.Model):
+    """Адрес отдела(лесничества)"""
+    postcode = models.CharField(max_length=6, blank=True, null=True, verbose_name='Индекс', default='644001')
+    region = models.CharField(max_length=100, blank=True, null=True, verbose_name='Область', default='Омская')
+    district = models.CharField(max_length=50, blank=True, null=True, verbose_name='Район', default='')
+    locality_type = models.ForeignKey(LocalityType, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Тип населенноо пункта')
+    locality = models.CharField(max_length=50, blank=True, null=True, verbose_name='Населенный пункт',
+                                default='')
+    street = models.CharField(max_length=50, blank=True, null=True, verbose_name='Улица', default='')
+    house_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Дом', default='')
+    apartment_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартира', default='')
+
+    def __str__(self):
+        if self.apartment_number:
+            a = str(self.postcode.__str__()) + ' ' + \
+                str(self.region.__str__()) + ' область ' + \
+                str(self.locality_type) + \
+                str(self.locality.__str__()) + \
+                str(self.street.__str__()) + ' ул. ' + \
+                str(self.house_number.__str__()) + ' кв. ' + \
+                str(self.apartment_number.__str__())
+        else:
+            a = str(self.postcode.__str__()) + ' ' + \
+                str(self.region.__str__()) + ' область ' + \
+                str(self.locality_type) + \
+                str(self.locality.__str__()) + ' ул. ' + \
+                str(self.street.__str__()) + ' д. ' + \
+                str(self.house_number.__str__())
+        return a
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Адрес отделения(лесничества)'
+        verbose_name_plural = 'Адреса отделений(лесничеств)'
+
 
 class OrganizationAddress(models.Model):
     """Адрес организации"""
     postcode = models.CharField(max_length=6, blank=True, null=True, verbose_name='Индекс', default='644001')
     region = models.CharField(max_length=100, blank=True, null=True, verbose_name='Область', default='Омская')
     district = models.CharField(max_length=50, blank=True, null=True, verbose_name='Район', default='')
-    locality = models.CharField(max_length=50, blank=True, null=True, verbose_name='Населенный пункт', default='г. Омск')
+    locality_type = models.ForeignKey(LocalityType, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Тип населенноо пункта')
+    locality = models.CharField(max_length=50, blank=True, null=True, verbose_name='Населенный пункт',
+                                default='Омск')
     street = models.CharField(max_length=50, blank=True, null=True, verbose_name='Улица', default='ул. Куйбышева')
     house_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Дом', default='63')
     apartment_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартира', default='')
@@ -15,13 +55,15 @@ class OrganizationAddress(models.Model):
         if self.apartment_number:
             a = str(self.postcode.__str__()) + ' ' + \
                 str(self.region.__str__()) + ' область ' + \
-                str(self.locality.__str__()) + ' ул. ' + \
-                str(self.street.__str__()) + ' д. ' + \
+                str(self.locality_type) + \
+                str(self.locality.__str__()) + \
+                str(self.street.__str__()) + ' ул. ' + \
                 str(self.house_number.__str__()) + ' кв. ' + \
                 str(self.apartment_number.__str__())
         else:
             a = str(self.postcode.__str__()) + ' ' + \
                 str(self.region.__str__()) + ' область ' + \
+                str(self.locality_type) + \
                 str(self.locality.__str__()) + ' ул. ' + \
                 str(self.street.__str__()) + ' д. ' + \
                 str(self.house_number.__str__())
@@ -55,6 +97,11 @@ class Organization(models.Model):
     """ Организация """
     title = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Название организации',
                              default='Главное управление лесного хозяйства Омской области')
+    otdel = models.CharField(max_length=500, blank=True, null=True, verbose_name='Название отдела (лесничества)')
+    number_otdelenya = models.PositiveSmallIntegerField(blank=True, null=True,
+                                                        verbose_name='номер отдела (лесничества)')
+    address_otdelenya = models.ForeignKey(AddressOtdelenya, on_delete=models.SET_NULL, blank=True, null=True,
+                                          verbose_name='Адресс отделения(лесничества)')
     title_v_roditelnom_padeje = models.CharField(max_length=1000, blank=True, null=True,
                                                  verbose_name='Название организации в родительном падеже',
                                                  default='')
