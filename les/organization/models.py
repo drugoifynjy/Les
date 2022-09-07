@@ -146,7 +146,7 @@ class BankDetails(models.Model):
 
 
 class OrganizationRepresentative(models.Model):
-    '''Представитель организации'''
+    """Представитель организации"""
     second_name = models.CharField(max_length=50, verbose_name='Фамилия')
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
@@ -159,7 +159,6 @@ class OrganizationRepresentative(models.Model):
 
     organization = models.ForeignKey(Organization, blank=True,
                                      null=True, on_delete=models.SET_NULL, verbose_name='Организация')
-    #selected = models.BooleanField(verbose_name='Активировать', default=False)
 
     def __str__(self):
         a = str(self.position)+' '+str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic)
@@ -179,3 +178,5 @@ class PowerOfAttorneyRepresentative(models.Model):
                                                         null=True, on_delete=models.SET_NULL,
                                                         verbose_name='Представитель организации')
     selected = models.BooleanField(verbose_name='Активировать', default=False)
+
+
