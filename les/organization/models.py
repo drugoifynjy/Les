@@ -159,7 +159,7 @@ class OrganizationRepresentative(models.Model):
 
     organization = models.ForeignKey(Organization, blank=True,
                                      null=True, on_delete=models.SET_NULL, verbose_name='Организация')
-    selected = models.BooleanField(verbose_name='Активировать', default=False)
+    #selected = models.BooleanField(verbose_name='Активировать', default=False)
 
     def __str__(self):
         a = str(self.position)+' '+str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic)

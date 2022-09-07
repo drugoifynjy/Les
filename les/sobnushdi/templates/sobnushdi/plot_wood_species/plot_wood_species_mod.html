@@ -4,15 +4,15 @@
 {% if request.user.is_authenticated %}
 <form action="{% url 'plot_wood_species_mod' pk %}" method="post">
     {% csrf_token %}
-    <table bgcolor="silver">
+    <table>
         <tr>
             <th>ФИО</th>
             <th>Договор</th>
             <th>Делянка</th>
-            <th>Количество по делянке</th>
+            <th>Количество по породе в делянке</th>
 
         </tr>
-        <tr  bgcolor="#858">
+        <tr>
             <td>
                     {{ person }}
             </td>

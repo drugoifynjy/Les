@@ -6,6 +6,12 @@ class MyDateInput(forms.DateInput):
     input_type = 'date'
 
 
+class AddLocalityType(forms.ModelForm):
+    class Meta:
+        model = LocalityType
+        fields = '__all__'
+
+
 class AddPassport(forms.ModelForm):
     class Meta:
         model = Passport

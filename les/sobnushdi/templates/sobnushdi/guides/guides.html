@@ -4,6 +4,10 @@
 {% if request.user.is_authenticated %}
 <H1>{{title}}</H1>
 
+<div><form action="{% url 'locality_types_list' %}" method="GET">
+	        <button type="submit" >Типы населенных пунктов</button>
+</form></div>
+
 <div><form action="{% url 'breeds' %}" method="GET">
 	        <button type="submit" >Породы</button>
 </form></div>
@@ -23,9 +27,7 @@
 	        <button type="submit" >Организации</button>
 </form>
 </div>
-<div><form action="{% url 'locality_types_list' %}" method="GET">
-	        <button type="submit" >Типы населенных пунктов</button>
-</form></div>
+
 
 {% else %}
 <p>Авторизуйтесь</p>

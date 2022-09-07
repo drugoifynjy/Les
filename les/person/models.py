@@ -35,7 +35,7 @@ class ResidenceAddress(models.Model):
             a = str(self.postcode.__str__()) + ' ' + \
                 str(self.region.__str__()) + ' область ' + \
                 str(self.district.__str__()) + ' район ' + \
-                str(self.locality_type) + \
+                str(self.locality_type.locality_type_sokr) + \
                 str(self.locality.__str__()) + ' ул. ' + \
                 str(self.street.__str__()) + ' д. ' + \
                 str(self.house_number.__str__()) + ' кв. ' + \
@@ -44,6 +44,7 @@ class ResidenceAddress(models.Model):
             a = str(self.postcode.__str__()) + ' ' + \
                 str(self.region.__str__()) + ' область ' + \
                 str(self.district.__str__()) + ' район ' + \
+                str(self.locality_type) + \
                 str(self.locality.__str__()) + ' ул. ' + \
                 str(self.street.__str__()) + ' д. ' + \
                 str(self.house_number.__str__())

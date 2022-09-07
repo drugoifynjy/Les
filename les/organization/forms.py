@@ -4,6 +4,7 @@ from django import forms
 from .models import *
 
 
+
 class AddOrganization(forms.ModelForm):
     class Meta:
         model = Organization
@@ -22,10 +23,7 @@ class AddAddressOtdelenya(forms.ModelForm):
         fields = '__all__'
 
 
-class AddLocalityType(forms.ModelForm):
-    class Meta:
-        model = LocalityType
-        fields = '__all__'
+
 
 
 class AddRequisitesOrganization(forms.ModelForm):
@@ -43,4 +41,4 @@ class AddOrModBankDetals(forms.ModelForm):
 class AddOrModRepresentativeOrganization(forms.ModelForm):
     class Meta:
         model = OrganizationRepresentative
-        fields = ['second_name', 'first_name', 'patronymic', 'position', 'selected']
+        fields = ['second_name', 'first_name', 'patronymic', 'position']

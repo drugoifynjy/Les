@@ -8,6 +8,56 @@ from django.views.generic import ListView, CreateView, View
 from .forms import *
 
 
+class LocalityTypeAddOrMod(CreateView):
+    template_name = 'locality_types/locality_type_mod.html'
+    paginate_by = 10
+
+    def get(self, request, pk=None, *args, **kwargs):
+        if pk:
+            locality_type = LocalityType.objects.get(pk=pk)
+            form_mod_locality_type = AddLocalityType(instance=locality_type)
+        else:
+            form_mod_locality_type = AddLocalityType()
+        form = {'form_mod_locality_type': form_mod_locality_type,
+                'pk': pk,
+                'title': 'Добавить тип населенного пункта'}
+
+        return render(request, self.template_name, context=form)
+
+    def post(self, request, pk=None, *args, **kwargs):
+        if pk:
+            locality_type = LocalityType.objects.get(pk=pk)
+            form_mod_locality_type = AddLocalityType(request.POST, instance=locality_type)
+        else:
+            form_mod_locality_type = AddLocalityType(request.POST)
+        form = {'form_mod_locality_type': form_mod_locality_type,
+                'title': 'Добавить тип населенного пункта'}
+        if form_mod_locality_type.is_valid():
+            if pk:
+                locality_type.save()
+            else:
+                form_mod_locality_type.save()
+            return redirect('locality_types_list')
+        else:
+            form_p = form
+        return render(request, self.template_name, context=form_p)
+
+
+class LocalityTypesList(ListView):
+    model = LocalityType
+    template_name = 'locality_types/locality_types_list.html'
+    context_object_name = 'locality_types'
+    ordering = '-pk'
+    paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        gg = self.model.objects.all()
+        print(gg)
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Типы населенных пунктов'
+        return context
+
+
 class PersonAdd(CreateView):
     template_name = 'person/person_add.html'
 
