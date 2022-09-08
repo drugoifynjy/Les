@@ -106,7 +106,7 @@ class OrganizationAddOrMod(CreateView):
 
 class RepresentativeList(ListView):
     model = OrganizationRepresentative
-    template_name = 'representatives/representative_list.html'
+    template_name = 'representatives/representatives_list.html'
     context_object_name = 'representative'
     ordering = '-pk'
     paginate_by = 10

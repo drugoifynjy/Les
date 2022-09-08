@@ -1,9 +1,9 @@
 from django.db import models
 
-from person.models import *
+from person.models import LocalityType
 
 
-class AddressOtdelenya(models.Model):
+class DepartmentAddress(models.Model):
     """Адрес отдела(лесничества)"""
     postcode = models.CharField(max_length=6, blank=True, null=True, verbose_name='Индекс', default='644001')
     region = models.CharField(max_length=100, blank=True, null=True, verbose_name='Область', default='Омская')
@@ -97,11 +97,6 @@ class Organization(models.Model):
     """ Организация """
     title = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Название организации',
                              default='Главное управление лесного хозяйства Омской области')
-    otdel = models.CharField(max_length=500, blank=True, null=True, verbose_name='Название отдела (лесничества)')
-    number_otdelenya = models.PositiveSmallIntegerField(blank=True, null=True,
-                                                        verbose_name='номер отдела (лесничества)')
-    address_otdelenya = models.ForeignKey(AddressOtdelenya, on_delete=models.SET_NULL, blank=True, null=True,
-                                          verbose_name='Адресс отделения(лесничества)')
     title_v_roditelnom_padeje = models.CharField(max_length=1000, blank=True, null=True,
                                                  verbose_name='Название организации в родительном падеже',
                                                  default='')
@@ -145,8 +140,19 @@ class BankDetails(models.Model):
         verbose_name_plural = 'Банковские реквизиты организаций'
 
 
-class OrganizationRepresentative(models.Model):
-    """Представитель организации"""
+class Department(models.Model):
+    """Отдел(лесничество)"""
+    departments = models.CharField(max_length=500, blank=True, null=True, verbose_name='Название отдела (лесничества)')
+    number_department = models.PositiveSmallIntegerField(blank=True, null=True,
+                                                         verbose_name='номер отдела (лесничества)')
+    address_otdelenya = models.ForeignKey(DepartmentAddress, on_delete=models.SET_NULL, blank=True, null=True,
+                                          verbose_name='Адресс отделения(лесничества)')
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True,
+                                     verbose_name='Организация')
+
+
+class DepartmentRepresentative(models.Model):
+    '''Представитель отдела(лесничества)'''
     second_name = models.CharField(max_length=50, verbose_name='Фамилия')
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
@@ -157,8 +163,9 @@ class OrganizationRepresentative(models.Model):
     position_v_roditelnom_padeje = models.CharField(max_length=1000, blank=True, null=True,
                                                     verbose_name='Должность в родительном пажеде')
 
-    organization = models.ForeignKey(Organization, blank=True,
-                                     null=True, on_delete=models.SET_NULL, verbose_name='Организация')
+    department = models.ForeignKey(Department, blank=True,
+                                     null=True, on_delete=models.CASCADE, verbose_name='Отдел')
+    #selected = models.BooleanField(verbose_name='Активировать', default=False)
 
     def __str__(self):
         a = str(self.position)+' '+str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic)
@@ -174,9 +181,7 @@ class PowerOfAttorneyRepresentative(models.Model):
     """ Доверенность представителя от организации """
     number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Номер доверенности')
     date = models.DateField(blank=True, null=True, verbose_name='Дата доверенности')
-    organization_representative = models.ForeignKey(OrganizationRepresentative, blank=True,
-                                                        null=True, on_delete=models.SET_NULL,
-                                                        verbose_name='Представитель организации')
+    organization_representative = models.ForeignKey(DepartmentRepresentative, blank=True,
+                                                        null=True, on_delete=models.CASCADE,
+                                                        verbose_name='Представитель оотдела(лесничества)')
     selected = models.BooleanField(verbose_name='Активировать', default=False)
-
-
