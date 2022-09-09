@@ -86,6 +86,45 @@ class PersonAdd(CreateView):
             pers.passport = passport
             pers.residence_address = adr
             pers.save()
+            if pers.there_is_a_representative:
+                PersonRepresentativeAdd()
+
+            return redirect('persons_list')
+
+        return render(request, self.template_name, context=form)
+
+
+class PersonRepresentativeAdd(CreateView):
+    template_name = 'person/person_representative_add.html'
+
+    def get(self, request, pk=None, *args, **kwargs):
+        pers = get_object_or_404(Person, pk=pk)
+        if pers.there_is_a_representative:
+            form_add_person_representative = AddPersonRepresentative()
+            form_add_passport = AddPassport()
+            form_add_residence_address = AddResidenceAddress()
+            form = {'form_add_person_representative': form_add_person_representative,
+                    'form_add_passport': form_add_passport,
+                    'form_add_residence_address': form_add_residence_address,
+                    'title': 'Добавить заявителя'}
+            return render(request, self.template_name, context=form)
+
+    def post(self, request, *args, **kwargs):
+        form_add_person = AddPerson(request.POST)
+        form_add_passport = AddPassport(request.POST)
+        form_add_residence_address = AddResidenceAddress(request.POST)
+        form = {'form_add_person': form_add_person,
+                'form_add_passport': form_add_passport,
+                'form_add_residence_address': form_add_residence_address,
+                'title': 'Добавить заявителя'}
+        if form_add_person.is_valid() and form_add_passport.is_valid() and form_add_residence_address.is_valid():
+            adr = form_add_residence_address.save()
+            passport = form_add_passport.save()
+            pers = form_add_person.save(commit=False)
+            pers.passport = passport
+            pers.residence_address = adr
+            pers.save()
+
             return redirect('persons_list')
 
         return render(request, self.template_name, context=form)

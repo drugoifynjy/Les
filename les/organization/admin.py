@@ -18,7 +18,7 @@ class BankDetailsAdmin(admin.ModelAdmin):
     list_display = ('bank_title', 'bank_account', 'correspondent_account', 'BIK', 'organization')
 
 
-@admin.register(OrganizationRepresentative)
+@admin.register(PowerOfAttorneyRepresentative)
 class OrganizationRepresentativeAdmin(admin.ModelAdmin):
     list_display = ('second_name', 'first_name', 'patronymic', 'position', 'organization')
 

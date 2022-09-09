@@ -31,6 +31,15 @@ class AddResidenceAddress(forms.ModelForm):
 class AddPerson(forms.ModelForm):
     class Meta:
         model = Person
+        fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number', 'there_is_a_representative']
+        widgets = {
+            'date_of_bird': MyDateInput,
+        }
+
+
+class AddPersonRepresentative(forms.ModelForm):
+    class Meta:
+        model = PersonRepresentative
         fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number']
         widgets = {
             'date_of_bird': MyDateInput,

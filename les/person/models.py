@@ -89,12 +89,39 @@ class Person(models.Model):
                                              blank=True, null=True, verbose_name='Адрес проживания')
     passport = models.OneToOneField(Passport, on_delete=models.CASCADE,
                                     blank=True, null=True, verbose_name='паспортные данные')
+    there_is_a_representative = models.FloatField(verbose_name='есть представитель', default=False)
 
     def __str__(self):
-        a = str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic)
+        a = str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic) + " - заявитель"
         return a
 
     class Meta:
         ordering = ['id']
-        verbose_name = 'ФИО'
-        verbose_name_plural = 'ФИО'
+        verbose_name = 'ФИО заявителя'
+        verbose_name_plural = 'ФИО заявтиелей'
+
+
+class PersonRepresentative(models.Model):
+    second_name = models.CharField(max_length=50, verbose_name='Фамилия')
+    first_name = models.CharField(max_length=50, verbose_name='Имя')
+    patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
+    date_of_bird = models.DateField(blank=True, null=True, verbose_name='Дата рождения')
+    phone_number = models.IntegerField(blank=True, null=True, verbose_name='Телефон')
+    residence_address = models.OneToOneField(ResidenceAddress, on_delete=models.CASCADE,
+                                             blank=True, null=True, verbose_name='Адрес регистрации')
+    passport = models.OneToOneField(Passport, on_delete=models.CASCADE,
+                                    blank=True, null=True, verbose_name='паспортные данные')
+
+    representative = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True,
+                                       verbose_name='Заявитель')
+
+    def __str__(self):
+        a = str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic) + " - представитель заявителя" +\
+            self.representative.__str__()
+
+        return a
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'ФИО представителя покупателя'
+        verbose_name_plural = 'ФИО представителей покупателей'

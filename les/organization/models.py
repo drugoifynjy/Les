@@ -180,8 +180,10 @@ class DepartmentRepresentative(models.Model):
 class PowerOfAttorneyRepresentative(models.Model):
     """ Доверенность представителя от организации """
     number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Номер доверенности')
-    date = models.DateField(blank=True, null=True, verbose_name='Дата доверенности')
+    date = models.DateField(blank=True, null=True, verbose_name='Дата начала действия доверенности')
+    date = models.DateField(blank=True, null=True, verbose_name='Дата окончания действия доверенности')
     organization_representative = models.ForeignKey(DepartmentRepresentative, blank=True,
                                                         null=True, on_delete=models.CASCADE,
                                                         verbose_name='Представитель оотдела(лесничества)')
+    year = models.DateField()
     selected = models.BooleanField(verbose_name='Активировать', default=False)

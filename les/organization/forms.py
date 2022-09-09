@@ -4,11 +4,10 @@ from django import forms
 from .models import *
 
 
-
 class AddOrganization(forms.ModelForm):
     class Meta:
         model = Organization
-        fields = ['title', 'otdel', 'number_otdelenya', 'selected']
+        fields = ['title', 'selected']
 
 
 class AddOrganizationAddress(forms.ModelForm):
@@ -17,13 +16,10 @@ class AddOrganizationAddress(forms.ModelForm):
         fields = '__all__'
 
 
-class AddAddressOtdelenya(forms.ModelForm):
+class AddDepartmentAddress(forms.ModelForm):
     class Meta:
-        model = AddressOtdelenya
+        model = DepartmentAddress
         fields = '__all__'
-
-
-
 
 
 class AddRequisitesOrganization(forms.ModelForm):
@@ -40,5 +36,5 @@ class AddOrModBankDetals(forms.ModelForm):
 
 class AddOrModRepresentativeOrganization(forms.ModelForm):
     class Meta:
-        model = OrganizationRepresentative
+        model = DepartmentRepresentative
         fields = ['second_name', 'first_name', 'patronymic', 'position']

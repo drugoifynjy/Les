@@ -1,0 +1,26 @@
+{% extends 'sobnushdi/base.html' %}
+
+{% block content %}
+
+<form action="{% url 'person_add' %}" method="post">
+    {% csrf_token %}
+    <table bgcolor="silver">
+        <tr>
+            <th>ФИО</th>
+            <th>Паспортные данные</th>
+            <th>Прописка</th>
+        </tr>
+        <tr>
+            <td><table >{{ form_add_person_representative.as_table }}</table></td>
+            <td><table>{{ form_add_passport.as_table }}</table></td>
+            <td><table>{{ form_add_residence_address.as_table }}</table></td>
+        </tr>
+    </table>
+
+    <button type="submit">Добавить</button>
+    <form action="{% url 'persons_list' %}" method="get">
+        <button type="reset" onclick="document.location='{% url 'persons_add' %}'">Отмена</button>
+    </form>
+</form>
+
+{% endblock %}
