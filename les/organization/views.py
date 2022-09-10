@@ -23,18 +23,18 @@ class OrganizationAddOrMod(CreateView):
             organization = Organization.objects.get(pk=pk)
             form_add_organization = AddOrganization(instance=organization)
             form_add_organization_address = AddOrganizationAddress(instance=organization.organization_address)
-            form_add_address_otdelenya = AddAddressOtdelenya(instance=organization.address_otdelenya)
+            #form_add_address_otdelenya = AddAddressOtdelenya(instance=organization.address_otdelenya)
             form_add_requisites_organization = AddRequisitesOrganization(instance=organization.requisites_organization)
         else:
             print(' Запрос  GET - Нет PK')
             form_add_organization = AddOrganization()
             form_add_organization_address = AddOrganizationAddress()
-            form_add_address_otdelenya = AddAddressOtdelenya()
+            #form_add_address_otdelenya = AddAddressOtdelenya()
             form_add_requisites_organization = AddRequisitesOrganization()
 
         form = {'form_add_organization': form_add_organization,
                 'form_add_organization_address': form_add_organization_address,
-                'form_add_address_otdelenya': form_add_address_otdelenya,
+                #'form_add_address_otdelenya': form_add_address_otdelenya,
                 'form_add_requisites_organization': form_add_requisites_organization,
                 'pk': pk,
                 'title': 'Добавить организацию'}
@@ -46,26 +46,26 @@ class OrganizationAddOrMod(CreateView):
             print(' Запрос  POST - Есть PK' )
             organization = Organization.objects.get(pk=pk)
             organization_address = organization.organization_address
-            address_otdelenya = organization.address_otdelenya
+            #address_otdelenya = organization.address_otdelenya
             requisites_organization = organization.requisites_organization
             form_add_organization = AddOrganization(request.POST, instance=organization)
             form_add_organization_address = AddOrganizationAddress(request.POST, instance=organization_address)
-            form_add_address_otdelenya = AddAddressOtdelenya(request.POST, instance=address_otdelenya)
+            #form_add_address_otdelenya = AddAddressOtdelenya(request.POST, instance=address_otdelenya)
             form_add_requisites_organization = AddRequisitesOrganization(request.POST, instance=requisites_organization)
         else:
             print(' Запрос  POST - Нет PK')
             form_add_organization = AddOrganization(request.POST)
             form_add_organization_address = AddOrganizationAddress(request.POST)
-            form_add_address_otdelenya = AddAddressOtdelenya(request.POST)
+            #form_add_address_otdelenya = AddAddressOtdelenya(request.POST)
             form_add_requisites_organization = AddRequisitesOrganization(request.POST)
         form = {'form_add_organization': form_add_organization,
                 'form_add_organization_address': form_add_organization_address,
-                'form_add_address_otdelenya': form_add_address_otdelenya,
+                #'form_add_address_otdelenya': form_add_address_otdelenya,
                 'form_add_requisites_organization': form_add_requisites_organization,
                 'pk': pk,
                 'title1': 'Добавить организацию'}
         if form_add_organization.is_valid() and form_add_organization_address.is_valid() and \
-                form_add_address_otdelenya.is_valid() and form_add_requisites_organization.is_valid():
+                form_add_requisites_organization.is_valid():
             if pk:
                 if organization.selected:
                     org = Organization.objects.exclude(pk=pk)  #
@@ -83,7 +83,7 @@ class OrganizationAddOrMod(CreateView):
             else:
                 print('Запрос POST отправка на сервер Нет PK создание нового')
                 adr = form_add_organization_address.save()
-                adr_otd = form_add_address_otdelenya.save()
+                #adr_otd = form_add_address_otdelenya.save()
                 requisites = form_add_requisites_organization.save()
                 organization = form_add_organization.save(commit=False)
                 skl = sklonenye(organization.title, type='Orgn')
@@ -95,7 +95,7 @@ class OrganizationAddOrMod(CreateView):
                         i.selected = False                     #
                         i.save()                               #
                 organization.organization_address = adr
-                organization.address_otdelenya = adr_otd
+                #organization.address_otdelenya = adr_otd
                 organization.requisites_organization = requisites
                 organization.save()
             return redirect('organizations_list')
