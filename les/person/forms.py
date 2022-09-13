@@ -16,10 +16,7 @@ class AddPassport(forms.ModelForm):
     class Meta:
         model = Passport
         fields = ['series', 'number', 'date_of_issue', 'issued', 'address_birth', 'inn']
-        widgets = {
-            'address_birth': forms.TextInput,
-            'date_of_issue': MyDateInput,
-        }
+        widgets = {'date_of_issue': MyDateInput, }
 
 
 class AddResidenceAddress(forms.ModelForm):
@@ -31,7 +28,8 @@ class AddResidenceAddress(forms.ModelForm):
 class AddPerson(forms.ModelForm):
     class Meta:
         model = Person
-        fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number', 'there_is_a_representative']
+        fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number',
+                  'there_is_a_representative']
         widgets = {
             'date_of_bird': MyDateInput,
         }

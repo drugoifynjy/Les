@@ -57,9 +57,9 @@ class ResidenceAddress(models.Model):
 
 
 class Passport(models.Model):
-    series = models.PositiveSmallIntegerField(verbose_name='Серия')
-    number = models.PositiveIntegerField(verbose_name='Номер')
-    date_of_issue = models.DateField(verbose_name='Дата выдачи')
+    series = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Серия')
+    number = models.PositiveIntegerField(blank=True, null=True, verbose_name='Номер')
+    date_of_issue = models.DateField(blank=True, null=True, verbose_name='Дата выдачи')
     issued = models.CharField(max_length=250, blank=True, null=True, verbose_name='Кем выдан')
     address_birth = models.TextField(max_length=500, blank=True, null=True, verbose_name='Место рождения',
                                      default='Колосовка')
@@ -80,8 +80,8 @@ class Passport(models.Model):
 
 
 class Person(models.Model):
-    second_name = models.CharField(max_length=50, verbose_name='Фамилия')
-    first_name = models.CharField(max_length=50, verbose_name='Имя')
+    second_name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Фамилия')
+    first_name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Имя')
     patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
     date_of_bird = models.DateField(blank=True, null=True, verbose_name='Дата рождения')
     phone_number = models.IntegerField(blank=True, null=True, verbose_name='Телефон')
@@ -89,7 +89,7 @@ class Person(models.Model):
                                              blank=True, null=True, verbose_name='Адрес проживания')
     passport = models.OneToOneField(Passport, on_delete=models.CASCADE,
                                     blank=True, null=True, verbose_name='паспортные данные')
-    there_is_a_representative = models.FloatField(verbose_name='есть представитель', default=False)
+    there_is_a_representative = models.BooleanField(verbose_name='есть представитель', default=False)
 
     def __str__(self):
         a = str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic) + " - заявитель"
@@ -102,8 +102,9 @@ class Person(models.Model):
 
 
 class PersonRepresentative(models.Model):
-    second_name = models.CharField(max_length=50, verbose_name='Фамилия')
-    first_name = models.CharField(max_length=50, verbose_name='Имя')
+    """Представитель заявителя по доверенности"""
+    second_name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Фамилия')
+    first_name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Имя')
     patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
     date_of_bird = models.DateField(blank=True, null=True, verbose_name='Дата рождения')
     phone_number = models.IntegerField(blank=True, null=True, verbose_name='Телефон')
@@ -112,12 +113,12 @@ class PersonRepresentative(models.Model):
     passport = models.OneToOneField(Passport, on_delete=models.CASCADE,
                                     blank=True, null=True, verbose_name='паспортные данные')
 
-    representative = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True,
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True,
                                        verbose_name='Заявитель')
 
     def __str__(self):
         a = str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic) + " - представитель заявителя" +\
-            self.representative.__str__()
+            self.person.__str__()
 
         return a
 

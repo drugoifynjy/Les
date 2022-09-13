@@ -11,7 +11,12 @@
 
             </tr>
             {% for org in organizations %}
-                <tr>
+                {% if org.selected %}
+                   <tr bgcolor="#00BB22">
+                   {% else %}
+                   <tr>
+                        {% endif %}
+
                     <td>
                         <mark>{{ org.pk }}</mark>
                     </td>

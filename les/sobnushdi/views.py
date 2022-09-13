@@ -569,57 +569,6 @@ class ContractVee(View):
         bank_detail = organ.bankdetails_set.get(selected=True)
         organ_repr = organ.organizationrepresentative_set.get(selected=True)
         print(organ_repr, bank_detail)
-        '''contract.number
-        self.page['BP3'] = contract.date
-        self.page['BP4'] = contract.date + timedelta(days=364)
-        self.page['BP5'] = contract.date + timedelta(days=364)
-        self.page['BP7'] = contract.date_decree
-        self.page['BP8'] = contract.number_decree
-
-        self.page['BP10'] = str(contract.statement.person)
-        self.page['BP11'] = contract.statement.person.passport.series
-        self.page['BP12'] = contract.statement.person.passport.number
-        self.page['BP13'] = contract.statement.person.passport.date_of_issue
-        self.page['BP14'] = contract.statement.person.passport.issued
-
-        self.page['BP20'] = contract.statement.person.passport.address_birth
-        self.page['BP21'] = contract.statement.person.date_of_bird
-        self.page['BP22'] = contract.statement.person.passport.address_birth
-        self.page['BP23'] = contract.statement.person.passport.inn
-        self.page['BP24'] = str(contract.statement.person.residence_address)
-
-        self.page['BP43'] = contract.plot.area
-        self.page['BP44'] = contract.plot.district_forestry.name
-        self.page['BP45'] = contract.plot.tract.name
-        self.page['BP46'] = contract.plot.quarter
-        self.page['BP47'] = contract.plot.section
-        self.page['BP48'] = contract.plot.number_plot
-
-        self.page['BP57'] = contract.plot.chop_type
-        self.page['BP62'] = contract.plot.cost
-        if contract.plot.plot_wood_species.filter(name__name='Береза'):
-            birch = contract.plot.plot_wood_species.filter(name__name='Береза')
-        else:
-            birch = False
-        if contract.plot.plot_wood_species.filter(name__name='Осина'):
-            aspen = contract.plot.plot_wood_species.filter(name__name='Осина')
-        else:
-            aspen = False
-        if birch:
-            self.page['BP84'] = birch[0].number_of_trees
-            self.page['BP85'] = birch[0].large
-            self.page['BP86'] = birch[0].average
-            self.page['BP87'] = birch[0].small
-            self.page['BP88'] = birch[0].firewood
-            self.page['BP89'] = birch[0].brushwood
-
-        if aspen:
-            self.page['BP94'] = aspen[0].number_of_trees
-            self.page['BP95'] = aspen[0].large
-            self.page['BP96'] = aspen[0].average
-            self.page['BP97'] = aspen[0].small
-            self.page['BP98'] = aspen[0].firewood
-            self.page['BP99'] = aspen[0].brushwood'''
         form = {'person': contract.statement.person,
                 'contract': contract,
                 'bank_detail': bank_detail,

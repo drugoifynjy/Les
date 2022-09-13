@@ -13,7 +13,12 @@
                 <th>БИК</th>
             </tr>
             {% for details in bank_details %}
-                <tr>
+
+                   {% if details.selected %}
+                   <tr bgcolor="#00BB22">
+                   {% else %}
+                   <tr>
+                        {% endif %}
                     <td>
                         <mark>{{ details.pk }}</mark>
                     </td>
@@ -34,18 +39,14 @@
                         <td>
                         {{ details.BIK }}
                     </td>
-                    <td>
-                        {% if details.selected %}
-                        Активные
-                        {% else %}
-                        <p>Не активные</p>
-                        {% endif %}
-                    </td>
+
                     <td>
                         <form action="{% url 'bank_details_mod' org_pk=details.organization.pk pk=details.pk %}">
                             <button type="submit">Изменить</button>
                         </form>
                     </td>
+
+
                 </tr>
             {% endfor %}
         </table>

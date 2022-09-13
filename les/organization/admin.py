@@ -8,6 +8,11 @@ class OrganizationAddressAdmin(admin.ModelAdmin):
     list_display = ('locality', 'street', 'house_number', 'apartment_number')
 
 
+@admin.register(DepartmentAddress)
+class OrganizationAddressAdmin(admin.ModelAdmin):
+    list_display = ('locality', 'street', 'house_number', 'apartment_number', 'department')
+
+
 @admin.register(RequisitesOrganization)
 class RequisitesOrganizationAdmin(admin.ModelAdmin):
     list_display = ('INN', 'KPP', 'OGRN', 'OKPO', 'email')
@@ -26,6 +31,11 @@ class DepartmentRepresentativeAdmin(admin.ModelAdmin):
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ('title', 'organization_address', 'requisites_organization')
+
+
+@admin.register(Department)
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'number_department', 'organization' )
 
 
 @admin.register(PowerOfAttorneyRepresentative)

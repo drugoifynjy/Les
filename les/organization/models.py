@@ -3,42 +3,6 @@ from django.db import models
 from person.models import LocalityType
 
 
-class DepartmentAddress(models.Model):
-    """Адрес отдела(лесничества)"""
-    postcode = models.CharField(max_length=6, blank=True, null=True, verbose_name='Индекс', default='644001')
-    region = models.CharField(max_length=100, blank=True, null=True, verbose_name='Область', default='Омская')
-    district = models.CharField(max_length=50, blank=True, null=True, verbose_name='Район', default='')
-    locality_type = models.ForeignKey(LocalityType, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Тип населенноо пункта')
-    locality = models.CharField(max_length=50, blank=True, null=True, verbose_name='Населенный пункт',
-                                default='')
-    street = models.CharField(max_length=50, blank=True, null=True, verbose_name='Улица', default='')
-    house_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Дом', default='')
-    apartment_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартира', default='')
-
-    def __str__(self):
-        if self.apartment_number:
-            a = str(self.postcode.__str__()) + ' ' + \
-                str(self.region.__str__()) + ' область ' + \
-                str(self.locality_type) + \
-                str(self.locality.__str__()) + \
-                str(self.street.__str__()) + ' ул. ' + \
-                str(self.house_number.__str__()) + ' кв. ' + \
-                str(self.apartment_number.__str__())
-        else:
-            a = str(self.postcode.__str__()) + ' ' + \
-                str(self.region.__str__()) + ' область ' + \
-                str(self.locality_type) + \
-                str(self.locality.__str__()) + ' ул. ' + \
-                str(self.street.__str__()) + ' д. ' + \
-                str(self.house_number.__str__())
-        return a
-
-    class Meta:
-        ordering = ['id']
-        verbose_name = 'Адрес отделения(лесничества)'
-        verbose_name_plural = 'Адреса отделений(лесничеств)'
-
-
 class OrganizationAddress(models.Model):
     """Адрес организации"""
     postcode = models.CharField(max_length=6, blank=True, null=True, verbose_name='Индекс', default='644001')
@@ -142,13 +106,57 @@ class BankDetails(models.Model):
 
 class Department(models.Model):
     """Отдел(лесничество)"""
-    departments = models.CharField(max_length=500, blank=True, null=True, verbose_name='Название отдела (лесничества)')
+    title = models.CharField(max_length=500, blank=True, null=True, verbose_name='Название отдела (лесничества)')
     number_department = models.PositiveSmallIntegerField(blank=True, null=True,
                                                          verbose_name='номер отдела (лесничества)')
-    address_otdelenya = models.ForeignKey(DepartmentAddress, on_delete=models.SET_NULL, blank=True, null=True,
-                                          verbose_name='Адресс отделения(лесничества)')
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True,
                                      verbose_name='Организация')
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'отделение (лесничество)'
+        verbose_name_plural = 'отделения (лесничества)'
+
+
+class DepartmentAddress(models.Model):
+    """Адрес отдела(лесничества)"""
+    postcode = models.CharField(max_length=6, blank=True, null=True, verbose_name='Индекс', default='644001')
+    region = models.CharField(max_length=100, blank=True, null=True, verbose_name='Область', default='Омская')
+    district = models.CharField(max_length=50, blank=True, null=True, verbose_name='Район', default='')
+    locality_type = models.ForeignKey(LocalityType, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Тип населенноо пункта')
+    locality = models.CharField(max_length=50, blank=True, null=True, verbose_name='Населенный пункт',
+                                default='')
+    street = models.CharField(max_length=50, blank=True, null=True, verbose_name='Улица', default='')
+    house_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Дом', default='')
+    apartment_number = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Квартира', default='')
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, blank=True, null=True,
+                                          verbose_name='Отделение (лесничество)')
+
+    def __str__(self):
+        if self.apartment_number:
+            a = str(self.postcode.__str__()) + ' ' + \
+                str(self.region.__str__()) + ' область ' + \
+                str(self.locality_type) + \
+                str(self.locality.__str__()) + \
+                str(self.street.__str__()) + ' ул. ' + \
+                str(self.house_number.__str__()) + ' кв. ' + \
+                str(self.apartment_number.__str__())
+        else:
+            a = str(self.postcode.__str__()) + ' ' + \
+                str(self.region.__str__()) + ' область ' + \
+                str(self.locality_type) + \
+                str(self.locality.__str__()) + ' ул. ' + \
+                str(self.street.__str__()) + ' д. ' + \
+                str(self.house_number.__str__())
+        return a
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Адрес отделения(лесничества)'
+        verbose_name_plural = 'Адреса отделений(лесничеств)'
 
 
 class DepartmentRepresentative(models.Model):
@@ -187,3 +195,12 @@ class PowerOfAttorneyRepresentative(models.Model):
                                                         verbose_name='Представитель оотдела(лесничества)')
     #year = models.DateField()
     selected = models.BooleanField(verbose_name='Активировать', default=False)
+
+    def __str__(self):
+        return 'Номер доверености ' + str(self.number) +' Дата окончания '+ str(self.end_date)\
+               + str(self.organization_representative)
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'доверенность представителя организаии'
+        verbose_name_plural = 'доверенности представителей организаии'
