@@ -63,11 +63,11 @@ class PersonAdd(CreateView):
 
     def get(self, request, *args, **kwargs):
         form_add_person = AddPerson()
-        form_add_passport = AddPassport()
-        form_add_residence_address = AddResidenceAddress()
-        form_add_person_representative = AddPersonRepresentative()
-        form_add_passport_representative = AddPassport()
-        form_add_residence_address_representative = AddResidenceAddress()
+        form_add_passport = AddPersonPassport()
+        form_add_residence_address = AddPersonResidenceAddress()
+        form_add_person_representative = AddRepresentativePerson()
+        form_add_passport_representative = AddRepresentativePassport()
+        form_add_residence_address_representative = AddRepresentativeResidenceAddress()
         form = {'form_add_person': form_add_person,
                 'form_add_passport': form_add_passport,
                 'form_add_residence_address': form_add_residence_address,
@@ -79,17 +79,17 @@ class PersonAdd(CreateView):
 
     def post(self, request, *args, **kwargs):
         form_add_person = AddPerson(request.POST)
-        form_add_passport = AddPassport(request.POST)
-        form_add_residence_address = AddResidenceAddress(request.POST)
-        form_add_person_representative = AddPersonRepresentative(request.POST)
-        form_add_passport_representative = AddPassport(request.POST)
-        form_add_residence_address_representative = AddResidenceAddress(request.POST)
+        form_add_passport = AddPersonPassport(request.POST)
+        form_add_residence_address = AddPersonResidenceAddress(request.POST)
+        form_add_person_representative = AddRepresentativePerson(request.POST)
+        form_add_passport_representative = AddRepresentativePassport(request.POST)
+        form_add_residence_address_representative = AddRepresentativeResidenceAddress(request.POST)
         form = {'form_add_person': form_add_person,
-                'form_add_passport': form_add_passport,
-                'form_add_residence_address': form_add_residence_address,
-                'form_add_person_representative': form_add_person_representative,
-                'form_add_passport_representative': form_add_passport_representative,
-                'form_add_residence_address_representative': form_add_residence_address_representative,
+                'form_add_person_passport': form_add_passport,
+                'form_add_person_residence_address': form_add_residence_address,
+                'form_add_representative': form_add_person_representative,
+                'form_add_representative_passport': form_add_passport_representative,
+                'form_add_representative_residence_address': form_add_residence_address_representative,
                 'title': 'Добавить заявителя'}
         if form_add_person.is_valid() and form_add_passport.is_valid() and form_add_residence_address.is_valid():
             passport = form_add_passport.save()
@@ -97,56 +97,18 @@ class PersonAdd(CreateView):
             pers = form_add_person.save(commit=False)
             pers.passport = passport
             pers.residence_address = adr
-            if pers.there_is_a_representative == 'True':
+            pers.save()
+            if form_add_person.cleaned_data.get('there_is_a_representative'):
                 if form_add_person_representative.is_valid() and form_add_passport_representative.is_valid()\
                         and form_add_residence_address_representative.is_valid():
                     adr_representative = form_add_residence_address_representative.save()
-                    passport_representative = form_add_passport_representative.save()
+                    passp_representative = form_add_passport_representative.save()
                     pers_representative = form_add_person_representative.save(commit=False)
                     pers_representative.residence_address = adr_representative
-                    pers_representative.passport_representative = passport_representative
-                    pers_representative.representative = pers
+                    pers_representative.passport = passp_representative
+                    pers_representative.person = pers
                     pers_representative.save()
-            pers.save()
             return redirect('persons_list')
-
-        return render(request, self.template_name, context=form)
-
-
-class PersonRepresentativeAdd(CreateView):
-    template_name = 'person/person_representative_add.html'
-
-    def get(self, request, pk=None, *args, **kwargs):
-        if pk:
-            person = get_object_or_404(Person, pk=pk)
-        else:
-            form_add_person_representative = AddPersonRepresentative()
-            form_add_passport = AddPassport()
-            form_add_residence_address = AddResidenceAddress()
-            form = {'form_add_person_representative': form_add_person_representative,
-                    'form_add_passport': form_add_passport,
-                    'form_add_residence_address': form_add_residence_address,
-                    'title': 'Добавить представителя заявителя'}
-            return render(request, self.template_name, context=form)
-
-    def post(self, request, *args, **kwargs):
-        form_add_person_representative = AddPerson(request.POST)
-        form_add_passport = AddPassport(request.POST)
-        form_add_residence_address = AddResidenceAddress(request.POST)
-        form = {'form_add_person_representative': form_add_person_representative,
-                'form_add_passport': form_add_passport,
-                'form_add_residence_address': form_add_residence_address,
-                'title': 'Добавить представителя заявителя'}
-        if form_add_person_representative.is_valid() and form_add_passport.is_valid() and form_add_residence_address.is_valid():
-            adr = form_add_residence_address.save()
-            passport = form_add_passport.save()
-            pers = form_add_person_representative.save(commit=False)
-            pers.passport = passport
-            pers.residence_address = adr
-            pers.save()
-
-            return redirect('persons_list')
-
         return render(request, self.template_name, context=form)
 
 
@@ -199,7 +161,8 @@ class PersonView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         for person in self.object_list:
-            person.date_of_bird = person.date_of_bird.strftime("%d.%m.%Y")
+            if person.date_of_bird:
+                person.date_of_bird = person.date_of_bird.strftime("%d.%m.%Y")
         context = super().get_context_data(**kwargs)
         context['title'] = 'Заявители'
         return context

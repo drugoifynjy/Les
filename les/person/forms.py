@@ -12,20 +12,39 @@ class AddLocalityType(forms.ModelForm):
         fields = '__all__'
 
 
-class AddPassport(forms.ModelForm):
+class AddPersonPassport(forms.ModelForm):
+    prefix = 'person_passport'
     class Meta:
-        model = Passport
+        model = PersonPassport
+        fields = ['series', 'number', 'date_of_issue', 'issued', 'address_birth', 'inn']
+        labels = {'series': 'person_series', 'number': 'person_number'}
+        widgets = {'date_of_issue': MyDateInput, }
+
+
+class AddRepresentativePassport(forms.ModelForm):
+    prefix = 'representative_passport'
+    class Meta:
+        model = RepresentativePassport
         fields = ['series', 'number', 'date_of_issue', 'issued', 'address_birth', 'inn']
         widgets = {'date_of_issue': MyDateInput, }
 
 
-class AddResidenceAddress(forms.ModelForm):
+class AddPersonResidenceAddress(forms.ModelForm):
+    prefix = 'person_residence_address'
     class Meta:
-        model = ResidenceAddress
+        model = PersonResidenceAddress
+        fields = '__all__'
+
+
+class AddRepresentativeResidenceAddress(forms.ModelForm):
+    prefix = 'representative_residence_address'
+    class Meta:
+        model = RepresentativeResidenceAddress
         fields = '__all__'
 
 
 class AddPerson(forms.ModelForm):
+    prefix = 'person'
     class Meta:
         model = Person
         fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number',
@@ -35,10 +54,12 @@ class AddPerson(forms.ModelForm):
         }
 
 
-class AddPersonRepresentative(forms.ModelForm):
+class AddRepresentativePerson(forms.ModelForm):
+    prefix = 'representative'
     class Meta:
-        model = PersonRepresentative
+        model = RepresentativePerson
         fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number']
         widgets = {
             'date_of_bird': MyDateInput,
         }
+
