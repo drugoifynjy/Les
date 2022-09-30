@@ -79,7 +79,7 @@ class PersonAbstr(models.Model):
     patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
     date_of_bird = models.DateField(blank=True, null=True, verbose_name='Дата рождения')
     phone_number = models.IntegerField(blank=True, null=True, verbose_name='Телефон')
-    residence_address = models.OneToOneField(Address, on_delete=models.CASCADE,
-                                             blank=True, null=True, verbose_name='Адрес проживания')
-    passport = models.OneToOneField(Passport, on_delete=models.CASCADE,
-                                    blank=True, null=True, verbose_name='паспортные данные')
+
+
+    class Meta:
+        abstract = True

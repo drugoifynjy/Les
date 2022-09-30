@@ -32,12 +32,7 @@ class RepresentativePassport(Passport):
         verbose_name_plural = 'Паспортные данные представителей заявителей'
 
 
-class Person(models.Model):
-    second_name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Фамилия')
-    first_name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Имя')
-    patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
-    date_of_bird = models.DateField(blank=True, null=True, verbose_name='Дата рождения')
-    phone_number = models.IntegerField(blank=True, null=True, verbose_name='Телефон')
+class Person(PersonAbstr):
     residence_address = models.OneToOneField(PersonResidenceAddress, on_delete=models.CASCADE,
                                              blank=True, null=True, verbose_name='Адрес проживания')
     passport = models.OneToOneField(PersonPassport, on_delete=models.CASCADE,
@@ -54,13 +49,8 @@ class Person(models.Model):
         verbose_name_plural = 'ФИО заявтиелей'
 
 
-class RepresentativePerson(models.Model):
+class RepresentativePerson(PersonAbstr):
     """Представитель заявителя по доверенности"""
-    second_name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Фамилия')
-    first_name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Имя')
-    patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
-    date_of_bird = models.DateField(blank=True, null=True, verbose_name='Дата рождения')
-    phone_number = models.IntegerField(blank=True, null=True, verbose_name='Телефон')
     residence_address = models.OneToOneField(RepresentativeResidenceAddress, on_delete=models.CASCADE,
                                                blank=True, null=True, verbose_name='Адрес регистрации')
     passport = models.OneToOneField(RepresentativePassport, on_delete=models.CASCADE,
