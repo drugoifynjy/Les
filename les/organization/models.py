@@ -160,7 +160,7 @@ class DepartmentAddress(models.Model):
 
 
 class DepartmentRepresentative(models.Model):
-    '''Представитель отдела(лесничества)'''
+    """Представитель отдела(лесничества)"""
     second_name = models.CharField(max_length=50, verbose_name='Фамилия')
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     patronymic = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')
