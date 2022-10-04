@@ -7,40 +7,29 @@
             <tr>
                 <th>№</th>
                 <th>Организация</th>
-                <th>ФИО</th>
-                <th>Должность</th>
-
+                <th>Отдел (лесничество)</th>
+                <th>Внутренний номер отдела</th>
             </tr>
-            {% for rep in representative %}
+            {% for dep in department %}
                 <tr>
                     <td>
-                        <mark>{{ rep.pk }}</mark>
+                        <mark>{{ dep.pk }}</mark>
                     </td>
                     <td>
-                        {{ rep.organization.pk }} {{ rep.organization }}
+                        {{ dep.organization.pk }} {{ dep.organization }}
                     </td>
                     <td>
-                        {{ rep.second_name }} {{ rep.first_name }} {{ rep.patronymic }}
-                    </td>
-                        <td>
-                        {{ rep.position }}
+                        {{ dep.title }} {{ dep.number_department }}
                     </td>
                     <td>
-                        {% if rep.selected %}
-                        Активный
-                        {% else %}
-                        <p>Не активный</p>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <form action="{% url 'representative_mod' org_pk=rep.organization.pk pk=rep.pk %}">
+                        <form action="{% url 'department_mod' org_pk=dep.organization.pk pk=dep.pk %}">
                             <button type="submit">Изменить</button>
                         </form>
                     </td>
                 </tr>
             {% endfor %}
         </table>
-        <form action="{% url 'representative_mod' org_pk=org_pk pk=0 %}" method="GET">
+        <form action="{% url 'department_mod' org_pk=org_pk pk=0 %}" method="GET">
 	        <button type="submit" >Добавить</button>
             <button type="reset" onclick="document.location='{% url 'organizations_list' %}'">Назад</button>
         </form>

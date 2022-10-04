@@ -171,12 +171,13 @@ class DepartmentRepresentative(models.Model):
     position_v_roditelnom_padeje = models.CharField(max_length=1000, blank=True, null=True,
                                                     verbose_name='Должность в родительном пажеде')
 
-    department = models.ForeignKey(Department, blank=True,
-                                     null=True, on_delete=models.CASCADE, verbose_name='Отдел')
-    #selected = models.BooleanField(verbose_name='Активировать', default=False)
+    department_address = models.ForeignKey(DepartmentAddress, blank=True,
+                                     null=True, on_delete=models.CASCADE,
+                                           verbose_name='Адрес отдела по которому работает')
+    # selected = models.BooleanField(verbose_name='Активировать', default=False)
 
     def __str__(self):
-        a = str(self.position)+' '+str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic)
+        a = str(self.department_address.locality)+' '+str(self.position)+' '+str(self.second_name)+' '+str(self.first_name)+' '+str(self.patronymic)
         return a
 
     class Meta:
@@ -193,7 +194,7 @@ class PowerOfAttorneyRepresentative(models.Model):
     organization_representative = models.ForeignKey(DepartmentRepresentative, blank=True,
                                                         null=True, on_delete=models.CASCADE,
                                                         verbose_name='Представитель оотдела(лесничества)')
-    #year = models.DateField()
+    # year = models.DateField()
     selected = models.BooleanField(verbose_name='Активировать', default=False)
 
     def __str__(self):

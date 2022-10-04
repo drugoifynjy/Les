@@ -12,7 +12,7 @@ class MyDateInput(forms.DateInput):
 class AddStatement(forms.ModelForm):
     class Meta:
         model = Statement
-        fields = ['number_statement', 'quantity', 'date', 'organization']
+        fields = ['number_statement', 'quantity', 'date']
         widgets = {
             'date': MyDateInput,
         }
@@ -58,7 +58,7 @@ class ModContract(forms.ModelForm):
 class AddPlot(forms.ModelForm):
     class Meta:
         model = Plot
-        fields = ['number_plot', 'forestry', 'district_forestry', 'tract', 'area',
+        fields = ['number_plot', 'tract', 'area',
                   'quarter', 'section', 'chop_type', 'cost', 'cost_in_words']
         widgets = {
             'cost': forms.TextInput(attrs={'readonly': True}),
@@ -87,14 +87,14 @@ class AddTract(forms.ModelForm):
         fields = ['name', ]
 
 
-class AddForestry(forms.ModelForm):
-    class Meta:
-        model = Forestry
-        fields = ['name', ]
+# class AddForestry(forms.ModelForm):
+#     class Meta:
+#         model = Forestry
+#         fields = ['name', ]
 
 
 class AddDistrictForestry(forms.ModelForm):
     class Meta:
         model = DistrictForestry
-        fields = ['name', ]
+        fields = ['name', 'forestry']
 

@@ -14,6 +14,7 @@
 
         <td><mark> {{ district_forestry.pk }}</mark></td>
         <td> {{ district_forestry.name }}</td>
+        <td> {{ district_forestry.forestry }}</td>
         <td>
             <form action="{% url 'district_forestry_mod' pk=district_forestry.pk %}">
                 <button type="submit">Изменить</button>

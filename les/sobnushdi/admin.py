@@ -22,7 +22,7 @@ class ContractAdmin(admin.ModelAdmin):
 
 @admin.register(Plot)
 class PlotAdmin(admin.ModelAdmin):
-    list_display = ('number_plot', 'forestry', 'district_forestry', 'tract', 'area',
+    list_display = ('number_plot', 'tract', 'area',
                     'quarter', 'section', 'chop_type', 'cost')
 
 
@@ -45,7 +45,3 @@ class TractAdmin(admin.ModelAdmin):
 class DistrictForestryAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
-
-@admin.register(Forestry)
-class ForestryAdmin(admin.ModelAdmin):
-    list_display = ('name',)

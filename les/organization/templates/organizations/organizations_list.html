@@ -41,6 +41,11 @@
                             <button type="submit">Банковские реквизиты</button>
                         </form>
                     </td>
+                    <td>
+                        <form action="{% url 'departments_list' org_pk=org.pk %}">
+                            <button type="submit">Отделы(лесничества)</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </table>

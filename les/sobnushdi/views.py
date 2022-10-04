@@ -18,61 +18,61 @@ class GuidesView(View):
         }
         return render(request, self.template_names, context=form)
 
-
-class ForestryView(ListView):
-    model = Forestry
-    template_name = 'sobnushdi/guides/forestrys.html'
-    context_object_name = 'forestrys'
-    ordering = '-pk'
-    paginate_by = 10
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        gg = self.model.objects.all()
-        print(gg)
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Лесничества'
-        return context
-
-
-class ForestryMod(CreateView):
-    template_name = 'sobnushdi/guides/forestry_mod.html'
-    paginate_by = 10
-
-    def get(self, request, pk=None, *args, **kwargs):
-        if pk:
-            forestry = Forestry.objects.get(pk=pk)
-            form_mod_forestry = AddForestry(instance=forestry)
-        else:
-            form_mod_forestry = AddForestry()
-        form = {'form_mod_forestry': form_mod_forestry,
-                'pk': pk,
-                'title': 'Добавить лесничество'}
-
-        return render(request, self.template_name, context=form)
-
-    def post(self, request, pk=None, *args, **kwargs):
-        if pk:
-            forestry = Forestry.objects.get(pk=pk)
-            form_mod_forestry = AddForestry(request.POST, instance=forestry)
-        else:
-            form_mod_forestry = AddForestry(request.POST)
-        form = {'form_mod_forestry': form_mod_forestry,
-                'title': 'Добавить лесничество'}
-        if form_mod_forestry.is_valid():
-            if pk:
-                forestry.save()
-            else:
-                form_mod_forestry.save()
-            return redirect('forestrys')
-        else:
-            form_p = form
-        return render(request, self.template_name, context=form_p)
-
-
-class ForestryDel(DeleteView):
-    template_name = 'sobnushdi/guides/form_del.html'
-    model = Forestry
-    success_url = reverse_lazy('forestrys')
+#
+# class ForestryView(ListView):
+#     model = Forestry
+#     template_name = 'sobnushdi/guides/forestrys.html'
+#     context_object_name = 'forestrys'
+#     ordering = '-pk'
+#     paginate_by = 10
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         gg = self.model.objects.all()
+#         print(gg)
+#         context = super().get_context_data(**kwargs)
+#         context['title'] = 'Лесничества'
+#         return context
+#
+#
+# class ForestryMod(CreateView):
+#     template_name = 'sobnushdi/guides/forestry_mod.html'
+#     paginate_by = 10
+#
+#     def get(self, request, pk=None, *args, **kwargs):
+#         if pk:
+#             forestry = Forestry.objects.get(pk=pk)
+#             form_mod_forestry = AddForestry(instance=forestry)
+#         else:
+#             form_mod_forestry = AddForestry()
+#         form = {'form_mod_forestry': form_mod_forestry,
+#                 'pk': pk,
+#                 'title': 'Добавить лесничество'}
+#
+#         return render(request, self.template_name, context=form)
+#
+#     def post(self, request, pk=None, *args, **kwargs):
+#         if pk:
+#             forestry = Forestry.objects.get(pk=pk)
+#             form_mod_forestry = AddForestry(request.POST, instance=forestry)
+#         else:
+#             form_mod_forestry = AddForestry(request.POST)
+#         form = {'form_mod_forestry': form_mod_forestry,
+#                 'title': 'Добавить лесничество'}
+#         if form_mod_forestry.is_valid():
+#             if pk:
+#                 forestry.save()
+#             else:
+#                 form_mod_forestry.save()
+#             return redirect('forestrys')
+#         else:
+#             form_p = form
+#         return render(request, self.template_name, context=form_p)
+#
+#
+# class ForestryDel(DeleteView):
+#     template_name = 'sobnushdi/guides/form_del.html'
+#     model = Forestry
+#     success_url = reverse_lazy('forestrys')
 
 
 class DistrictForestryView(ListView):

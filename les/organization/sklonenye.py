@@ -1,15 +1,15 @@
 import pymorphy2
 
 
-def sklonenye(for_sklonenye, type=None):
-    print('строка которая приша в функцию склонения= ', for_sklonenye)
+def sklonenye(for_sklonenye, typee=None):
+    """print('строка которая приша в функцию склонения= ', for_sklonenye)
     print('тип название, фамилия, имя, отчество, должность')
-    types = {'Orgn': '', 'Surn': 'Surn', 'Name': 'Name', 'Patr': 'Part', 'Dolj': ''}
+    types = {'Orgn': '', 'Surn': 'Surn', 'Name': 'Name', 'Patr': 'Part', 'Dolj': ''}"""
     morph = pymorphy2.MorphAnalyzer()
     slova = for_sklonenye.split()
     slovo_v_pred_p = []
     slovo_v_rod_p = []
-    if type == 'Orgn':
+    if typee == 'Orgn':
         for i in slova:
             if i == 'Главное' or i == 'управление':
                 a = morph.parse(i)[0]
@@ -25,7 +25,7 @@ def sklonenye(for_sklonenye, type=None):
         skl = [nazvanye_v_rod_p, nazvanye_v_pred_p]
         print('skl=', skl)
         return skl
-    elif type == 'Surn':
+    elif typee == 'Surn':
         for i in slova:
             a = morph.parse(i)[0]
             b = morph.parse(i)
@@ -40,9 +40,9 @@ def sklonenye(for_sklonenye, type=None):
         nazvanye_v_pred_p = ' '.join(slovo_v_pred_p)
         nazvanye_v_rod_p = ' '.join(slovo_v_rod_p)
         skl = [nazvanye_v_rod_p.title(), nazvanye_v_pred_p.title()]
-        #print('skl=', skl)
+        # print('skl=', skl)
         return skl
-    elif type == 'Name':
+    elif typee == 'Name':
         for i in slova:
             a = morph.parse(i)[0]
             b = morph.parse(i)
@@ -57,9 +57,9 @@ def sklonenye(for_sklonenye, type=None):
         nazvanye_v_pred_p = ' '.join(slovo_v_pred_p)
         nazvanye_v_rod_p = ' '.join(slovo_v_rod_p)
         skl = [nazvanye_v_rod_p.title(), nazvanye_v_pred_p.title()]
-        #print('skl=', skl)
+        # print('skl=', skl)
         return skl
-    elif type == 'Patr':
+    elif typee == 'Patr':
         for i in slova:
             a = morph.parse(i)[0]
             b = morph.parse(i)
@@ -76,7 +76,7 @@ def sklonenye(for_sklonenye, type=None):
         skl = [nazvanye_v_rod_p.title(), nazvanye_v_pred_p.title()]
         print('skl=', skl)
         return skl
-    elif type == 'Dolj':
+    elif typee == 'Dolj':
         for i in slova:
             a = morph.parse(i)[0]
             v_pred_p = a.inflect({'loct'})
@@ -86,7 +86,7 @@ def sklonenye(for_sklonenye, type=None):
         nazvanye_v_pred_p = ' '.join(slovo_v_pred_p)
         nazvanye_v_rod_p = ' '.join(slovo_v_rod_p)
         skl = [nazvanye_v_rod_p, nazvanye_v_pred_p]
-        #print('skl=', skl)
+        # print('skl=', skl)
         return skl
     else:
         for i in slova:
@@ -98,5 +98,5 @@ def sklonenye(for_sklonenye, type=None):
         nazvanye_v_pred_p = ' '.join(slovo_v_pred_p)
         nazvanye_v_rod_p = ' '.join(slovo_v_rod_p)
         skl = [nazvanye_v_rod_p, nazvanye_v_pred_p]
-        #print('skl=', skl)
+        # print('skl=', skl)
         return skl

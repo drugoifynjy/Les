@@ -29,9 +29,9 @@ urlpatterns = [
     path('guides/tracts/tract_mod/<int:pk>', TractMod.as_view(), name='tract_mod'),
     path('guides/tracts/form_del/<int:pk>', TractDel.as_view(), name='form_tract_del'),
 
-    path('guides/forestrys/', ForestryView.as_view(), name='forestrys'),
-    path('guides/forestrys/forestry_mod/<int:pk>', ForestryMod.as_view(), name='forestry_mod'),
-    path('guides/forestrys/form_del/<int:pk>', ForestryDel.as_view(), name='form_forestry_del'),
+    # path('guides/forestrys/', ForestryView.as_view(), name='forestrys'),
+    # path('guides/forestrys/forestry_mod/<int:pk>', ForestryMod.as_view(), name='forestry_mod'),
+    # path('guides/forestrys/form_del/<int:pk>', ForestryDel.as_view(), name='form_forestry_del'),
 
     path('guides/district_forestrys/', DistrictForestryView.as_view(), name='district_forestrys'),
     path('guides/district_forestrys/district_forestry_mod/<int:pk>', DistrictForestryMod.as_view(), name='district_forestry_mod'),

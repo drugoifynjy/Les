@@ -6,7 +6,7 @@
         <table>
             <tr>
                 <th>№</th>
-                <th>Организация</th>
+                <th>Отдел (лесничестов)</th>
                 <th>ФИО</th>
                 <th>Должность</th>
 
@@ -33,7 +33,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <form action="{% url 'representative_mod' org_pk=rep.organization.pk pk=rep.pk %}">
+                        <form action="{% url 'representative_mod' dep_pk=rep.organization.pk pk=rep.pk %}">
                             <button type="submit">Изменить</button>
                         </form>
                     </td>

@@ -25,7 +25,7 @@ class BankDetailsAdmin(admin.ModelAdmin):
 
 @admin.register(DepartmentRepresentative)
 class DepartmentRepresentativeAdmin(admin.ModelAdmin):
-    list_display = ('second_name', 'first_name', 'patronymic', 'position', 'department')
+    list_display = ('second_name', 'first_name', 'patronymic', 'position', 'department_address')
 
 
 @admin.register(Organization)

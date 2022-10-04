@@ -16,7 +16,14 @@ class AddOrganizationAddress(forms.ModelForm):
         fields = '__all__'
 
 
-class AddDepartmentAddress(forms.ModelForm):
+class AddOrModDepartment(forms.ModelForm):
+
+    class Meta:
+        model = Department
+        fields = '__all__'
+
+
+class AddOrModDepartmentAddress(forms.ModelForm):
     class Meta:
         model = DepartmentAddress
         fields = '__all__'
