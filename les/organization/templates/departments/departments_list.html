@@ -19,11 +19,19 @@
                         {{ dep.organization.pk }} {{ dep.organization }}
                     </td>
                     <td>
-                        {{ dep.title }} {{ dep.number_department }}
+                        {{ dep.title }}
+                    </td>
+                    <td>
+                        {{ dep.number_department }}
                     </td>
                     <td>
                         <form action="{% url 'department_mod' org_pk=dep.organization.pk pk=dep.pk %}">
                             <button type="submit">Изменить</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{% url 'department_mod' org_pk=dep.organization.pk pk=dep.pk %}">
+                            <button type="submit">Представители отдела</button>
                         </form>
                     </td>
                 </tr>

@@ -111,7 +111,8 @@ class Department(models.Model):
                                                          verbose_name='номер отдела (лесничества)')
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True,
                                      verbose_name='Организация')
-
+    division_into_several_districts = models.BooleanField(blank=True, null=True,
+                                                         verbose_name='Отдел на несколько районов')
     def __str__(self):
         return self.title
 

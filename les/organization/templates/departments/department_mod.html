@@ -6,11 +6,17 @@
     <table>
         <tr>
             <th>Данные отдела (лесничества)</th>
-
+             <th>Адрес отдела (лесничества)</th>
         </tr>
         <tr>
             <td>{{ form_mod_department.as_p }}</td>
+            <td>
+                <form action="{% url 'department_address_list' dep_pk=dep.pk %}">
+                    <button type="submit">Адрес отдела</button>
+                </form>
+            </td>
         </tr>
+
     </table>
 
     <button type="submit">Ок</button>

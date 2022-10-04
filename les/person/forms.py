@@ -14,6 +14,7 @@ class AddLocalityType(forms.ModelForm):
 
 class AddPersonPassport(forms.ModelForm):
     prefix = 'person_passport'
+
     class Meta:
         model = PersonPassport
         fields = ['series', 'number', 'date_of_issue', 'issued', 'address_birth', 'inn']
@@ -23,6 +24,7 @@ class AddPersonPassport(forms.ModelForm):
 
 class AddRepresentativePassport(forms.ModelForm):
     prefix = 'representative_passport'
+
     class Meta:
         model = RepresentativePassport
         fields = ['series', 'number', 'date_of_issue', 'issued', 'address_birth', 'inn']
@@ -31,6 +33,7 @@ class AddRepresentativePassport(forms.ModelForm):
 
 class AddPersonResidenceAddress(forms.ModelForm):
     prefix = 'person_residence_address'
+
     class Meta:
         model = PersonResidenceAddress
         fields = '__all__'
@@ -38,6 +41,7 @@ class AddPersonResidenceAddress(forms.ModelForm):
 
 class AddRepresentativeResidenceAddress(forms.ModelForm):
     prefix = 'representative_residence_address'
+
     class Meta:
         model = RepresentativeResidenceAddress
         fields = '__all__'
@@ -45,6 +49,7 @@ class AddRepresentativeResidenceAddress(forms.ModelForm):
 
 class AddPerson(forms.ModelForm):
     prefix = 'person'
+
     class Meta:
         model = Person
         fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number',
@@ -56,6 +61,7 @@ class AddPerson(forms.ModelForm):
 
 class AddRepresentativePerson(forms.ModelForm):
     prefix = 'representative'
+
     class Meta:
         model = RepresentativePerson
         fields = ['second_name', 'first_name', 'patronymic', 'date_of_bird', 'phone_number']
