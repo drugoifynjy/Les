@@ -152,7 +152,7 @@ class DepartmentAddress(models.Model):
                 str(self.locality.__str__()) + ' ул. ' + \
                 str(self.street.__str__()) + ' д. ' + \
                 str(self.house_number.__str__())
-        return a
+        return str(a)
 
     class Meta:
         ordering = ['id']

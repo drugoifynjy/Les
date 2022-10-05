@@ -11,7 +11,6 @@ class OrganizationsView(ListView):
     context_object_name = 'organizations'
     ordering = '-pk'
     paginate_by = 10
-    print('Сработал класс OrganizationsView')
 
 
 class OrganizationAddOrMod(CreateView):
@@ -275,7 +274,7 @@ class DepartmentList(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.kwargs['org_pk'])
+        print('список отделов org_pk=', self.kwargs['org_pk'])
         context['org_pk'] = self.kwargs['org_pk']
         return context
 
@@ -332,30 +331,40 @@ class DepartmentAddressList(ListView):
     ordering = '-pk'
     paginate_by = 10
 
+    def get_queryset(self):
+        return DepartmentAddress.objects.filter(department=Department.objects.get(pk=self.kwargs['dep_pk']))
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.kwargs['dep_pk'])
+        print('org_pk=', self.kwargs['org_pk'])
+        print('dep_pk=', self.kwargs['dep_pk'])
+        context['org_pk'] = self.kwargs['org_pk']
         context['dep_pk'] = self.kwargs['dep_pk']
         return context
+
 
 class DepartmentAddressAddOrMod(CreateView):
     template_name = 'departments/department_address_mod.html'
     context_object_name = 'department_address'
 
     def get(self, request, pk=None, *args, **kwargs):
+        organization = Organization.objects.get(pk=self.kwargs['org_pk'])
         department = Department.objects.get(pk=self.kwargs['dep_pk'])
         if pk:
             department_address = DepartmentAddress.objects.get(pk=pk)
-            form_mod_department_address = AddOrModDepartmentAddress(instance=department_address)
+            form_mod_department_address = AddOrModDepartmentAddress(
+                instance=department_address)
         else:
             form_mod_department_address = AddOrModDepartmentAddress()
         form = {'form_mod_department_address': form_mod_department_address,
+                'org': organization.pk,
                 'dep': department.pk,
                 'pk': pk,
                 'title': 'Адрес отдела (лесничества)'}
         return render(request, self.template_name, context=form)
 
     def post(self, request, pk=None, *args, **kwargs):
+        organization = Organization.objects.get(pk=self.kwargs['org_pk'])
         department = Department.objects.get(pk=self.kwargs['dep_pk'])
         if pk:
             department_address = DepartmentAddress.objects.get(pk=pk)
@@ -365,6 +374,7 @@ class DepartmentAddressAddOrMod(CreateView):
             form_mod_department_address = AddOrModDepartmentAddress(request.POST)
         form = {'form_mod_department_address': form_mod_department_address,
                 'pk': pk,
+                'org': organization.pk,
                 'dep': department.pk,
                 'title': 'Банковские реквизиты'}
         if form_mod_department_address.is_valid():
@@ -374,7 +384,7 @@ class DepartmentAddressAddOrMod(CreateView):
                 department_address = form_mod_department_address.save(commit=False)
                 department_address.department = Department.objects.get(pk=self.kwargs['dep_pk'])
                 department_address.save()
-            return redirect('department_address_list', department.pk)
+            return redirect('department_address_list', organization.pk, department.pk)
 
         else:
             form_p = form

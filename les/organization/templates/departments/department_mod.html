@@ -10,11 +10,7 @@
         </tr>
         <tr>
             <td>{{ form_mod_department.as_p }}</td>
-            <td>
-                <form action="{% url 'department_address_list' dep_pk=dep.pk %}">
-                    <button type="submit">Адрес отдела</button>
-                </form>
-            </td>
+
         </tr>
 
     </table>
@@ -23,6 +19,11 @@
     <form action="{% url 'departments_list' org %}" method="get">
         <button type="reset" onclick="document.location='{% url 'departments_list' org %}'">Отмена</button>
     </form>
+    <td>
+        <form action="{% url 'department_address_list' org pk %}">
+            <button type="submit">Адреса отдела</button>
+        </form>
+    </td>
 </form>
 
 {% endblock %}

@@ -26,7 +26,8 @@ class AddOrModDepartment(forms.ModelForm):
 class AddOrModDepartmentAddress(forms.ModelForm):
     class Meta:
         model = DepartmentAddress
-        fields = '__all__'
+        fields = ['postcode', 'region', 'district', 'locality_type', 'locality',
+                  'street', 'house_number', 'apartment_number', ]
 
 
 class AddRequisitesOrganization(forms.ModelForm):

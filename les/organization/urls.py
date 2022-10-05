@@ -10,4 +10,6 @@ urlpatterns = [
     path('guides/organizations/<int:org_pk>/bank_details_mod/<int:pk>', BankDetailsAddOrMod.as_view(), name='bank_details_mod'),
     path('guides/organizations/<int:org_pk>/departments_list/', DepartmentList.as_view(), name='departments_list'),
     path('guides/organizations/<int:org_pk>/department_mod/<int:pk>', DepartmentAddOrMod.as_view(), name='department_mod'),
+    path('guides/organizations/<int:org_pk>/department_mod/<int:dep_pk>/department_address_list/', DepartmentAddressList.as_view(), name='department_address_list'),
+    path('guides/organizations/<int:org_pk>/department_mod/<int:dep_pk>/department_address_mod/<int:pk>', DepartmentAddressAddOrMod.as_view(), name='department_address_mod'),
 ]
